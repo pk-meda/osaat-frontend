@@ -36,7 +36,6 @@
     "@types/aes-js": "^3.1.4",
     "aes-js": "^3.1.2",
     "country-state-city": "^3.0.1-beta.1",
-    "device-ppi": "file:./device-ppi",
     "google-libphonenumber": "^3.2.43",
     "intl-tel-input": "^17.0.15",
     "ionicons": "^7.0.0",
