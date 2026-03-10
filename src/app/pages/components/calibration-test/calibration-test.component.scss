@@ -1,0 +1,23 @@
+ion-header{
+    text-align: center;
+    border-bottom: 1px solid grey;
+}
+
+.Calibration-container{
+    p{
+        font-size: 15px;
+        margin: 0px;
+    }
+}
+.error-msg{
+    color: red;
+    font-size: 12px;
+    margin-top: 0.5rem;
+    padding-left: var(--padding-start);
+}
+
+.calibration-eye-container{
+    display: flex;
+    margin: 2rem 0px;
+    img{ margin: auto; }
+}

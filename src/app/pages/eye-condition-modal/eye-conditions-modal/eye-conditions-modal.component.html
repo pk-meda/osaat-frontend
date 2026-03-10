@@ -1,0 +1,78 @@
+<!-- eye-conditions-modal.component.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Eye Conditions Screening</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="screening-container">
+    <h2>Select any eye conditions observed:</h2>
+    <p class="instruction-text">
+      Check all conditions that apply. If no conditions are present, leave all unchecked.
+    </p>
+
+    <ion-list>
+<ion-item 
+  *ngFor="let condition of eyeConditions"
+  [class.selected]="condition.selected">
+  <ion-checkbox 
+    slot="start" 
+    [checked]="condition.selected"
+    color="primary"  
+    (ionChange)="onConditionToggle(condition)">
+  </ion-checkbox>
+  <ion-label class="ion-margin-start">
+    {{ condition.label }}
+  </ion-label>
+</ion-item>
+    </ion-list>
+
+    <div class="result-preview" *ngIf="getSelectedCount() > 0">
+      <ion-card color="warning">
+        <ion-card-content>
+          <ion-icon name="warning" color="warning"></ion-icon>
+          <span class="result-text">
+            Child will be marked as <strong>Failed</strong> - Patient Registration required
+          </span>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div class="result-preview" *ngIf="getSelectedCount() === 0">
+      <ion-card color="success">
+        <ion-card-content>
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <span class="result-text">
+            Child will be marked as <strong>Passed</strong> - Ready for next child
+          </span>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button 
+        fill="outline" 
+        color="medium" 
+        (click)="onCancel()">
+        Cancel
+      </ion-button>
+      
+      <ion-button 
+        fill="solid" 
+        [color]="getSelectedCount() > 0 ? 'warning' : 'success'"
+        (click)="onSubmit()">
+        {{ getSelectedCount() > 0 ? 'Register Patient' : 'Screen Next Child' }}
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

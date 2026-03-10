@@ -1,0 +1,18 @@
+ion-item {
+    --padding-start: 0.5rem;
+    --inner-border-width: 0px 0px 0px 0px !important;
+}
+
+ion-label {
+    margin-left: 0px;
+}
+
+ion-checkbox {
+    --size: 17px;
+    --checkbox-background-checked: #6815ec;
+    margin-right: 10px;
+}
+
+ion-checkbox::part(container) {
+    border-radius: 6px;
+}

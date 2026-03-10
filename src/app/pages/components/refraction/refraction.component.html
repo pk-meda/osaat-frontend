@@ -1,0 +1,268 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">REFRACTION & EXAMINATION</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <div class="padding">
+        <form [formGroup]="refravtionForm">
+          <app-participant-info 
+          [participant]="participantData" 
+          (profileClicked)="nevigateProfile()">
+        </app-participant-info> 
+
+          <div *ngIf="currentStep === 1">
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">1. Chief Complaint</p>
+              <div class="border">
+                <ion-select formControlName="chief_complaint" toggleIcon="caret-down-sharp" placeholder="Select Option" interface="popover" class="custom-ion-select">
+                  <ion-select-option value="NO COMPLAINTS">No complaints</ion-select-option>
+                  <ion-select-option value="ITCHING">Itching</ion-select-option>
+                  <ion-select-option value="HEADACHE">Headache</ion-select-option>
+                  <ion-select-option value="WATERING">Watering</ion-select-option>
+                  <ion-select-option value="REDNESS">Redness</ion-select-option>
+                  <ion-select-option value="BLURRING">Blurring</ion-select-option>
+                </ion-select>
+              </div>
+              <div *ngIf="submitted && refravtionForm.get('chief_complaint')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select a chief complaint.</p>
+                </ion-text>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 2">
+            <div class="form-group">
+              <p class="participant-info">2. Which eye?</p>
+              <div class="border">
+                <ion-select formControlName="eye" toggleIcon="caret-down-sharp" placeholder="Choose an option" interface="popover" class="custom-ion-select">
+                  <ion-select-option value="left">LEFT EYE</ion-select-option>
+                  <ion-select-option value="right">RIGHT EYE</ion-select-option>
+                  <ion-select-option value="BOTH_EYE">BOTH EYE</ion-select-option>
+                </ion-select>
+              </div>
+              <div *ngIf="submitted && refravtionForm.get('eye')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select an eye.</p>
+                </ion-text>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info">3. Duration</p>
+              <div class="border">
+                <ion-select formControlName="duration" toggleIcon="caret-down-sharp" placeholder="Enter duration (in years)" interface="popover" class="custom-ion-select">
+                  <ion-select-option value="1">1 years or more</ion-select-option>
+                  <ion-select-option value="2">2 years or more</ion-select-option>
+                  <ion-select-option value="5">5 years or more</ion-select-option>
+                </ion-select>
+              </div>
+              <div *ngIf="submitted && refravtionForm.get('duration')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select a duration.</p>
+                </ion-text>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 3">
+            <div class="form-group">
+              <p>4. Would you like to add an additional ocular complaint?</p>
+              <div class="btn">
+                <ion-button type="button"  (click)="sendnotification(true)"
+                [disabled]="refravtionForm.disabled"
+                [color]="refravtionForm.get('additional_ocular_complaint')?.value !== true ? 'danger' : 'success'" 
+                >
+                  Yes
+                </ion-button>
+                <ion-button type="button"  (click)="sendnotification(false)"
+                [disabled]="refravtionForm.disabled"
+                [color]="refravtionForm.get('additional_ocular_complaint')?.value === false ? 'success' : 'danger'">
+                  No
+                </ion-button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 4">
+            <div class="form-group">
+              <p class="participant-info">5. Ocular Alignment Remarks</p>
+              <div class="border">
+                <ion-select formControlName="ocular_alignment_remarks" toggleIcon="caret-down-sharp" placeholder="Select an Option" interface="popover" class="custom-ion-select">
+                  <ion-select-option value="Orthophoria">Orthophoria</ion-select-option>
+                  <ion-select-option value="Hyperphoria">Hyperphoria</ion-select-option>
+                  <ion-select-option value="Hypertropia">Hypertropia</ion-select-option>
+                  <ion-select-option value="Hypophoria">Hypophoria</ion-select-option>
+                  <ion-select-option value="Hypotropia">Hypotropia</ion-select-option>
+                  <ion-select-option value="Esophoria">Esophoria</ion-select-option>
+                  <ion-select-option value="Exotropia">Exotropia</ion-select-option>
+                  <ion-select-option value="Nystagmus">Nystagmus</ion-select-option>
+                  <ion-select-option value="Others">Others</ion-select-option>
+                </ion-select>
+              </div>
+              <div *ngIf="submitted && refravtionForm.get('ocular_alignment_remarks')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please enter remarks regarding ocular alignment.</p>
+                </ion-text>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5 to 8: Prescriptions with Dropdowns -->
+          <ng-container *ngFor="let step of prescriptionSteps">
+            <div *ngIf="currentStep === step.id">
+              <p class="participant-info" style="padding: 5px;">{{step.label}}</p>
+              
+              <!-- Sphere Section -->
+              <div class="form-group">
+                <p class="participant-info" style="padding: 5px;">Spherical Prescription</p>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="12">
+                      <p style="margin: 5px 0;"><b>Right Eye (RE)</b></p>
+                      <div class="border">
+                        <ion-select [formControlName]="step.controls.sph_RE" toggleIcon="caret-down-sharp" placeholder="Select option" interface="popover" class="custom-ion-select">
+                          <ion-select-option *ngFor="let opt of sphereOptions" [value]="opt.value">
+                            {{ opt.label }}
+                          </ion-select-option>
+                        </ion-select>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12">
+                      <p style="margin: 5px 0;"><b>Left Eye (LE)</b></p>
+                      <div class="border">
+                        <ion-select [formControlName]="step.controls.sph_LE" toggleIcon="caret-down-sharp" placeholder="Select option" interface="popover" class="custom-ion-select">
+                          <ion-select-option *ngFor="let opt of sphereOptions" [value]="opt.value">
+                            {{ opt.label }}
+                          </ion-select-option>
+                        </ion-select>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </div>
+              
+              <!-- Cylinder Section -->
+              <div class="form-group">
+                <p class="participant-info" style="padding: 5px;">Cylindrical Prescription</p>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="12">
+                      <p style="margin: 5px 0;"><b>Right Eye (RE)</b></p>
+                      <div class="border">
+                        <ion-select [formControlName]="step.controls.cyl_RE" toggleIcon="caret-down-sharp" placeholder="Select option" interface="popover" class="custom-ion-select">
+                          <ion-select-option *ngFor="let opt of cylinderOptions" [value]="opt.value">
+                            {{ opt.label }}
+                          </ion-select-option>
+                        </ion-select>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12">
+                      <p style="margin: 5px 0;"><b>Left Eye (LE)</b></p>
+                      <div class="border">
+                        <ion-select [formControlName]="step.controls.cyl_LE" toggleIcon="caret-down-sharp" placeholder="Select option" interface="popover" class="custom-ion-select">
+                          <ion-select-option *ngFor="let opt of cylinderOptions" [value]="opt.value">
+                            {{ opt.label }}
+                          </ion-select-option>
+                        </ion-select>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </div>
+              
+              <!-- Axis Section -->
+              <div class="form-group">
+                <p class="participant-info" style="padding: 5px;">Axis of Cylinder</p>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="12">
+                      <p style="margin: 5px 0;"><b>Right Eye (RE)</b></p>
+                      <div class="border">
+                        <ion-select [formControlName]="step.controls.axis_RE" toggleIcon="caret-down-sharp" placeholder="Select option" interface="popover" class="custom-ion-select">
+                          <ion-select-option *ngFor="let opt of axisOptions" [value]="opt.value">
+                            {{ opt.label }}
+                          </ion-select-option>
+                        </ion-select>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12">
+                      <p style="margin: 5px 0;"><b>Left Eye (LE)</b></p>
+                      <div class="border">
+                        <ion-select [formControlName]="step.controls.axis_LE" toggleIcon="caret-down-sharp" placeholder="Select option" interface="popover" class="custom-ion-select">
+                          <ion-select-option *ngFor="let opt of axisOptions" [value]="opt.value">
+                            {{ opt.label }}
+                          </ion-select-option>
+                        </ion-select>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- STEP 9: BCVA -->
+          <div *ngIf="currentStep === 9">
+            <p class="participant-info">Best Corrected Visual Acuity (BCVA)</p>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4"><b>Right Eye (RE)</b></ion-col>
+                <ion-col size="4"><b>Left Eye (LE)</b></ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="4">Spherical Equivalent</ion-col>
+                <ion-col size="4"><ion-input type="number" formControlName="se_RE"></ion-input></ion-col>
+                <ion-col size="4"><ion-input type="number" formControlName="se_LE"></ion-input></ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="4">BCVA</ion-col>
+                <ion-col size="4"><ion-input type="text" formControlName="bcva_RE"></ion-input></ion-col>
+                <ion-col size="4"><ion-input type="text" formControlName="bcva_LE"></ion-input></ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+
+          <!-- STEP 10: Near -->
+          <div *ngIf="currentStep === 10">
+            <p class="participant-info">Near Prescription</p>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4"><b>Right Eye (RE)</b></ion-col>
+                <ion-col size="4"><b>Left Eye (LE)</b></ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="4">ADD</ion-col>
+                <ion-col size="4"><ion-input type="number" formControlName="add_RE"></ion-input></ion-col>
+                <ion-col size="4"><ion-input type="number" formControlName="add_LE"></ion-input></ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="4">NPC (mm)</ion-col>
+                <ion-col size="8"><ion-input type="number" formControlName="npc"></ion-input></ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </form>
+      </div>
+
+      <app-profile-footer
+        [currentStep]="currentStep"
+        [totalSteps]="totalSteps"
+        (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()"
+        (saveProgressClick)="submitForm()"
+        (editClick)="onEdit()"
+        (deleteClick)="onDelete()">
+      </app-profile-footer>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,97 @@
+
+  a {
+    text-decoration: none;
+    color: #1a3561;
+    font-weight: 500;
+}
+
+// General card padding
+.padding {
+  padding: 12px;
+}
+
+// Step headers
+.participant-info {
+  font-weight: 600;
+  font-size: 16px;
+  margin: 12px 0;
+  color: #333;
+  border-left: 4px solid #3b82f6; // blue accent
+  padding-left: 8px;
+}
+
+// Borders for select
+.border_1 {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 4px 6px;
+  background: #fafafa;
+}
+
+// Ion-select styling
+.custom-ion-select {
+  width: 100%;
+  font-size: 15px;
+  --padding-start: 10px;
+}
+
+// Grid/table style for prescription steps
+ion-grid {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-top: 10px;
+  background: #fff;
+
+  ion-row {
+    border-bottom: 1px solid #eee;
+    align-items: center;
+    min-height: 42px;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  ion-col {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  ion-input {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 4px 6px;
+    font-size: 14px;
+    --background: #f9f9f9;
+    --padding-start: 8px;
+    text-align: center;
+  }
+}
+
+// Step buttons (Yes/No)
+.btn {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+
+  ion-button {
+    border-radius: 20px;
+    font-weight: 500;
+    text-transform: none;
+    padding: 0 16px;
+  }
+}
+
+// Footer nav buttons (if you want spacing)
+app-profile-footer {
+  margin-top: 20px;
+  display: block;
+}
+
+// Error messages
+ion-text[color="danger"] p {
+  font-size: 13px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  color: #d32f2f;
+}

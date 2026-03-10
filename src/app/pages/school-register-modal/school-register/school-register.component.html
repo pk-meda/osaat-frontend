@@ -1,0 +1,363 @@
+<ion-header mode="md">
+  <app-header *ngIf="screeningId"> </app-header>
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <span class="back_btn" *ngIf="!screeningId">SCHOOL REGISTRATION</span>
+      <ion-icon
+        *ngIf="screeningId"
+        class="back_icon"
+        name="chevron-back-outline"
+        (click)="backLocation()"
+      ></ion-icon>
+      <span class="back_btn" *ngIf="screeningId">SCHOOL INFO</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      @if (!screeningId) {
+        <div class="form-group">
+          <p class="participant-info">
+            Before proceeding, please choose an option:
+          </p>
+
+          <!-- Toggle between existing and new school -->
+          <ion-segment [(ngModel)]="mode" (ionChange)="onModeChange($event)">
+            <ion-segment-button value="select">
+              Select School
+            </ion-segment-button>
+            <ion-segment-button value="register">
+              Register New School
+            </ion-segment-button>
+          </ion-segment>
+
+          <!-- Select existing school -->
+          <div *ngIf="mode === 'select'" class="select-section">
+            <form [formGroup]="oldscreeningForm">
+              
+              <!-- Country Selector -->
+              <div class="select-container">
+                <ion-item class="select-box" button (click)="toggleCountryDropdown()">
+                  <ion-label style="color: #00000087">
+                    {{ screeningForm.get("country")?.value || "Select Country" }}
+                  </ion-label>
+                  <ion-icon
+                    slot="end"
+                    class="chevron-icon"
+                    [name]="showCountryDropdown ? 'caret-up-outline' : 'caret-down-outline'"
+                  ></ion-icon>
+                </ion-item>
+                <div *ngIf="showCountryDropdown" class="dropdown-panel">
+                  <ion-searchbar
+                    [formControl]="countrySearchControl"
+                    placeholder="Search country"
+                    showCancelButton="focus"
+                    [showClearButton]="true"
+                    (ionClear)="clearCountrySearch()"
+                  >
+                  </ion-searchbar>
+                  <ion-list>
+                    <ion-item
+                      *ngFor="let c of filteredCountries"
+                      (click)="selectCountry(c)"
+                    >
+                      <span style="font-size: 20px; margin-right: 8px;">{{ c.flag }}</span>
+                      <span>{{ c.name }}</span>
+                      <span style="margin-left: auto; color:#888">{{ c.code }}</span>
+                    </ion-item>
+                  </ion-list>
+                </div>
+              </div>
+              
+              <!-- Province Selector -->
+              <div class="select-container">
+                <ion-item class="select-box" button (click)="toggleProvinceDropdown()">
+                  <ion-label style="color: #00000087">
+                    {{ screeningForm.get("province")?.value || "Select Province" }}
+                  </ion-label>
+                  <ion-icon
+                    slot="end"
+                    class="chevron-icon"
+                    [name]="showProvinceDropdown ? 'caret-up-outline' : 'caret-down-outline'"
+                  ></ion-icon>
+                </ion-item>
+                <div *ngIf="showProvinceDropdown" class="dropdown-panel">
+                  <ion-searchbar
+                    [formControl]="provinceSearchControl"
+                    placeholder="Search province"
+                    showCancelButton="focus"
+                    [showClearButton]="true"
+                    (ionClear)="clearProvinceSearch()"
+                  >
+                  </ion-searchbar>
+                  <ion-list>
+                    <ion-item (click)="selectProvince('None')">
+                      None
+                    </ion-item>
+                    <ion-item
+                      *ngFor="let p of filteredProvinces"
+                      (click)="selectProvince(p.name)"
+                    >
+                      {{ p.name }}
+                    </ion-item>
+                  </ion-list>
+                </div>
+              </div>
+
+              <!-- School Selector -->
+              <div class="select-container" style="top: 10px;">
+                <ion-item 
+                  class="select-box" 
+                  button 
+                  (click)="toggleDropdown()"
+                >
+                  <ion-label style="color: #00000087;">
+                    {{ oldscreeningForm.get("School_name")?.value || 
+                       'Please select a school' }}
+                  </ion-label>
+                  <ion-icon 
+                    slot="end" 
+                    class="chevron-icon"
+                    [name]="showDropdown ? 'caret-up-outline' : 'caret-down-outline'"
+                  ></ion-icon>
+                </ion-item>
+                <div *ngIf="showDropdown" class="dropdown-panel">
+                  <ion-searchbar
+                    [formControl]="searchControl"
+                    placeholder="Search schools"
+                    showCancelButton="focus"
+                    [showClearButton]="true"
+                    (ionClear)="clearSearch()"
+                  >
+                  </ion-searchbar>
+                  <ion-list>
+                    <ion-item
+                      *ngFor="let school of filteredSchools"
+                      (click)="selectSchool(school.school_name)"
+                    >
+                      {{ school.school_name }}
+                    </ion-item>
+                    <ion-item *ngIf="filteredSchools.length === 0">
+                      <em>No matches</em>
+                    </ion-item>
+                  </ion-list>
+                </div>
+              </div>
+
+              <div
+                *ngIf="
+                  (oldscreeningForm.get('School_name')?.touched || submitted) &&
+                  oldscreeningForm.get('School_name')?.hasError('required')
+                "
+              >
+                <ion-text color="danger">
+                  <p style="margin-top: 20px">Please select a school.</p>
+                </ion-text>
+              </div>
+
+              <ion-button
+                class="register-btn"
+                (click)="submit()"
+                expand="block"
+                style="margin-top: 27px"
+              >
+                Submit
+              </ion-button>
+            </form>
+          </div>
+
+          <!-- Register new school -->
+          <div *ngIf="mode === 'register'" class="register-section">
+            <form [formGroup]="screeningForm">
+              <div class="register-container">
+                <div class="register-input-group">
+                  
+                  <!-- Country Selector -->
+                  <div class="select-container">
+                    <ion-item class="select-box" button (click)="toggleCountryDropdown()">
+                      <ion-label style="color: #00000087;">
+                        {{ screeningForm.get('country')?.value || 'Select Country' }}
+                      </ion-label>
+                      <ion-icon
+                        slot="end"
+                        class="chevron-icon"
+                        [name]="showCountryDropdown ? 'caret-up-outline' : 'caret-down-outline'"
+                      ></ion-icon>
+                    </ion-item>
+                    <div *ngIf="showCountryDropdown" class="dropdown-panel">
+                      <ion-searchbar
+                        [formControl]="countrySearchControl"
+                        placeholder="Search country"
+                        showCancelButton="focus"
+                        [showClearButton]="true"
+                        (ionClear)="clearCountrySearch()"
+                      >
+                      </ion-searchbar>
+                      <ion-list>
+                        <ion-item
+                          *ngFor="let c of filteredCountries"
+                          (click)="selectCountry(c)"
+                        >
+                          <span style="font-size: 20px; margin-right: 8px;">{{ c.flag }}</span>
+                          <span>{{ c.name }}</span>
+                          <span style="margin-left: auto; color:#888">{{ c.code }}</span>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </div>
+
+                  <!-- Province Selector -->
+                  <div class="select-container">
+                    <ion-item
+                      class="select-box"
+                      button
+                      (click)="toggleProvinceDropdown()"
+                    >
+                      <ion-label style="color: #00000087">
+                        {{
+                          screeningForm.get("province")?.value ||
+                            "Select Province"
+                        }}
+                      </ion-label>
+                      <ion-icon
+                        slot="end"
+                        class="chevron-icon"
+                        [name]="
+                          showProvinceDropdown
+                            ? 'caret-up-outline'
+                            : 'caret-down-outline'
+                        "
+                      ></ion-icon>
+                    </ion-item>
+                    <div *ngIf="showProvinceDropdown" class="dropdown-panel">
+                      <ion-searchbar
+                        [formControl]="provinceSearchControl"
+                        placeholder="Search province"
+                        showCancelButton="focus"
+                        [showClearButton]="true"
+                        (ionClear)="clearProvinceSearch()"
+                      >
+                      </ion-searchbar>
+                      <ion-list>
+                        <ion-item
+                          *ngFor="let p of filteredProvinces"
+                          (click)="selectProvince(p.name)"
+                        >
+                          {{ p.name }}
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </div>
+
+                  <input
+                    class="register-input"
+                    type="text"
+                    placeholder="Enter Address"
+                    formControlName="address"
+                  />
+                  <input
+                    class="register-input"
+                    type="text"
+                    placeholder="Contact details"
+                    formControlName="contact"
+                  />
+
+                  <input
+                    class="register-input"
+                    type="text"
+                    placeholder="Enter new school name"
+                    formControlName="newSchoolName"
+                  />
+
+                  <ion-button
+                    class="register-btn"
+                    (click)="registerSchool()"
+                    [disabled]="!screeningForm.valid"
+                    expand="block"
+                  >
+                    Register New School
+                  </ion-button>
+                </div>
+              </div>
+            </form>
+
+            <div *ngIf="screeningForm.invalid && submitted">
+              <ion-text color="danger">
+                <p>Please fill in all required fields.</p>
+              </ion-text>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="form-group">
+          <p class="participant-info">
+            Before proceeding, please choose your School:
+          </p>
+          <form [formGroup]="oldscreeningForm">
+            <div class="select-container" style="top: 10px">
+              <ion-item class="select-box" button (click)="toggleDropdown()">
+                <ion-label style="color: #00000087">
+                  {{
+                    oldscreeningForm.get("School_name")?.value ||
+                      "Please select a school"
+                  }}
+                </ion-label>
+                <ion-icon
+                  slot="end"
+                  class="chevron-icon"
+                  [name]="
+                    showDropdown ? 'caret-up-outline' : 'caret-down-outline'
+                  "
+                >
+                </ion-icon>
+              </ion-item>
+              <div *ngIf="showDropdown" class="dropdown-panel">
+                <ion-searchbar
+                  [formControl]="searchControl"
+                  placeholder="Search schools"
+                  showCancelButton="focus"
+                  [showClearButton]="true"
+                  (ionClear)="clearSearch()"
+                >
+                </ion-searchbar>
+                <ion-list>
+                  <ion-item
+                    *ngFor="let school of filteredSchools"
+                    (click)="selectSchool(school.school_name)"
+                  >
+                    {{ school.school_name }}
+                  </ion-item>
+                  <ion-item *ngIf="filteredSchools.length === 0">
+                    <em>No matches</em>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </div>
+
+            <div
+              *ngIf="
+                (oldscreeningForm.get('School_name')?.touched || submitted) &&
+                oldscreeningForm.get('School_name')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p style="margin-top: 20px">Please select a school.</p>
+              </ion-text>
+            </div>
+
+            <ion-button
+              class="register-btn"
+              (click)="submitCloseModal()"
+              expand="block"
+              style="margin-top: 27px"
+            >
+              Submit
+            </ion-button>
+          </form>
+        </div>
+      }
+    </ion-card-content>
+  </ion-card>
+</ion-content>

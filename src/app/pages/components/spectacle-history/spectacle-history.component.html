@@ -1,0 +1,819 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon
+        class="back_icon"
+        name="chevron-back-outline"
+        (click)="backLocation()"
+      ></ion-icon>
+      <span class="back_btn">SPECTACLE WEARING HISTORY</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <form [formGroup]="spectacleForm">
+        <app-participant-info
+          [participant]="participantData"
+          (profileClicked)="nevigateProfile()"
+        >
+        </app-participant-info>
+
+        <div *ngIf="currentStep === 1">
+          <div class="form-group">
+            <p class="participant-info">1. Does the child wear spectacles?</p>
+            <div class="btn">
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('wearSpectacles')?.value !== true
+                    ? 'danger'
+                    : 'success'
+                "
+                (click)="spectacleForm.patchValue({ wearSpectacles: true })"
+              >
+                Yes
+              </ion-button>
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('wearSpectacles')?.value === false
+                    ? 'success'
+                    : 'danger'
+                "
+                (click)="spectacleForm.patchValue({ wearSpectacles: false })"
+              >
+                No
+              </ion-button>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('wearSpectacles')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select Yes or No.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">
+              2. How long has the child been wearing<br />
+              <span style="margin-left: 23px">spectacles?</span>
+            </p>
+
+            <!-- Duration Type Selection -->
+            <div class="btn" style="margin-bottom: 15px">
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  wearingDurationType === 'months' ? 'success' : 'medium'
+                "
+                (click)="setWearingDurationType('months')"
+              >
+                Months
+              </ion-button>
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="wearingDurationType === 'years' ? 'success' : 'medium'"
+                (click)="setWearingDurationType('years')"
+              >
+                Years
+              </ion-button>
+            </div>
+
+            <!-- Duration Value Selection -->
+            <div *ngIf="wearingDurationType" class="duration-selection">
+              <p class="duration-label">
+                Select number of {{ wearingDurationType }}:
+              </p>
+
+              <!-- For Months (1-12) -->
+              <div
+                *ngIf="wearingDurationType === 'months'"
+                class="duration-buttons"
+              >
+                <ion-button
+                  *ngFor="let month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+                  type="button"
+                  [disabled]="spectacleForm.disabled"
+                  [color]="wearingDurationValue === month ? 'success' : 'light'"
+                  (click)="setWearingDurationValue(month)"
+                  class="duration-btn"
+                >
+                  {{ month }}
+                </ion-button>
+              </div>
+
+              <!-- For Years (1-10+) -->
+              <div
+                *ngIf="wearingDurationType === 'years'"
+                class="duration-buttons"
+              >
+                <ion-button
+                  *ngFor="let year of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+                  type="button"
+                  [disabled]="spectacleForm.disabled"
+                  [color]="wearingDurationValue === year ? 'success' : 'light'"
+                  (click)="setWearingDurationValue(year)"
+                  class="duration-btn"
+                >
+                  {{ year }}
+                </ion-button>
+                <ion-button
+                  type="button"
+                  [disabled]="spectacleForm.disabled"
+                  [color]="wearingDurationValue === 99 ? 'success' : 'light'"
+                  (click)="setWearingDurationValue(99)"
+                  class="duration-btn"
+                >
+                  10+
+                </ion-button>
+              </div>
+            </div>
+
+            <!-- Display Selected Duration -->
+            <div
+              *ngIf="spectacleForm.get('wearingDuration')?.value"
+              class="selected-duration"
+            >
+              <ion-chip color="primary">
+                <ion-label>{{
+                  spectacleForm.get("wearingDuration")?.value
+                }}</ion-label>
+              </ion-chip>
+            </div>
+
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('wearingDuration')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select the wearing duration.</p>
+              </ion-text>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="currentStep === 2">
+          <div class="form-group">
+            <p class="participant-info">
+              3. Does the child have the glasses with them?
+            </p>
+            <div class="btn">
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('hasGlasses')?.value !== true
+                    ? 'danger'
+                    : 'success'
+                "
+                (click)="spectacleForm.patchValue({ hasGlasses: true })"
+              >
+                Yes
+              </ion-button>
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('hasGlasses')?.value === false
+                    ? 'success'
+                    : 'danger'
+                "
+                (click)="spectacleForm.patchValue({ hasGlasses: false })"
+              >
+                No
+              </ion-button>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('hasGlasses')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select Yes or No.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">
+              4. What is the condition of the lenses?
+            </p>
+            <div class="border">
+              <ion-select
+                formControlName="lensCondition"
+                placeholder="Select Condition"
+                class="form-control always-flip"
+                toggleIcon="caret-down-sharp"
+                interface="popover"
+                class="custom-ion-select"
+              >
+                <ion-select-option value="good">Good</ion-select-option>
+                <ion-select-option value="scratched"
+                  >Scratched</ion-select-option
+                >
+                <ion-select-option value="dirty">Dirty</ion-select-option>
+                <ion-select-option value="broken">Broken</ion-select-option>
+              </ion-select>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('lensCondition')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select the lens condition.</p>
+              </ion-text>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="currentStep === 3">
+          <p class="participant-info">
+            5. What type of lenses are in these glasses?
+          </p>
+          <div class="form-group">
+            <p class="participant-info">
+              5.1. What lens material are the glasses made from?
+            </p>
+            <div class="border">
+              <ion-select
+                formControlName="lensMaterial"
+                placeholder="Select Material"
+                class="form-control always-flip"
+                toggleIcon="caret-down-sharp"
+                interface="popover"
+                class="custom-ion-select"
+              >
+                <ion-select-option value="glass">Glass</ion-select-option>
+                <ion-select-option value="plastic">Plastic</ion-select-option>
+              </ion-select>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('lensMaterial')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select the lens material.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">5.2. Are the lenses coated?</p>
+            <div class="border">
+              <ion-select
+                formControlName="lensCoating"
+                placeholder="Select Coating"
+                class="form-control always-flip"
+                toggleIcon="caret-down-sharp"
+                interface="popover"
+                class="custom-ion-select"
+              >
+                <ion-select-option value="hard coat"
+                  >Hard coat</ion-select-option
+                >
+                <ion-select-option value="ARC">ARC</ion-select-option>
+                <ion-select-option value="blue coat"
+                  >Blue coat</ion-select-option
+                >
+                <ion-select-option value="uncoated"
+                  >uncoated</ion-select-option>
+              </ion-select>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('lensCoating')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select a lens coating.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">
+              5.3. What type of lenses are in these glasses?
+            </p>
+            <div class="border">
+              <ion-select
+                formControlName="lensType"
+                placeholder="Select Lens Type"
+                class="form-control always-flip"
+                toggleIcon="caret-down-sharp"
+                interface="popover"
+                class="custom-ion-select"
+              >
+                <ion-select-option value="single vision"
+                  >Single vision</ion-select-option
+                >
+                <ion-select-option value="bifocal">Bifocal</ion-select-option>
+                <ion-select-option value="multifocal"
+                  >Multifocal</ion-select-option
+                >
+                <ion-select-option value="lenticular"
+                  >Lenticular</ion-select-option
+                >
+              </ion-select>
+            </div>
+            <div
+              *ngIf="
+                submitted && spectacleForm.get('lensType')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select the lens type.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">
+              5.4. What refractive index material are the lenses made from?
+            </p>
+            <div class="border">
+              <ion-select
+                formControlName="refractiveIndex"
+                placeholder="Select Refractive Index"
+                class="form-control always-flip"
+                toggleIcon="caret-down-sharp"
+                interface="popover"
+                class="custom-ion-select"
+              >
+                <ion-select-option value="1.5">1.5</ion-select-option>
+                <ion-select-option value="1.56">1.56</ion-select-option>
+                <ion-select-option value="1.67">1.67</ion-select-option>
+                <ion-select-option value="1.71">1.71</ion-select-option>
+              </ion-select>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('refractiveIndex')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select the refractive index.</p>
+              </ion-text>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="currentStep === 4">
+          <p class="participant-info">
+            6. What is the condition of the frames?
+          </p>
+          <div class="form-group">
+            <div class="border">
+              <ion-select
+                formControlName="frameCondition"
+                placeholder="Select Frame Condition"
+                class="form-control always-flip"
+                toggleIcon="caret-down-sharp"
+                interface="popover"
+                class="custom-ion-select"
+              >
+                <ion-select-option value="good">Good</ion-select-option>
+                <ion-select-option value="scratched"
+                  >Scratched</ion-select-option
+                >
+                <ion-select-option value="dirty">Dirty</ion-select-option>
+                <ion-select-option value="broken">Broken</ion-select-option>
+              </ion-select>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('frameCondition')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select the frame condition.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">6.1. Are the frames a good fit?</p>
+            <div class="btn">
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('framesFit')?.value !== true
+                    ? 'danger'
+                    : 'success'
+                "
+                (click)="spectacleForm.patchValue({ framesFit: true })"
+              >
+                Yes
+              </ion-button>
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('framesFit')?.value === false
+                    ? 'success'
+                    : 'danger'
+                "
+                (click)="spectacleForm.patchValue({ framesFit: false })"
+              >
+                No
+              </ion-button>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('framesFit')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select Yes or No.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">6.2. Are the frames bent or buckled?</p>
+            <div class="btn">
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('framesBend')?.value !== true
+                    ? 'danger'
+                    : 'success'
+                "
+                (click)="spectacleForm.patchValue({ framesBend: true })"
+              >
+                Yes
+              </ion-button>
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('framesBend')?.value === false
+                    ? 'success'
+                    : 'danger'
+                "
+                (click)="spectacleForm.patchValue({ framesBend: false })"
+              >
+                No
+              </ion-button>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('framesBend')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select Yes or No.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">6.3. Are the frames broken?</p>
+            <div class="btn">
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('framesBroken')?.value !== true
+                    ? 'danger'
+                    : 'success'
+                "
+                (click)="spectacleForm.patchValue({ framesBroken: true })"
+              >
+                Yes
+              </ion-button>
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('framesBroken')?.value === false
+                    ? 'success'
+                    : 'danger'
+                "
+                (click)="spectacleForm.patchValue({ framesBroken: false })"
+              >
+                No
+              </ion-button>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('framesBroken')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select Yes or No.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">
+              6.4. Are the frames in good condition?
+            </p>
+            <div class="btn">
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('framesGoodCondition')?.value !== true
+                    ? 'danger'
+                    : 'success'
+                "
+                (click)="
+                  spectacleForm.patchValue({ framesGoodCondition: true })
+                "
+              >
+                Yes
+              </ion-button>
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('framesGoodCondition')?.value === false
+                    ? 'success'
+                    : 'danger'
+                "
+                (click)="
+                  spectacleForm.patchValue({ framesGoodCondition: false })
+                "
+              >
+                No
+              </ion-button>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('framesGoodCondition')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select Yes or No.</p>
+              </ion-text>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="currentStep === 5">
+          <div class="form-group">
+            <p class="participant-info">
+              7. When were the glasses last changed?
+            </p>
+
+            <!-- Duration Type Selection -->
+            <div class="btn" style="margin-bottom: 15px">
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  glassesChangeDurationType === 'months' ? 'success' : 'medium'
+                "
+                (click)="setGlassesChangeDurationType('months')"
+              >
+                Months
+              </ion-button>
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="glassesChangeDurationType === 'years' ? 'success' : 'medium'"
+                (click)="setGlassesChangeDurationType('years')"
+              >
+                Years
+              </ion-button>
+            </div>
+
+            <!-- Duration Value Selection -->
+            <div *ngIf="glassesChangeDurationType" class="duration-selection">
+              <p class="duration-label">
+                Select number of {{ glassesChangeDurationType  }}:
+              </p>
+
+              <!-- For Months (1-12) -->
+              <div
+                *ngIf="glassesChangeDurationType === 'months'"
+                class="duration-buttons"
+              >
+                <ion-button
+                  *ngFor="let month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+                  type="button"
+                  [disabled]="spectacleForm.disabled"
+                  [color]="glassesChangeDurationValue  === month ? 'success' : 'light'"
+                  (click)="setGlassesChangeDurationValue(month)"
+                  class="duration-btn"
+                >
+                  {{ month }}
+                </ion-button>
+              </div>
+
+              <!-- For Years (1-10+) -->
+              <div
+                *ngIf="glassesChangeDurationType === 'years'"
+                class="duration-buttons"
+              >
+                <ion-button
+                  *ngFor="let year of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+                  type="button"
+                  [disabled]="spectacleForm.disabled"
+                  [color]="glassesChangeDurationValue  === year ? 'success' : 'light'"
+                  (click)="setGlassesChangeDurationValue(year)"
+                  class="duration-btn"
+                >
+                  {{ year }}
+                </ion-button>
+                <ion-button
+                  type="button"
+                  [disabled]="spectacleForm.disabled"
+                  [color]="glassesChangeDurationValue  === 99 ? 'success' : 'light'"
+                  (click)="setGlassesChangeDurationValue(99)"
+                  class="duration-btn"
+                >
+                  10+
+                </ion-button>
+              </div>
+            </div>
+
+            <!-- Display Selected Duration -->
+            <div
+              *ngIf="spectacleForm.get('glassesChangeDuration')?.value"
+              class="selected-duration"
+            >
+              <ion-chip color="primary">
+                <ion-label>{{
+                  spectacleForm.get("glassesChangeDuration")?.value
+                }}</ion-label>
+              </ion-chip>
+            </div>
+
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('glassesChangeDuration')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select the wearing duration.</p>
+              </ion-text>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="currentStep === 6">
+          <div class="form-group">
+            <p class="participant-info">
+              8. Where did they get these glasses from?
+            </p>
+            <div class="border">
+              <ion-select
+                formControlName="glassesSource"
+                placeholder="Select Source"
+                class="form-control always-flip"
+                toggleIcon="caret-down-sharp"
+                interface="popover"
+                class="custom-ion-select"
+              >
+                <ion-select-option value="eye hospital"
+                  >Eye hospital</ion-select-option
+                >
+                <ion-select-option value="vision center"
+                  >Vision center</ion-select-option
+                >
+                <ion-select-option value="optical store"
+                  >Optical store</ion-select-option
+                >
+                <ion-select-option value="eye camp">Eye camp</ion-select-option>
+                <ion-select-option value="school eye health event"
+                  >School eye health event</ion-select-option
+                >
+                <ion-select-option value="don't know"
+                  >Don't know</ion-select-option
+                >
+                <ion-select-option value="other">Other</ion-select-option>
+              </ion-select>
+              <div
+                *ngIf="
+                  submitted &&
+                  spectacleForm.get('glassesSource')?.hasError('required')
+                "
+              >
+                <ion-text color="danger">
+                  <p>Please select a source.</p>
+                </ion-text>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">9. Did they choose their own frames?</p>
+            <div class="btn">
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('selfChosenFrames')?.value !== true
+                    ? 'danger'
+                    : 'success'
+                "
+                (click)="spectacleForm.patchValue({ selfChosenFrames: true })"
+              >
+                Yes
+              </ion-button>
+              <ion-button
+                type="button"
+                [disabled]="spectacleForm.disabled"
+                [color]="
+                  spectacleForm.get('selfChosenFrames')?.value === false
+                    ? 'success'
+                    : 'danger'
+                "
+                (click)="spectacleForm.patchValue({ selfChosenFrames: false })"
+              >
+                No
+              </ion-button>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('selfChosenFrames')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select Yes or No.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="participant-info">
+              10. Are they satisfied with their frames?
+            </p>
+            <div class="border">
+              <ion-select
+                formControlName="satisfactionLevel"
+                placeholder="Select Satisfaction"
+                class="form-control always-flip"
+                toggleIcon="caret-down-sharp"
+                interface="popover"
+                class="custom-ion-select"
+              >
+                <ion-select-option value="very happy"
+                  >Very happy</ion-select-option
+                >
+                <ion-select-option value="happy">Happy</ion-select-option>
+                <ion-select-option value="OK">OK</ion-select-option>
+                <ion-select-option value="unhappy">Unhappy</ion-select-option>
+                <ion-select-option value="very unhappy"
+                  >Very unhappy</ion-select-option
+                >
+              </ion-select>
+            </div>
+            <div
+              *ngIf="
+                submitted &&
+                spectacleForm.get('satisfactionLevel')?.hasError('required')
+              "
+            >
+              <ion-text color="danger">
+                <p>Please select their satisfaction level.</p>
+              </ion-text>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <app-profile-footer
+        [currentStep]="currentStep"
+        [totalSteps]="totalSteps"
+        (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()"
+        (saveProgressClick)="submitForm()"
+        (editClick)="onEdit()"
+        (deleteClick)="onDelete()"
+      >
+      </app-profile-footer>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

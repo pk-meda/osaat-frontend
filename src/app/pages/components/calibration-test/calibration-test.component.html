@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Calibration Test</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" style="height: 70vh;">
+  <div class="Calibration-container">
+    <p>Measure the height of "E" using the ruler and enter the value in Input box. By doing this we'll vaidate the
+      accuracy of our app in your device.</p>
+    <ion-list>
+      <ion-item>
+        <ion-input labelPlacement="stacked" (keyup.enter)="validateHeight()" [(ngModel)]="userEnteredHeight" type="number" label="Eye Height" placeholder="Enter the measured height in mm">
+          <ion-button fill="clear" slot="end" aria-label="submit" (click)="validateHeight()">
+            <ion-icon slot="icon-only" color="primary" name="send" aria-hidden="true"></ion-icon>
+          </ion-button>
+        </ion-input>
+      </ion-item>
+      <span class="error-msg">{{ errorMsg }}</span>
+    </ion-list>
+    <div class="calibration-eye-container">
+      <img src="assets/images/43-5.png" [style]="imageStyle" alt="Snellen E" />
+    </div>
+  </div>
+</ion-content>

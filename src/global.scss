@@ -1,0 +1,622 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+
+// ion-content{
+//     --background: linear-gradient(169.7deg, #1A3561 5.43%, rgba(153, 27, 28, 0.6) 127.29%);
+// }
+
+::ng-deep .iti__search-input{
+  padding: 0.5rem 1rem;
+  box-shadow: 0px 0px 3px grey;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+ion-button {
+  --text-decoration: none !important;
+  text-decoration: none !important;
+  text-transform: none;
+  border-radius: 13px;
+}
+
+* {
+  font-family: "Poppins", serif;
+  font-style: normal;
+}
+
+// Theme Button
+ion-button.primary-btn {
+  --background: var(--theme-color);
+  --background-hover: #ff2600;
+  --background-activated: #ff2600;
+  --background-focused: #ff2600;
+}
+
+ion-input {
+  --highlight-color: var(--text-color) !important;
+  --border-color: var(--borders-color) !important;
+  --highlight-height: 0px !important;
+  --highlight-color-valid: var(--text-color) !important;
+  --highlight-color-focused: var(--text-color) !important;
+}
+
+// Custom Classes
+.theme-text-color {
+  color: var(--theme-color);
+}
+
+.text-color {
+  color: var(--text-color);
+}
+
+.big-botton {
+  width: 100%;
+  height: 44px;
+  color: #ffffff;
+  background: #1A3561;
+  --background: #1A3561;
+  --background-activated: #ebeaea40;
+  --background-focused: #ebeaea40;
+  --background-hover: #ebeaea40;
+  --border-radius: 15px !important;
+  border-radius: 15px !important;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 24px;
+}
+
+.auth-header {
+  --background: #1a3561;
+  background: #1a3561;
+  --color: #fff;
+}
+
+.broder-div {
+  height: 20px;
+  background: #1a3561;
+  border: none;
+}
+
+.border-div-inner {
+  height: 22px;
+  border-top-left-radius: 60px;
+  border-top-right-radius: 60px;
+  overflow: hidden;
+  background: #fff;
+  border: none;
+  width: 100%;
+}
+
+.rounded-content {
+  --padding-top: 0px;
+}
+
+.top-header {
+  margin: 40px auto;
+}
+
+h2.top-title {
+  color: #1A3561;
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: 0px;
+  margin: 0;
+}
+
+.top-subtitle {
+  color: #343434;
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 0px;
+  letter-spacing: 0px;
+}
+
+.input-invalid {
+  color: red;
+  margin-left: 10px !important;
+  margin-top: 5px !important;
+  font-size: 10px !important;
+}
+
+
+.input-container {
+  text-align: left;
+  --background: transparent;
+  --color: black;
+  border: 1px solid #CBCBCB;
+  --border-radius: 15px;
+  border-radius: 15px;
+  border-width: 1px !important;
+  --padding-start: 15px;
+  --padding-end: 15px;
+  margin-top: 15px;
+}
+
+.input-fill-outline.input-shape-round {
+  --border-color: blue;
+  --border-radius: 40px;
+}
+
+.link-primary {
+  width: 100%;
+
+  p {
+    max-width: 100%;
+    width: 100%;
+    font-family: Poppins;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: center;
+    margin: 10px 0px;
+    color: #343434;
+  }
+
+  .p2 {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+}
+
+h2.members-title {
+  position: relative;
+  right: 25px;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #000000;
+}
+
+
+h2.long-members-title {
+  position: relative;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: left;
+  text-underline-position: from-font;
+  -webkit-text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
+  color: #000000;
+  text-align: center;
+}
+
+.form-group {
+  padding: 7px 0px 14px 0px;
+}
+
+.navigation-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0px 31px 0px;
+}
+
+.custom-title {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: #333;
+}
+
+.back_btn {
+  font-size: 17px;
+  color: #333;
+}
+
+.back_icon {
+  font-size: 24px;
+  margin-bottom: -8px;
+  margin-right: 10px;
+}
+
+.custom-search-bar {
+  border-radius: 13px;
+  margin: 16px;
+  border: 1px solid;
+  height: 46px;
+  width: 100%;
+  margin-left: -2px;
+  border-color: #c1c1c1;
+
+  ion-item::part(native) {
+      border: none;
+  }
+}
+
+.search-input {
+  margin-right: 8px;
+}
+
+.search-button {
+  --border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+}
+
+.view_profile {
+  color: #001fff;
+  font-weight: 500;
+}
+
+.btn {
+  display: flex;
+  justify-content: space-around;
+}
+
+ion-textarea{
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 0px 5px 0px 15px;
+  border-color: #c1c1c1;
+  width: 300x;
+  height: 149px;
+}
+
+.btn ion-button {
+  width: 120px;
+}
+
+.navigation-buttons {
+  display: flex;
+  align-items: center;
+  padding: 0px 0px 0px;
+  justify-content: center;
+  color: #1A3561;
+  font-weight: 600;
+  gap: 10px;
+}
+
+.size {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #002f6c;
+}
+
+.icon_size {
+  font-size: 18px;
+  margin: 0 6px;
+  color: #000;
+}
+
+ion-card{
+  margin-bottom: 120px;
+  border-radius: 10px;
+}
+.save_btn {
+  background: #1A3561 !important;
+  border-radius: 9px;
+}
+
+.action-buttons {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.edit {
+  color: green;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.discard {
+  color: red;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.edit_icon {
+  font-size: 18px;
+  color: green;
+}
+
+.discard_icon {
+  font-size: 18px;
+  color: red;
+}
+
+.header-md {
+  -webkit-box-shadow: none;
+  box-shadow: none
+}
+
+.bottom {
+  position: fixed;
+  bottom: 80px;
+  width: 89%;
+  // margin: 0px 0 0 20px;
+}
+
+.border {
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 0px 5px 0px 15px;
+  border-color: #c1c1c1;
+}
+::ng-deep .select-icon{
+  padding: 0 0 0 130px !important;
+}
+
+.custom-select {
+  --border-radius: 12px;
+  --border-width: 1px;
+  --border-color: #dcdcdc;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  background: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.custom-select select {
+  --placeholder-color: #b0b0b0;
+  --color: #000;
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+.participant-info-1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+p.participant-info {
+  padding: 6px;
+}
+
+
+.sub-text {
+  color: #333;
+  font-size: 15px;
+}
+
+.sub-text a {
+  color: #0056b3;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px !important;
+}
+
+ion-list {
+  padding-top: 22px;
+}
+
+
+ion-label.sc-ion-label-md-h.sc-ion-label-md-s.md.label-stacked.hydrated {
+  margin-bottom: 10px;
+}
+
+.custom-select ion-select {
+  border-radius: 15px;
+  /* max-width: 30px; */
+  /* padding: 10px; */
+  padding: 0px 0px 0px 0px !important;
+  max-height: 25px;
+}
+
+.custom-date-picker {
+  --border-radius: 10px;
+  --background: #fff;
+  --border-color: #ccc;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.custom-date-picker ion-input {
+  flex: 1;
+  font-size: 14px;
+  border: none;
+}
+
+.custom-date-picker ion-button {
+  --color: #888;
+  --padding-end: 8px;
+}
+
+.main-text {
+  font-size: 14px;
+  color: black;
+  padding: 4px;
+}
+
+ion-select.always-flip::part(icon) {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  position: fixed;
+  left: 83%;
+}
+
+
+ion-select.always-flip.select-expanded::part(icon) {
+  transform: rotate(180deg);
+}
+ion-icon.select-icon {
+  position: fixed;
+  left: 83%;
+}
+
+ion-select.never-flip::part(icon) {
+  transform: none;
+}/* Calendar container styles */
+.calendar-container {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Date input field styles */
+.date-input-container {
+  --background: white;
+  --border-radius: 13px;
+  --border-width: 1px;
+  --border-color: #e0e0e0;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  margin: 10px 0;
+  box-shadow: none;
+}
+
+.placeholder-label {
+  color: #a0a0a0;
+}
+
+/* Calendar icon styles */
+ion-icon {
+  font-size: 24px;
+  color: #666;
+}
+
+/* Calendar modal styles */
+.calendar-wrapper {
+  padding: 10px;
+}
+
+/* Custom styles for ion-datetime to match the image */
+::ng-deep ion-datetime {
+  --background: white;
+  --border-radius: 8px;
+  --box-shadow: none;
+  
+  /* Header day names */
+  --ion-color-primary: #000000;
+  --ion-color-step-200: #666666;
+  
+  /* Selected date */
+  --ion-color-primary-tint: #f0f0f0;
+  
+  /* Calendar grid adjustments */
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 20px;
+  --padding-bottom: 20px;
+}
+
+/* Style to make Sundays red like in your image */
+::ng-deep ion-datetime .calendar-day:nth-child(7n),
+::ng-deep ion-datetime .calendar-day:nth-child(7n+1) {
+  color: #ff3b30;
+}
+
+/* Style for the day headers (M T W T F S S) */
+::ng-deep ion-datetime .calendar-day-header {
+  text-transform: uppercase;
+  font-weight: normal;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Style for the days */
+::ng-deep ion-datetime .calendar-day {
+  font-size: 16px;
+  height: 40px;
+  width: 40px;
+}
+
+/* Selected day highlight */
+::ng-deep ion-datetime .calendar-day-active {
+  background: #f0f0f0;
+  color: black;
+  font-weight: bold;
+}
+
+/* Modal size and position */
+ion-modal {
+  --width: 100%;
+  --max-width: 420px;
+  // --height: 56%;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+ion-label {
+  color: #00000057;
+}
+
+.custom-ion-select {
+  --padding-end: 40px; /* Adjust spacing for the icon */
+  text-align: left; /* Ensures text alignment */
+}
+
+.custom-ion-select::part(icon) {
+  position: absolute;
+  right: 10px; /* Adjust icon position */
+  color: var(--ion-color-medium); /* Optional: Color adjustment */
+}
+.toast-white-text {
+  --ion-toast-color: #ffffff;
+  --ion-toast-background: #333333; /* optional: changes the background */
+  font-weight: bold;
+  text-align: center;
+}
+.ion-color-success{
+  --ion-color-contrast: #fff !important;
+}
+.toast-wrapper {
+  border-radius: 20px;
+}
+.error-message {
+  color: red;
+}

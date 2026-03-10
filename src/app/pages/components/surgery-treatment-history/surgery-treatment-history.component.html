@@ -1,0 +1,199 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">SURGERY/TREATMENT HISTORY</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <div class="padding">
+        <form [formGroup]="dispenseForm">
+          <app-participant-info 
+          [participant]="participantData" 
+          (profileClicked)="nevigateProfile()">
+        </app-participant-info>
+
+          <div *ngIf="currentStep === 1">
+            <div class="form-group">
+              <p class="participant-info" style="margin-bottom: 20px;">
+                1. Has any surgery or treatment been<br>
+                <span style="margin-left: 23px;">done to the child's eyes?</span>
+              </p>
+              <div class="btn">
+                <ion-button type="button" [disabled]="dispenseForm.disabled"
+                  [color]="dispenseForm.get('surgeryDone')?.value !== true ? 'danger' : 'success'"
+                  (click)="onSurgerySelection(true)">
+                  Yes
+                </ion-button>
+                <ion-button type="button" [disabled]="dispenseForm.disabled"
+                  [color]="dispenseForm.get('surgeryDone')?.value === false ? 'success' : 'danger'"
+                  (click)="onSurgerySelection(false)">
+                  No
+                </ion-button>
+              </div>
+              <div class="error-message" *ngIf="stepSubmitted && dispenseForm.get('surgeryDone')?.invalid">
+                <small>Please select an option.</small>
+              </div>
+            </div>
+
+            <!-- Only show this question if user selected "Yes" -->
+            <div class="form-group" *ngIf="dispenseForm.get('surgeryDone')?.value === true">
+              <p class="participant-info" style="padding: 5px;">
+                2. Which eye was the surgery or<br>
+                <span style="margin-left: 23px;">treatment done to?</span>
+              </p>
+              <div class="border">
+                <ion-select formControlName="treatmentEye" placeholder="Select Eye" toggleIcon="caret-down-sharp"
+                  interface="popover" class="custom-ion-select">
+                  <ion-select-option value="left">Left Eye</ion-select-option>
+                  <ion-select-option value="right">Right Eye</ion-select-option>
+                  <ion-select-option value="BOTH_EYE">Both Eye</ion-select-option>
+                </ion-select>
+              </div>
+              <div class="error-message" *ngIf="stepSubmitted && dispenseForm.get('treatmentEye')?.invalid">
+                <small>Please select which eye.</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 and 3 only visible if surgery was done -->
+          <div *ngIf="currentStep === 2 && dispenseForm.get('surgeryDone')?.value === true">
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                3. What type of surgery and treatment<br>
+                <span style="margin-left: 23px;">was done?</span>
+              </p>
+              <div class="border">
+                <ion-input formControlName="searchTerm" placeholder="Type here" class="search-input"></ion-input>
+              </div>
+              <div class="error-message" *ngIf="stepSubmitted && dispenseForm.get('searchTerm')?.invalid">
+                <small>This field is required.</small>
+              </div>
+            </div>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" size-md="4" formGroupName="leftEye">
+                  <strong>Left</strong>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="trauma"></ion-checkbox>
+                        <p class="participant-info">Trauma</p>
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="cataract"></ion-checkbox>
+                        <p class="participant-info">Cataract</p>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="squint"></ion-checkbox>
+                        <p class="participant-info">Squint</p>
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="lid"></ion-checkbox>
+                        <p class="participant-info">Lid</p>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="other"></ion-checkbox>
+                        <p class="participant-info">Other</p>
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="none"></ion-checkbox>
+                        <p class="participant-info">None</p>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+
+                <ion-col size="12" size-md="4" formGroupName="rightEye">
+                  <strong>Right</strong>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="trauma"></ion-checkbox>
+                        <p class="participant-info">Trauma</p>
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="cataract"></ion-checkbox>
+                        <p class="participant-info">Cataract</p>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="squint"></ion-checkbox>
+                        <p class="participant-info">Squint</p>
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="lid"></ion-checkbox>
+                        <p class="participant-info">Lid</p>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="other"></ion-checkbox>
+                        <p class="participant-info">Other</p>
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="6">
+                      <ion-item>
+                        <ion-checkbox formControlName="none"></ion-checkbox>
+                        <p class="participant-info">None</p>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+
+          <div *ngIf="currentStep === 3 && dispenseForm.get('surgeryDone')?.value === true">
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                4. What are the medical issues or<br>
+                <span style="margin-left: 23px;">problems that the child has ?</span>
+              </p>
+              <ion-textarea formControlName="medicalIssues" placeholder="Enter Answer"></ion-textarea>
+              <div class="error-message" *ngIf="stepSubmitted && dispenseForm.get('medicalIssues')?.invalid">
+                <small>Please provide the details.</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="error-message" *ngIf="globalError">
+            <p>{{ globalError }}</p>
+          </div>
+        </form>
+      </div>
+      <app-profile-footer [currentStep]="currentStep" [totalSteps]="totalSteps" (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()" (saveProgressClick)="submitForm()" (editClick)="onEdit()"
+        (deleteClick)="onDelete()">
+      </app-profile-footer>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

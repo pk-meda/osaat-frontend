@@ -1,0 +1,65 @@
+ion-label{
+    color: #9E9E9E;
+}
+
+
+/* Specific styling for managementPlan multi-select only */
+ion-select[formControlName="managementPlan"] {
+  width: 100%;
+  padding: 12px;
+  min-height: 48px;
+}
+
+/* Display selected items as chips/tags below the managementPlan select */
+.selected-items-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  min-height: 32px;
+}
+
+.selected-item-chip {
+  display: inline-flex;
+  align-items: center;
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  gap: 6px;
+}
+
+.selected-item-chip ion-icon {
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.selected-item-chip ion-icon:hover {
+  opacity: 1;
+}
+
+/* Empty state */
+.selected-items-display:empty::after {
+  content: "No items selected";
+  color: #999;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* Border highlight when managementPlan is focused */
+.border:has(ion-select[formControlName="managementPlan"]:focus-within) {
+  border-color: #3880ff;
+  box-shadow: 0 0 0 3px rgba(56, 128, 255, 0.1);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .selected-item-chip {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}

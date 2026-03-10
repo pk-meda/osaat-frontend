@@ -1,0 +1,108 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">CREATING A NEW PROFILE</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <div class="padding">
+        <form [formGroup]="studentProfileForm">
+          <p class="participant-info">
+            Participant number: N/A
+          </p>
+
+          <!-- Step 1: Select Country -->
+          <div class="form-group">
+            <p class="participant-info">1. Select the Country</p>
+            <div class="border">
+              <ion-select formControlName="country" placeholder="Select Country" interface="popover"
+                (ionChange)="onCountrySelect($event)">
+                <ion-select-option *ngFor="let country of countries" [value]="country.country">
+                  {{ country.country }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </div>
+
+          <!-- Step 2: Select Province/Region -->
+          <div class="form-group" *ngIf="provinces.length > 0">
+            <p class="participant-info">2. Select the Province/Region</p>
+            <div class="border">
+              <ion-select formControlName="province" placeholder="Select Province" interface="popover">
+                <ion-select-option *ngFor="let province of provinces" [value]="province">
+                  {{ province }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </div>
+
+          <!-- Step 3: School Name -->
+          <div class="form-group">
+            <p class="participant-info">3. Enter School Name</p>
+            <div class="border">
+              <ion-input formControlName="school_name" placeholder="participant registration."></ion-input>
+            </div>
+          </div>
+
+          <!-- Step 4: Number of Children -->
+          <div class="form-group">
+            <p class="participant-info">4. Number of Children Enrolled</p>
+            <div class="border">
+              <ion-input type="number" formControlName="children_count" placeholder="Enter Number"></ion-input>
+            </div>
+          </div>
+
+          <!-- Step 5: Address/Location -->
+          <div class="form-group">
+            <p class="participant-info">5. Address/Location</p>
+            <div class="border">
+              <ion-input formControlName="address" placeholder="Enter Address or Location"></ion-input>
+            </div>
+          </div>
+
+          <!-- Step 6: Contact Person -->
+          <div class="form-group">
+            <p class="participant-info">6. Contact Person</p>
+            <div class="border">
+              <ion-input formControlName="contact_person" placeholder="Enter Contact Person" type="tel"
+              maxlength="10"
+              appContactNumberOnly ></ion-input>
+            </div>
+          </div>
+
+          <!-- Step 7: Contact Details -->
+          <div class="form-group">
+            <p class="participant-info">7. Contact Details</p>
+            <div class="border">
+              <ion-input formControlName="contact_details" placeholder="Enter Phone or Email" type="tel"
+              maxlength="10"
+              appContactNumberOnly>
+              </ion-input>
+            </div>
+          </div>
+
+          <!-- Step 8: Referral Clinic/Hospital -->
+          <div class="form-group">
+            <p class="participant-info">8. Referral Clinic/Hospital (Optional)</p>
+            <div class="border">
+              <ion-input formControlName="referral_clinic" placeholder="Enter Referral Clinic/Hospital"></ion-input>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Footer Navigation -->
+      <app-profile-footer [currentStep]="currentStep" [totalSteps]="totalSteps" (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()" (saveProgressClick)="submitForm()" (editClick)="onEdit()"
+        (deleteClick)="onDelete()">
+      </app-profile-footer>
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>

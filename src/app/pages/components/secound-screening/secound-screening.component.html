@@ -1,0 +1,316 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon
+        class="back_icon"
+        name="chevron-back-outline"
+        (click)="backLocation()"
+      ></ion-icon>
+      <span class="back_btn">PARTICIPANT REGISTRATION.</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <div class="padding">
+        <form [formGroup]="screeningForm">
+          <div *ngIf="currentStep === 1">
+            <!-- Participant First Name -->
+            <div class="form-group">
+              <p class="participant-info">1. Participant first name?</p>
+              <div class="border">
+                <ion-input
+                  formControlName="firstname"
+                  placeholder="Enter participant firstname"
+                  maxlength="50"
+                >
+                </ion-input>
+              </div>
+              <ion-text
+                color="danger"
+                *ngIf="
+                  (screeningForm.get('firstname')?.touched || submitted) &&
+                  screeningForm.get('firstname')?.invalid
+                "
+              >
+                <ng-container
+                  *ngIf="screeningForm.get('firstname')?.errors?.['required']"
+                >
+                  Please enter participant first name
+                </ng-container>
+                <ng-container
+                  *ngIf="screeningForm.get('firstname')?.errors?.['minlength']"
+                >
+                  First name must be at least 2 characters long
+                </ng-container>
+              </ion-text>
+            </div>
+
+            <!-- Participant Surname -->
+            <div class="form-group">
+              <p class="participant-info">2. Participant surname?</p>
+              <div class="border">
+                <ion-input
+                  formControlName="surname"
+                  placeholder="Enter participant surname"
+                  maxlength="50"
+                >
+                </ion-input>
+              </div>
+              <ion-text
+                color="danger"
+                *ngIf="
+                  (screeningForm.get('surname')?.touched || submitted) &&
+                  screeningForm.get('surname')?.invalid
+                "
+              >
+                <ng-container
+                  *ngIf="screeningForm.get('surname')?.errors?.['required']"
+                >
+                  Please enter participant surname
+                </ng-container>
+                <ng-container
+                  *ngIf="screeningForm.get('surname')?.errors?.['minlength']"
+                >
+                  Surname must be at least 2 characters long
+                </ng-container>
+              </ion-text>
+            </div>
+
+            <!-- Contact First Name -->
+            <div class="form-group">
+              <p class="participant-info">3. Contact first name</p>
+              <div class="border">
+                <ion-input
+                  formControlName="contact_name"
+                  placeholder="Enter contact person firstname"
+                  maxlength="50"
+                >
+                </ion-input>
+              </div>
+              <ion-text
+                color="danger"
+                *ngIf="
+                  (screeningForm.get('contact_name')?.touched || submitted) &&
+                  screeningForm.get('contact_name')?.invalid
+                "
+              >
+                <ng-container
+                  *ngIf="
+                    screeningForm.get('contact_name')?.errors?.['required']
+                  "
+                >
+                  Please enter contact person first name
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    screeningForm.get('contact_name')?.errors?.['minlength']
+                  "
+                >
+                  Contact name must be at least 2 characters long
+                </ng-container>
+              </ion-text>
+            </div>
+
+            <!-- Contact Surname -->
+            <div class="form-group">
+              <p class="participant-info">4. Contact surname</p>
+              <div class="border">
+                <ion-input
+                  type="text"
+                  formControlName="contact_surname"
+                  placeholder="Enter contact surname"
+                  maxlength="50"
+                >
+                </ion-input>
+              </div>
+              <ion-text
+                color="danger"
+                *ngIf="
+                  (screeningForm.get('contact_surname')?.touched ||
+                    submitted) &&
+                  screeningForm.get('contact_surname')?.invalid
+                "
+              >
+                <ng-container
+                  *ngIf="
+                    screeningForm.get('contact_surname')?.errors?.['required']
+                  "
+                >
+                  Please enter contact surname
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    screeningForm.get('contact_surname')?.errors?.['minlength']
+                  "
+                >
+                  Contact surname must be at least 2 characters long
+                </ng-container>
+              </ion-text>
+            </div>
+
+            <!-- Relationship Selection -->
+            <div class="form-group">
+              <p class="participant-info">5. Relationship to participant</p>
+              <ion-item class="border" lines="none">
+                <ion-select
+                  formControlName="relationship"
+                  interface="popover"
+                  placeholder="Select relationship"
+                >
+                  <ion-select-option value="Mother">Mother</ion-select-option>
+                  <ion-select-option value="Father">Father</ion-select-option>
+                  <ion-select-option value="Self" *ngIf="isAdult"
+                    >Self</ion-select-option
+                  >
+                  <ion-select-option value="Other">Other</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-text
+                color="danger"
+                *ngIf="
+                  (screeningForm.get('relationship')?.touched || submitted) &&
+                  screeningForm.get('relationship')?.invalid
+                "
+              >
+                Please select relationship to participant
+              </ion-text>
+            </div>
+
+            <!-- Other Relationship (Conditional) -->
+            <div
+              class="form-group"
+              *ngIf="screeningForm.get('relationship')?.value === 'Other'"
+            >
+              <p class="participant-info">Please specify relationship</p>
+              <div class="border">
+                <ion-input
+                  formControlName="other_relationship"
+                  placeholder="e.g., Aunt, Uncle, Cousin, Teacher"
+                  maxlength="50"
+                >
+                </ion-input>
+              </div>
+              <ion-text
+                color="danger"
+                *ngIf="
+                  (screeningForm.get('other_relationship')?.touched ||
+                    submitted) &&
+                  screeningForm.get('other_relationship')?.invalid
+                "
+              >
+                <ng-container
+                  *ngIf="
+                    screeningForm.get('other_relationship')?.errors?.[
+                      'required'
+                    ]
+                  "
+                >
+                  Please specify the relationship
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    screeningForm.get('other_relationship')?.errors?.[
+                      'minlength'
+                    ]
+                  "
+                >
+                  Relationship must be at least 2 characters long
+                </ng-container>
+              </ion-text>
+            </div>
+
+            <!-- Contact Number -->
+<!-- Contact Number -->
+<div class="form-group">
+  <p class="participant-info">6. Contact Number</p>
+  <div class="border_1">
+    <!-- Use native input instead of ion-input -->
+    <input
+      id="phoneInput"
+      type="tel"
+      class="native-input"
+      placeholder="Enter mobile number"
+      appContactNumberOnly
+    />
+  </div>
+  <ion-text
+    color="danger"
+    *ngIf="
+      (screeningForm.get('contact_number')?.touched || submitted) &&
+      screeningForm.get('contact_number')?.invalid
+    "
+  >
+    Please enter a valid phone number
+  </ion-text>
+</div>
+
+
+            <!-- Reference Number (readonly) -->
+            <ng-container *ngIf="reference_number">
+              <div class="form-group">
+                <p class="participant-info">7. Reference Number</p>
+                <div class="border">
+                  <ion-input
+                    formControlName="reference_number"
+                    placeholder="Reference number"
+                    ></ion-input>
+                    <!-- [readonly]="true" -->
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Optional School Selector (Uncomment if needed) -->
+            <!--
+            <div class="form-group">
+              <p class="participant-info">7. School Name (Optional)</p>
+              <div class="select-container">
+                <ion-item class="select-box" button (click)="toggleDropdown()">
+                  <ion-label [color]="screeningForm.get('School_name')?.value ? 'dark' : 'medium'">
+                    {{ screeningForm.get('School_name')?.value || 'Please select a school (optional)' }}
+                  </ion-label>
+                  <ion-icon slot="end" class="chevron-icon" 
+                    [name]="showDropdown ? 'caret-up-outline' : 'caret-down-outline'">
+                  </ion-icon>
+                </ion-item>
+                <div *ngIf="showDropdown" class="dropdown-panel">
+                  <ion-searchbar 
+                    [formControl]="searchControl" 
+                    placeholder="Search schools" 
+                    showCancelButton="focus"
+                    [showClearButton]="true" 
+                    (ionClear)="clearSearch()">
+                  </ion-searchbar>
+                  <ion-list>
+                    <ion-item *ngFor="let sc of filteredSchools" 
+                      (click)="selectSchool(sc.school_name)" 
+                      button>
+                      {{ sc.school_name }}
+                    </ion-item>
+                    <ion-item *ngIf="filteredSchools.length === 0">
+                      <ion-label><em>No schools found</em></ion-label>
+                    </ion-item>
+                  </ion-list>
+                </div>
+              </div>
+            </div>
+            -->
+          </div>
+        </form>
+      </div>
+
+      <app-profile-footer
+        [currentStep]="currentStep"
+        [totalSteps]="totalSteps"
+        (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()"
+        (saveProgressClick)="submitForm()"
+        (editClick)="onEdit()"
+        (deleteClick)="onDelete()"
+      >
+      </app-profile-footer>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

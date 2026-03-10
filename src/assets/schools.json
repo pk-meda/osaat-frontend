@@ -1,0 +1,53 @@
+[
+    {
+      "name": "University of Cape Town",
+      "type": "University",
+      "location": "Cape Town, Western Cape"
+    },
+    {
+      "name": "University of the Witwatersrand",
+      "type": "University",
+      "location": "Johannesburg, Gauteng"
+    },
+    {
+      "name": "University of Pretoria",
+      "type": "University",
+      "location": "Pretoria, Gauteng"
+    },
+    {
+      "name": "Stellenbosch University",
+      "type": "University",
+      "location": "Stellenbosch, Western Cape"
+    },
+    {
+      "name": "Rondebosch Boys' High School",
+      "type": "Secondary",
+      "location": "Cape Town, Western Cape"
+    },
+    {
+      "name": "Bishops Diocesan College",
+      "type": "Secondary",
+      "location": "Cape Town, Western Cape"
+    },
+    {
+      "name": "St. John's College",
+      "type": "Secondary",
+      "location": "Johannesburg, Gauteng"
+    },
+    {
+      "name": "Crawford College",
+      "type": "Secondary",
+      "location": "Multiple Locations"
+    },
+    {
+      "name": "Clifton School",
+      "type": "Primary",
+      "location": "Durban, KwaZulu-Natal"
+    },
+    {
+      "name": "Pretoria Boys High School",
+      "type": "Secondary",
+      "location": "Pretoria, Gauteng"
+    }
+  ]
+  

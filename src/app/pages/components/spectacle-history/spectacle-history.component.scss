@@ -1,0 +1,167 @@
+ion-card-subtitle.view-profile {
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: 8px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.actions ion-button {
+    margin: 0 0.5rem;
+}
+
+.duration-grid { margin-top: 6px; }
+.select-box {
+  border: 1px solid #e9ecef; border-radius: 10px; padding: 4px 8px;
+  --padding-start: 0;
+}
+.helper { margin-top: 6px; }
+
+// ion-card {
+//     height: 100%;
+//     width: 90%;
+// }
+
+.main-text {
+    font-size: 14px;
+    color: black;
+}
+
+.view_profile {
+    color: #001fff;
+    font-weight: 500;
+}
+
+p.spectacles {
+    color: black;
+}
+
+
+
+.custom-datetime-button::part(native-button) {
+    color: transparent;
+    width: 24px;
+    min-width: 0;
+    padding: 0;
+    background: none;
+    border: none;
+}
+
+
+/*************************************
+ * Styles for the select “box” itself
+ *************************************/
+ .lens-select {
+    /* Outer border & shape for the IonItem */
+    border: 1px solid #ccc;       /* Thin gray border */
+    border-radius: 8px;           /* Rounded corners */
+    --background: #fff;           /* White background inside */
+    margin: 16px 0;               /* Optional vertical spacing */
+  
+    /* Remove any extra lines inside the item */
+    ion-item-native {
+      border: none;
+    }
+  
+    /* Customize the ion-select placeholder & text */
+    ion-select.custom-dropdown {
+      --placeholder-color: #999;    /* Light gray placeholder text */
+      --placeholder-opacity: 1;     /* Ensure placeholder is fully visible */
+      --color: #666;                /* Normal text color once selected */
+      --padding-start: 12px;        /* Left padding for the text */
+      --padding-end: 40px;          /* Right padding (room for default arrow) */
+    }
+  }
+  
+  /***********************************************
+   * Styles for the popover dropdown that appears
+   ***********************************************/
+  :host ::ng-deep .select-interface-popover {
+    /* Outer list container in the popover */
+    ion-list {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 0;
+      padding: 0;
+    }
+  
+    /* Individual items inside the popover */
+    ion-item {
+      --min-height: 40px;    /* Slightly smaller or bigger if you prefer */
+      color: #666;
+      font-size: 14px;
+    }
+  }
+  .active-btn {
+    border: 1px solid black;
+    border-radius: 4px; // adjust as needed
+    /* Optionally, add more styling if you want, e.g. background-color, font-weight, etc. */
+  }
+
+  /* Additional CSS for Question 2 Duration Selection */
+
+.duration-selection {
+  margin-top: 15px;
+  
+  .duration-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+}
+
+.duration-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+  
+  .duration-btn {
+    --min-width: 50px;
+    --min-height: 40px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    
+    &.ion-color-success {
+      --background: #2dd36f;
+      --color: white;
+    }
+    
+    &.ion-color-light {
+      --background: #f4f5f8;
+      --color: #222428;
+      --border-color: #d7d8da;
+      --border-style: solid;
+      --border-width: 1px;
+    }
+  }
+}
+
+.selected-duration {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  
+  ion-chip {
+    --background: #3880ff;
+    --color: white;
+    font-weight: 500;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .duration-buttons {
+    .duration-btn {
+      --min-width: 45px;
+      --min-height: 38px;
+      font-size: 13px;
+    }
+  }
+}

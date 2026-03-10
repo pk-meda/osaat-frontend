@@ -1,0 +1,41 @@
+
+<ion-header mode="md">
+  <app-header></app-header>
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">{{screeningType}}</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <p class="participant-info" style="margin-bottom: 20px; font-size: 16px;
+    text-align: center;">Please Select Internal or External</p>
+  <div class="button-group">
+    <ion-button 
+      [color]="selectedOption === 'pass' ? 'success' : 'danger'" 
+      (click)="selectOption('Internal')" class="button_yes">
+      Internal
+    </ion-button>
+    <ion-button 
+      [color]="selectedOption === 'fail' ? 'success' : 'danger'" 
+      (click)="selectOption('External')" class="button_yes">
+      External
+    </ion-button>
+    <ion-button 
+      [color]="selectedOption === 'fail' ? 'success' : 'danger'" 
+      (click)="selectOption('Both')" class="button_yes">
+      Both
+    </ion-button>
+    <ion-button 
+      [color]="selectedOption === 'fail' ? 'success' : 'danger'" 
+      (click)="selectOption('Cancel')" class="button_yes">
+      Cancel
+    </ion-button>
+  </div>
+  </ion-card-content>
+  </ion-card>
+</ion-content>

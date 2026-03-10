@@ -1,0 +1,130 @@
+<!-- First Screen: Comprehensive Eye Exam -->
+<ion-content class="ion-padding" *ngIf="RouteCheck">
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>Comprehensive Eye Exam</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="cancel()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="content-wrapper">
+    <div class="header-section">
+      <ion-icon name="eye-outline" class="main-icon"></ion-icon>
+      <h2 class="main-title">Choose Visual Test</h2>
+      <p class="subtitle">Select the appropriate test method</p>
+    </div>
+
+    <div class="test-cards">
+      <ion-card class="test-card" button (click)="doETest()">
+        <ion-card-content>
+          <div class="card-icon">
+            <ion-icon name="grid-outline"></ion-icon>
+          </div>
+           <ion-icon name="chevron-forward-outline" slot="end" class="chevron-icons"></ion-icon>
+          <ion-card-title class="card-title">E Test</ion-card-title>
+          <ion-card-subtitle class="card-subtitle">Orientation-based testing</ion-card-subtitle>
+          <p class="card-description">
+            Ideal for children or patients who cannot read letters. 
+            Uses directional E symbols.
+          </p>
+          <div class="card-footer">
+            <ion-chip color="primary" outline>
+              <ion-icon name="people-outline"></ion-icon>
+              <ion-label>Child-friendly</ion-label>
+            </ion-chip>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="test-card" button (click)="doVAChart()">
+        <ion-card-content>
+          <div class="card-icon">
+            <ion-icon name="document-text-outline"></ion-icon>
+          </div>
+           <ion-icon name="chevron-forward-outline" slot="end" class="chevron-icons"></ion-icon>
+          <ion-card-title class="card-title">VA Chart</ion-card-title>
+          <ion-card-subtitle class="card-subtitle">Visual acuity measurement</ion-card-subtitle>
+          <p class="card-description">
+            Standard letter chart for measuring visual acuity. 
+            Uses traditional Snellen chart format.
+          </p>
+          <div class="card-footer">
+            <ion-chip color="secondary" outline>
+              <ion-icon name="analytics-outline"></ion-icon>
+              <ion-label>Precise</ion-label>
+            </ion-chip>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>
+
+<!-- Second Screen: Participant Registration -->
+<ion-content class="ion-padding" *ngIf="!RouteCheck">
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>Participant Registration</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="cancel()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="content-wrapper">
+    <div class="header-section">
+      <ion-icon name="person-add-outline" class="main-icon"></ion-icon>
+      <h2 class="main-title">Continue Testing</h2>
+      <p class="subtitle">Select next action for participant</p>
+    </div>
+
+    <div class="test-cards">
+      <ion-card class="test-card retest-card" button (click)="doETest()">
+        <ion-card-content>
+          <div class="card-icon retest">
+            <ion-icon name="refresh-outline"></ion-icon>
+          </div>
+          <ion-icon name="chevron-forward-outline" slot="end" class="chevron-icons"></ion-icon>
+          <ion-card-title class="card-title">Redo E Test</ion-card-title>
+          <ion-card-subtitle class="card-subtitle">Repeat orientation test</ion-card-subtitle>
+          <p class="card-description">
+            Perform the E test again for verification or if initial results were unclear.
+          </p>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="test-card retest-card" button (click)="doVAChart()">
+        <ion-card-content>
+          <div class="card-icon retest">
+            <ion-icon name="refresh-outline"></ion-icon>
+          </div>
+          <ion-icon name="chevron-forward-outline" slot="end" class="chevron-icons"></ion-icon>
+          <ion-card-title class="card-title">Redo VA Chart</ion-card-title>
+          <ion-card-subtitle class="card-subtitle">Repeat visual acuity test</ion-card-subtitle>
+          <p class="card-description">
+            Record visual acuity using the VA chart again for confirmation.
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div class="continue-section">
+      <ion-button 
+        expand="block" 
+        size="large" 
+        color="success"
+        class="continue-button"
+        (click)="SecoundScreen()">
+        <ion-icon name="arrow-forward-outline" slot="start"></ion-icon>
+        Continue to Second Screening
+        <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

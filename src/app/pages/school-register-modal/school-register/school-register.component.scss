@@ -1,0 +1,172 @@
+::ng-deep ion-select::part(text) {
+  white-space: normal !important;
+}
+::ng-deep ion-select-option {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  display: block !important;
+  line-height: 1.2;
+}
+ion-select::part(icon) {
+  position: absolute;
+  right: 10px;
+}
+
+
+::ng-deep .select-interface-option {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.4 !important;
+  height: auto !important;
+  padding-right: 10px;
+}
+
+.custom-title {
+  text-align: center;
+  font-weight: 600;
+  display: flex;
+  justify-self: center;
+}
+
+.back_btn {
+    font-size: 17px;
+    color: #333;
+}
+
+.participant-info {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 15px;
+}
+
+// .select-container {
+//   margin-bottom: 15px;
+// }
+
+.custom-select {
+  width: 100%;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --border-radius: 8px;
+  --border-width: 1px;
+  --border-color: #ddd;
+  --placeholder-color: #999;
+  --placeholder-opacity: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.register-container {
+  margin-top: 15px;
+}
+
+.register-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.register-input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.register-btn {
+  --background: #3880ff;
+  --border-radius: 8px;
+  margin: 0;
+  height: 44px;
+}
+
+/* Make the register button full-width on mobile */
+@media (max-width: 480px) {
+  .register-input-group {
+    flex-direction: column;
+  }
+  
+  .register-btn {
+    width: 100%;
+  }
+}
+
+/* Style for the ion-select alert overlay - this will be applied 
+   but won't override the internal styling of the alert interface */
+:root {
+  --ion-color-primary: #3880ff;
+}
+.register-label {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+}
+ion-icon.chevron-icon{
+  font-size: 15px !important;
+}
+
+ion-item{
+  color: #9e9e9ee3;
+}
+
+.select-container {
+  position: relative;
+
+  .select-box {
+    --background: #ffffff;
+    // border: 1px solid #9E9E9E !important;
+    // border-radius: 11px !important;
+    --padding-start: 16px;
+    --padding-end: 9px;
+    // color: #9e9e9eb8;
+        border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .dropdown-panel {
+    // position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid var(--ion-color-light-shade, #ccc);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    padding: 4px 0;
+
+    ion-searchbar {
+      --background: transparent;
+      --border-radius: 0;
+      --padding-start: 8px;
+      --padding-end: 8px;
+    }
+
+    ion-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 0;
+    }
+
+    .clear-btn {
+      width: 100%;
+      border-top: 1px solid var(--ion-color-light-shade, #ccc);
+      --padding-top: 8px;
+      --padding-bottom: 8px;
+    }
+  }
+}
+
+ion-segment-button{
+    font-size: 13px !important;
+}
+.select-container {
+    position: relative;
+    padding-bottom: 1px;
+    padding-top: 3px;
+}

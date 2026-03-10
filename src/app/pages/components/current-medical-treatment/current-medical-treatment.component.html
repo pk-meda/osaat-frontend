@@ -1,0 +1,233 @@
+<!-- current-medical-treatment.component.html -->
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">CURRENT MEDICAL TREATMENT</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <div class="padding">
+        <form [formGroup]="dispenseForm">
+          <app-participant-info 
+          [participant]="participantData" 
+          (profileClicked)="nevigateProfile()">
+        </app-participant-info>
+
+          <!-- STEP 1 -->
+          <div *ngIf="currentStep === 1">
+            <div class="form-group">
+              <p class="participant-info" style="margin-bottom: 20px;">
+                1. Is the child currently using any<br>
+                <span style="margin-left: 23px;">medical treatment?</span>
+              </p>
+              <div class="btn">
+                <ion-button type="button" [disabled]="dispenseForm.disabled"
+                  [color]="dispenseForm.get('currentTreatment')?.value !== true ? 'danger' : 'success'"
+                  (click)="selectCurrentTreatment(true)">
+                  Yes
+                </ion-button>
+                <ion-button type="button" [disabled]="dispenseForm.disabled"
+                  [color]="dispenseForm.get('currentTreatment')?.value === false ? 'success' : 'danger'"
+                  (click)="selectCurrentTreatment(false)">
+                  No
+                </ion-button>
+              </div>
+              <div
+                *ngIf="(dispenseForm.get('currentTreatment')?.touched || submitted) && dispenseForm.get('currentTreatment')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select an option.</p>
+                </ion-text>
+              </div>
+            </div>
+
+            <!-- Only show medicine name if Yes is selected -->
+            <div class="form-group" *ngIf="dispenseForm.get('currentTreatment')?.value === true">
+              <p class="participant-info">
+                2. What medicine is being used?<br>
+                <span style="margin-left: 23px;">(e.g. name of the medicine)</span>
+              </p>
+              <ion-textarea placeholder="Enter Answer" formControlName="medicineUsed"></ion-textarea>
+              <div
+                *ngIf="(dispenseForm.get('medicineUsed')?.touched || submitted) && dispenseForm.get('medicineUsed')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>This field is required.</p>
+                </ion-text>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 - Only show if Yes was selected -->
+          <div *ngIf="currentStep === 2 && dispenseForm.get('currentTreatment')?.value === true">
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">3. Which eye is being treated?</p>
+              <div class="border">
+                <ion-select placeholder="Select Eye" formControlName="eyeTreated" class="form-control always-flip"
+                  toggleIcon="caret-down-sharp" interface="popover">
+                  <ion-select-option value="Left_eye">Left</ion-select-option>
+                  <ion-select-option value="Right_eye">Right</ion-select-option>
+                  <ion-select-option value="Both">Both</ion-select-option>
+                  <ion-select-option value="Systemic">Systemic</ion-select-option>
+                </ion-select>
+              </div>
+              <div
+                *ngIf="(dispenseForm.get('eyeTreated')?.touched || submitted) && dispenseForm.get('eyeTreated')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select an option.</p>
+                </ion-text>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">4. What type of medicine is being used?</p>
+              <div class="border">
+                <ion-select placeholder="Select Medicine Type" formControlName="medicineType"
+                  class="form-control always-flip" toggleIcon="caret-down-sharp" interface="popover">
+                  <ion-select-option value="tablet">Tablet</ion-select-option>
+                  <ion-select-option value="syrup">Syrup</ion-select-option>
+                  <ion-select-option value="injection">Injection</ion-select-option>
+                </ion-select>
+              </div>
+              <div
+                *ngIf="(dispenseForm.get('medicineType')?.touched || submitted) && dispenseForm.get('medicineType')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select an option.</p>
+                </ion-text>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">5. How many times a day are these medicines used?</p>
+              <div class="border">
+                <ion-select placeholder="Select Frequency" formControlName="frequency" class="form-control always-flip"
+                  toggleIcon="caret-down-sharp" interface="popover">
+                  <ion-select-option value="1">Once</ion-select-option>
+                  <ion-select-option value="2">Twice</ion-select-option>
+                  <ion-select-option value="3">Thrice</ion-select-option>
+                  <ion-select-option value="4">Four times</ion-select-option>
+                </ion-select>
+              </div>
+              <div
+                *ngIf="(dispenseForm.get('frequency')?.touched || submitted) && dispenseForm.get('frequency')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select an option.</p>
+                </ion-text>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info">
+                6. When was the medicine prescribed to the patient?
+              </p>
+
+              <!-- Duration Type Selection -->
+              <div class="btn" style="margin-bottom: 15px">
+                <ion-button
+                  type="button"
+                  [disabled]="dispenseForm.disabled"
+                  [color]="
+                    wearingDurationType === 'months' ? 'success' : 'medium'
+                  "
+                  (click)="setWearingDurationType('months')"
+                >
+                  Months
+                </ion-button>
+                <ion-button
+                  type="button"
+                  [disabled]="dispenseForm.disabled"
+                  [color]="wearingDurationType === 'years' ? 'success' : 'medium'"
+                  (click)="setWearingDurationType('years')"
+                >
+                  Years
+                </ion-button>
+              </div>
+
+              <!-- Duration Value Selection -->
+              <div *ngIf="wearingDurationType" class="duration-selection">
+                <p class="duration-label">
+                  Select number of {{ wearingDurationType }}:
+                </p>
+
+                <!-- For Months (1-12) -->
+                <div
+                  *ngIf="wearingDurationType === 'months'"
+                  class="duration-buttons"
+                >
+                  <ion-button
+                    *ngFor="let month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+                    type="button"
+                    [disabled]="dispenseForm.disabled"
+                    [color]="wearingDurationValue === month ? 'success' : 'light'"
+                    (click)="setWearingDurationValue(month)"
+                    class="duration-btn"
+                  >
+                    {{ month }}
+                  </ion-button>
+                </div>
+
+                <!-- For Years (1-10+) -->
+                <div
+                  *ngIf="wearingDurationType === 'years'"
+                  class="duration-buttons"
+                >
+                  <ion-button
+                    *ngFor="let year of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+                    type="button"
+                    [disabled]="dispenseForm.disabled"
+                    [color]="wearingDurationValue === year ? 'success' : 'light'"
+                    (click)="setWearingDurationValue(year)"
+                    class="duration-btn"
+                  >
+                    {{ year }}
+                  </ion-button>
+                  <ion-button
+                    type="button"
+                    [disabled]="dispenseForm.disabled"
+                    [color]="wearingDurationValue === 99 ? 'success' : 'light'"
+                    (click)="setWearingDurationValue(99)"
+                    class="duration-btn"
+                  >
+                    10+
+                  </ion-button>
+                </div>
+              </div>
+
+              <!-- Display Selected Duration -->
+              <div
+                *ngIf="dispenseForm.get('prescribedDate')?.value"
+                class="selected-duration"
+              >
+                <ion-chip color="primary">
+                  <ion-label>{{
+                    dispenseForm.get("prescribedDate")?.value
+                  }}</ion-label>
+                </ion-chip>
+              </div>
+
+              <div
+                *ngIf="
+                  submitted &&
+                  dispenseForm.get('prescribedDate')?.hasError('required')
+                "
+              >
+                <ion-text color="danger">
+                  <p>Please select the wearing duration.</p>
+                </ion-text>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+      <app-profile-footer [currentStep]="currentStep" [totalSteps]="totalSteps" (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()" (saveProgressClick)="submitForm()" (editClick)="onEdit()"
+        (deleteClick)="onDelete()">
+      </app-profile-footer>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

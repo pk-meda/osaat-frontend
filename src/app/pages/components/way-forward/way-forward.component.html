@@ -1,0 +1,39 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">WAY FORWARD</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-radio-group [(ngModel)]="selectedReferral">
+        <ion-item>
+          <ion-label>No referral</ion-label>
+          <ion-radio slot="start" value="none"></ion-radio>
+        </ion-item>
+    
+        <ion-item>
+          <ion-label>Referred to second screening at {{ schoolName }}</ion-label>
+          <ion-radio slot="start" value="school"></ion-radio>
+        </ion-item>
+    
+        <ion-item>
+          <ion-label>Referred to to continue examination at the selected school or at another clinic/hospital</ion-label>
+          <ion-radio slot="start" value="clinic"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+
+      <div class="save_btn">
+      <ion-button expand="full" color="#1A3561" (click)="submitForm()" [disabled]="isloading">
+        <ion-spinner *ngIf="isloading"></ion-spinner> 
+        Save progress
+      </ion-button>
+      </div>
+      
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,27 @@
+
+        <div class="navigation-buttons">
+          <span class="size" (click)="onPreviousStep()" *ngIf="currentStep > 1">
+            <ion-icon class="icon_size" name="chevron-back-outline"></ion-icon>
+            Previous
+          </span>
+          <span class="size" (click)="onNextStep()" *ngIf="currentStep < totalSteps">
+            Next <ion-icon class="icon_size" name="chevron-forward-outline"></ion-icon>
+          </span>
+        </div>
+  
+        <div class="save_btn">
+          <ion-button expand="full" color="#1A3561" (click)="onSaveProgress()" [disabled]="saveDisabled || (apiService.isLoading.asObservable() | async)">
+            <ion-spinner *ngIf="apiService.isLoading.asObservable() | async"></ion-spinner> 
+            Save progress
+          </ion-button>
+        </div>
+  
+        <div class="action-buttons">
+          <span class="edit" (click)="onEdit()">
+            <ion-icon class="edit_icon" name="create-outline"></ion-icon> Edit
+          </span>
+          <span class="discard" (click)="onDelete()">
+            <ion-icon class="discard_icon" name="close-circle-outline"></ion-icon> Discard progress
+          </span>
+        </div>
+  

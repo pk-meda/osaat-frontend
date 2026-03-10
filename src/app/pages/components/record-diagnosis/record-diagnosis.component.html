@@ -1,0 +1,162 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">RECORD DIAGNOSIS</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <div class="padding">
+        <form [formGroup]="dispenseForm">
+          <app-participant-info
+            [participant]="participantData"
+            (profileClicked)="nevigateProfile()">
+          </app-participant-info>
+
+          <!-- STEP 1 -->
+          <div *ngIf="currentStep === 1">
+            <div class="form-group">
+              <p class="participant-info">
+                1. What is the type of refractive error based on final accepted prescription?
+              </p>
+              <div class="border">
+                <ion-select
+                  class="custom-ion-select"
+                  formControlName="refractiveErrorType"
+                  interface="popover"
+                  toggleIcon="caret-down-sharp"
+                  placeholder="Select refractive error">
+                  <ion-select-option *ngFor="let opt of REFRACTIVE_ERROR_OPTIONS" [value]="opt.value">
+                    {{ opt.label }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+              <ion-text color="danger"
+                        *ngIf="submitted && dispenseForm.get('refractiveErrorType')?.hasError('required')">
+                <p>Please select a refractive error.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div *ngIf="currentStep === 2">
+            <div class="form-group">
+              <p class="participant-info">
+                2. Which eye is affected by this refractive error?
+              </p>
+              <div class="border">
+                <ion-select
+                  class="custom-ion-select"
+                  formControlName="affectedEye"
+                  interface="popover"
+                  toggleIcon="caret-down-sharp"
+                  placeholder="Select eye">
+                  <ion-select-option *ngFor="let opt of AFFECTED_EYE_OPTIONS" [value]="opt.value">
+                    {{ opt.label }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+              <ion-text color="danger"
+                        *ngIf="submitted && dispenseForm.get('affectedEye')?.hasError('required')">
+                <p>Please select an eye.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div *ngIf="currentStep === 3">
+            <div class="form-group">
+              <p class="participant-info">
+                3. What ocular condition has been diagnosed in this patient?
+              </p>
+              <div class="border">
+                <ion-select
+                  class="custom-ion-select"
+                  formControlName="ocularCondition"
+                  interface="popover"
+                  toggleIcon="caret-down-sharp"
+                  placeholder="Select ocular condition">
+                  <ion-select-option *ngFor="let opt of OCULAR_CONDITION_OPTIONS" [value]="opt.value">
+                    {{ opt.label }}
+                  </ion-select-option>
+                  <ion-select-option value="OTHER">Other</ion-select-option>
+                </ion-select>
+              </div>
+
+              <!-- Show "Other" text field only when needed -->
+              <div class="border mt8" *ngIf="dispenseForm.get('ocularCondition')?.value === 'OTHER'">
+                <ion-input
+                  formControlName="ocularConditionOther"
+                  placeholder="Please specify the ocular condition">
+                </ion-input>
+              </div>
+
+              <ion-text color="danger"
+                        *ngIf="submitted && dispenseForm.get('ocularCondition')?.hasError('required')">
+                <p>Please select an ocular condition.</p>
+              </ion-text>
+              <ion-text color="danger"
+                        *ngIf="submitted && dispenseForm.get('ocularConditionOther')?.hasError('required')">
+                <p>Please specify the condition.</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <!-- STEP 4 -->
+<!-- STEP 4 -->
+<div *ngIf="currentStep === 4">
+  <div class="form-group">
+    <p class="participant-info">
+      4. How has the patient been advised to proceed?
+    </p>
+    <div class="border">
+      <ion-select
+        class="custom-ion-select"
+        formControlName="managementPlan"
+        interface="popover"
+        toggleIcon="caret-down-sharp"
+        placeholder="Select advice (multiple allowed)"
+        multiple="true">
+        <ion-select-option *ngFor="let opt of MANAGEMENT_OPTIONS" [value]="opt.value">
+          {{ opt.label }}
+        </ion-select-option>
+      </ion-select>
+    </div>
+    
+    <!-- Display selected items as chips -->
+    <div class="selected-items-display" *ngIf="dispenseForm.get('managementPlan')?.value?.length > 0">
+      <div class="selected-item-chip" 
+           *ngFor="let value of dispenseForm.get('managementPlan')?.value">
+        {{ getManagementLabel(value) }}
+        <ion-icon 
+          name="close-circle" 
+          (click)="removeManagementOption(value)">
+        </ion-icon>
+      </div>
+    </div>
+    
+    <ion-text color="danger"
+              *ngIf="submitted && dispenseForm.get('managementPlan')?.hasError('required')">
+      <p>Please select at least one management plan.</p>
+    </ion-text>
+  </div>
+</div>
+        </form>
+      </div>
+
+      <app-profile-footer
+        [currentStep]="currentStep"
+        [totalSteps]="totalSteps"
+        (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()"
+        (saveProgressClick)="submitForm()"
+        (editClick)="onEdit()"
+        (deleteClick)="onDelete()">
+      </app-profile-footer>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

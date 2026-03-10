@@ -1,0 +1,40 @@
+
+  .disabled-item {
+    opacity: 0.5;
+  }
+  
+  ion-badge {
+    font-size: 14px;
+    color: #1a3561;
+  }
+  
+.button_group{
+    margin-top: 20px;
+}
+.btn{
+    margin-bottom: 15px;
+}
+
+a {
+  color: #0056b3;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+}
+ion-icon.new_success {
+    position: relative;
+    right: 11px;
+    font-size: 15px !important;
+}
+
+
+ion-item.item.ios.item-lines-full.in-list.hydrated.item-label {
+  border-radius: 28px;
+  margin-bottom: 18px;
+  border: 1px solid #CACACA;
+}
+
+ion-icon.new_error{
+  font-size: 16px;
+  color: #aeaeae;
+}

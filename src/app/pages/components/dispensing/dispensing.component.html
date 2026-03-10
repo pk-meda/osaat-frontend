@@ -1,0 +1,194 @@
+<!-- matches Child Registration UI patterns -->
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">DISPENSING</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <div class="padding">
+        <form [formGroup]="screeningForm">
+          <!-- Summary (kept minimal to match your cards) -->
+          <ion-card style="margin-bottom: 30px !important">
+            <ion-card-header>
+              <ion-card-title class="heading">DISPENSING SUMMARY</ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="card-content">
+              <!-- <p>Last updated status: <strong>{{ screeningForm.value.provision_status || '—' }}</strong></p> -->
+              <!-- <p>Updated on: <strong>{{ screeningForm.value.provision_date || '—' }}</strong></p> -->
+              <p>Reference #: <strong>{{ reference_number || '—' }}</strong></p>
+          </ion-card-content>
+          </ion-card>
+
+          <!-- STEP 1 : Q1–Q3 -->
+          <div *ngIf="currentStep === 1">
+            <!-- Q1 -->
+            <div class="form-group">
+              <p class="participant-info">1. What lenses are to be provided to this patient?</p>
+              <!-- <div class="border"> -->
+                <ion-select
+                  class="custom-select"
+                  formControlName="lenses_type"
+                  toggleIcon="caret-down-sharp"
+                  placeholder="Select lens type"
+                  interface="popover"
+                  (ionChange)="onLensesChange($event.detail.value)">
+                  <ion-select-option *ngFor="let opt of lensesOptions" [value]="opt">
+                    {{ opt }}
+                  </ion-select-option>
+                </ion-select>
+              <!-- </div> -->
+              <div *ngIf="(f['lenses_type'].touched || submitted) && f['lenses_type'].hasError('required')">
+                <ion-text color="danger"><p>Please select a lens type.</p></ion-text>
+              </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="form-group">
+              <p class="participant-info">2. What is the inter pupillary distance (PD)?</p>
+              <div class="twocol">
+                <div>
+                  <label class="label">2.1 Distance PD (mm)</label>
+                  <div class="border">
+                    <ion-input type="number" formControlName="pd_distance" placeholder="50–90"></ion-input>
+                  </div>
+                  <small class="hint">generally between 50 mm to 90 mm</small>
+                  <div *ngIf="(f['pd_distance'].touched || submitted) && f['pd_distance'].invalid">
+                    <ion-text color="danger"><p>Distance PD must be between 50 and 90 mm.</p></ion-text>
+                  </div>
+                </div>
+                <div>
+                  <label class="label">2.2 Near PD (mm)</label>
+                  <div class="border">
+                    <ion-input type="number" formControlName="pd_near" placeholder="50–90"></ion-input>
+                  </div>
+                  <small class="hint">generally between 50 mm to 90 mm</small>
+                  <div *ngIf="(f['pd_near'].touched || submitted) && f['pd_near'].invalid">
+                    <ion-text color="danger"><p>Near PD must be between 50 and 90 mm.</p></ion-text>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="form-group">
+              <p class="participant-info">3. What frame(s) has been selected for the patient?</p>
+
+              <label class="label">3.1 Frame for single vision distance spectacle </label>
+              <div class="border">
+                <ion-input formControlName="frame_distance" placeholder="Enter frame"></ion-input>
+              </div>
+              <div *ngIf="(f['frame_distance'].touched || submitted) && f['frame_distance'].hasError('required')">
+                <ion-text color="danger"><p>This frame is required for the selected lens type.</p></ion-text>
+              </div>
+
+              <label class="label">3.2 Frame for single vision near spectacles </label>
+              <div class="border">
+                <ion-input formControlName="frame_near" placeholder="Enter frame"></ion-input>
+              </div>
+              <div *ngIf="(f['frame_near'].touched || submitted) && f['frame_near'].hasError('required')">
+                <ion-text color="danger"><p>This frame is required for the selected lens type.</p></ion-text>
+              </div>
+
+              <label class="label">3.3 Frame for bifocal/multifocal spectacles </label>
+              <div class="border">
+                <ion-input formControlName="frame_bifocal" placeholder="Enter frame"></ion-input>
+              </div>
+              <div *ngIf="(f['frame_bifocal'].touched || submitted) && f['frame_bifocal'].hasError('required')">
+                <ion-text color="danger"><p>This frame is required for the selected lens type.</p></ion-text>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 : Q4–Q5 -->
+          <div *ngIf="currentStep === 2">
+            <div class="form-group">
+              <p class="participant-info">4. What is the fitting height for the bifocal/multifocal spectacles?</p>
+              <div class="twocol">
+                <div>
+                  <label class="label">4.1 Fitting height RE (mm) (optional)</label>
+                  <div class="border">
+                    <ion-input type="number" formControlName="fitting_height_re" placeholder="10–30"></ion-input>
+                  </div>
+                  <small class="hint">between 10 - 30 mm</small>
+                  <div *ngIf="(f['fitting_height_re'].touched || submitted) && f['fitting_height_re'].invalid">
+                    <ion-text color="danger"><p>Enter 10–30 mm.</p></ion-text>
+                  </div>
+                </div>
+                <div>
+                  <label class="label">4.2 Fitting height LE (mm) (optional)</label>
+                  <div class="border">
+                    <ion-input type="number" formControlName="fitting_height_le" placeholder="10–30"></ion-input>
+                  </div>
+                  <small class="hint">between 10 - 30 mm</small>
+                  <div *ngIf="(f['fitting_height_le'].touched || submitted) && f['fitting_height_le'].invalid">
+                    <ion-text color="danger"><p>Enter 10–30 mm.</p></ion-text>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info">5. Are there any comments regarding the spectacles dispensed?</p>
+              <!-- <div class="border"> -->
+                <ion-textarea auto-grow="true" formControlName="comments" placeholder="Open text"></ion-textarea>
+              <!-- </div> -->
+            </div>
+          </div>
+
+          <!-- STEP 3 : Q6–Q7 -->
+          <div *ngIf="currentStep === 3">
+            <div class="form-group">
+              <p class="participant-info">6. When will the spectacles be provided to the patient?</p>
+              <div class="border">
+                <ion-datetime
+                  formControlName="provision_date"
+                  presentation="date"
+                  placeholder="Select a date">
+                </ion-datetime>
+              </div>
+              <div *ngIf="(f['provision_date'].touched || submitted) && f['provision_date'].hasError('required')">
+                <ion-text color="danger"><p>Please select a date.</p></ion-text>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info">7. What is the status of the provision of spectacles?</p>
+              <!-- <div class="border"> -->
+                <ion-select
+                  class="custom-select"
+                  formControlName="provision_status"
+                  toggleIcon="caret-down-sharp"
+                  placeholder="Select status"
+                  interface="popover">
+                  <ion-select-option *ngFor="let s of statusOptions" [value]="s">
+                    {{ s }}
+                  </ion-select-option>
+                </ion-select>
+              <!-- </div> -->
+              <div *ngIf="(f['provision_status'].touched || submitted) && f['provision_status'].hasError('required')">
+                <ion-text color="danger"><p>Please select a status.</p></ion-text>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <app-profile-footer
+        [currentStep]="currentStep"
+        [saveDisabled]="!screeningForm.valid"
+        [totalSteps]="totalSteps"
+        (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()"
+        (saveProgressClick)="submitForm()"
+        (editClick)="onEdit()"
+        (deleteClick)="onDelete()">
+      </app-profile-footer>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

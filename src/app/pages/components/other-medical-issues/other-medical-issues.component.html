@@ -1,0 +1,69 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">OTHER MEDICAL ISSUES</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <div class="padding">
+        <form [formGroup]="otherMedicalForm">
+          <app-participant-info 
+          [participant]="participantData" 
+          (profileClicked)="nevigateProfile()">
+        </app-participant-info>
+
+          <div *ngIf="currentStep === 1">
+            <div class="form-group">
+              <p class="participant-info" style="margin-bottom: 20px;">
+                1. Has any surgery or treatment been<br>
+                <span style="margin-left: 23px;">done to the child's eyes?</span>
+              </p>
+              <!-- <div class="btn">
+                <ion-button type="button"    [disabled]="otherMedicalForm.disabled"
+                [color]="otherMedicalForm.get('surgeryTreatment')?.value !== true ? 'danger' : 'success'"  (click)="setSurgeryTreatment(true)">
+                  Yes
+                </ion-button>
+                <ion-button type="button"            [disabled]="otherMedicalForm.disabled"
+                [color]="otherMedicalForm.get('surgeryTreatment')?.value === false ? 'success' : 'danger'" (click)="setSurgeryTreatment(false)">
+                  No
+                </ion-button> -->
+              <div class="border">
+                <ion-select formControlName="surgeryTreatment" toggleIcon="caret-down-sharp" placeholder="Choose an option" interface="popover" class="custom-ion-select">
+                  <ion-select-option value="Yes">yes</ion-select-option>
+                  <ion-select-option value="No">no</ion-select-option>
+                  <ion-select-option value="Not Known">not known</ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+            <!-- <div class="form-group">
+              <div class="save_btn">
+                <ion-button class="btn" expand="full" type="button" color="#1A3561" (click)="setSurgeryTreatment('not known')">
+                  Not Known
+                </ion-button>
+              </div>
+            </div> -->
+            <!-- Display an error if no option is selected -->
+            <div *ngIf="submitted && otherMedicalForm.get('surgeryTreatment')?.hasError('required')">
+              <ion-text color="danger">
+                <p>Please select an option.</p>
+              </ion-text>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <app-profile-footer
+        [currentStep]="currentStep"
+        [totalSteps]="totalSteps"
+        (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()"
+        (saveProgressClick)="submitForm()" (editClick)="onEdit()"  (deleteClick)="onDelete()">
+      </app-profile-footer>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

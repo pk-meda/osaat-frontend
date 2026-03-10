@@ -1,0 +1,17 @@
+<div class="participant-info-1">
+  <div class="main-text">
+    <span  *ngIf="participant?.reference_number != null">  Participant number: <b>{{participant.reference_number}}</b>
+    </span>
+     <p *ngIf="participant?.name != ''">Name :<b>{{ participant?.name }}</b></p>
+  </div>
+  <div class="sub-text">
+    <p *ngIf="participant?.age != null">  age  :<b>{{ participant?.age }}</b></p>  
+    <p *ngIf="participant?.grade != null"> grade : <b>{{ participant?.grade }}</b></p> 
+    <p *ngIf="participant?.school != ''">School :<b>{{ participant?.school }}</b></p>
+  </div>
+  <div class="sub_text">
+    <!-- <span class="view_profile" (click)="viewProfile()">
+      View profile
+    </span> -->
+  </div>
+</div>

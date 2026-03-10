@@ -1,0 +1,54 @@
+.top-header {
+    margin-top: 75px;
+    padding-left: 19px;
+}
+
+.bg-image {
+    position: relative;
+    --background: none; /* Remove default Ionic background */
+    // background: url('../../../assets/images/welcome-bg.png') no-repeat center center / cover;
+    height: auto;
+    min-height: 665px;
+  }
+
+p.p1 {
+    font-family: Poppins, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 36px;
+    letter-spacing: -0.24px;
+    color: rgba(255, 255, 255, 1);
+    text-align: left;
+}
+
+span.p2 {
+    color: rgba(255, 233, 32, 1);
+}
+
+.bottom-card-welcome{
+    position: absolute;
+    bottom: 0;
+    min-width: 331px !important;
+    max-width: 331 !important;
+    margin: 15px 20px;
+    padding: 10px 5px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 4px 0px rgb(153, 27, 28);
+}
+
+.p-text{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: center;
+    text-underline-position: from-font;
+    -webkit-text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
+    padding: 0px;
+    color: #1A3561;
+    margin-top: 10px;
+    span{
+        margin-top: 5px;
+    }
+}

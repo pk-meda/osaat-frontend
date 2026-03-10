@@ -1,0 +1,26 @@
+<ion-content class="eye-test" mode="md" [scrollY]="false" [scrollX]="false">
+  <div class="loading-screen" *ngIf="(apiService.isLoading | async);else eye_container">
+    <ion-spinner></ion-spinner>
+    <p>Processing, Please wait</p>
+  </div>
+  
+  <ng-template #eye_container>
+    <div #slider class="slide" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+      <div class="optotype-wrapper" [style.transform]="'rotate(' + currentRotation + 'deg)'">
+        <img [src]="getImagePath()" [style]="imageStyle" alt="Snellen E {{ snellenLabels[currentStep - 1] }}" />
+      </div>
+    </div>
+  </ng-template>
+  <!-- <ion-modal
+      #modal
+      [isOpen]="isModalOpen"
+      trigger="open-modal"
+      [canDismiss]="canDismiss"
+      [presentingElement]="presentingElement"
+      (willPresent)="onWillPresent()"
+    >
+      <ng-template>
+        <app-calibration-test [modal]="modal" (dismissChange)="onDismissChange($event)"></app-calibration-test>
+      </ng-template>
+    </ion-modal> -->
+</ion-content>

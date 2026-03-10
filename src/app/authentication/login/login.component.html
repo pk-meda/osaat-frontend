@@ -1,0 +1,48 @@
+<ion-header class="ion-no-border" mode="md">
+  <ion-toolbar class="auth-header">
+    <ion-title> Sign In </ion-title>
+  </ion-toolbar>
+  <div class="broder-div">
+    <div class="border-div-inner"></div>
+  </div>
+</ion-header>
+
+<ion-content class="ion-padding" mode="md">
+  <div class="">
+    <h2 class="top-title">Welcome Back</h2>
+    <p class="top-subtitle">Hello there, sign in to continue</p>
+  </div>
+  <div class="top-header">
+    <ion-img src="assets/images/header.svg" width="167px" style="height: 167px;"></ion-img>
+  </div>
+  <form [formGroup]="loginForm">
+    <ion-input class="input-container" formControlName="email" placeholder="Email"
+      aria-label="Primary input" shape="round" color="primary">
+    </ion-input>
+    <p [class.input-invalid]="f['email'].dirty && f['email'].invalid" *ngIf="f['email'].dirty && f['email'].invalid">*
+      Email is required</p>
+
+    <ion-input class="input-container" formControlName="password" [type]="showPassword ? 'text' : 'password'"
+      placeholder="Password">
+      <ion-icon name="{{showPassword ? 'eye' : 'eye-off'}}" slot="end"
+        (click)="showPassword = !showPassword"></ion-icon>
+    </ion-input>
+    <p [class.input-invalid]="f['password'].dirty && f['password'].invalid"
+      *ngIf="f['password'].dirty && f['password'].invalid">* Password is required</p>
+
+    <div class="button-forget">
+      <a [routerLink]="['/authentication/forget']" (click)="localstorage()">Forgot your password ?</a>
+    </div>
+
+    <div>
+      <ion-button class="big-botton" (click)="submit()" [disabled]="isLoading"><ion-spinner *ngIf="isLoading"></ion-spinner> <span *ngIf="!isLoading">Sign in</span></ion-button>
+      <!-- <ion-button class="big-botton"> <img src="assets/icon/google_icon.svg" alt="">Sign up with Google</ion-button>
+          <ion-button class="big-botton"> <img src="assets/icon/apple_icon.svg" alt="">Sign up with Apple</ion-button> -->
+    </div>
+
+    <div lines="none" class="link-primary">
+      <p>Don't have an account? <b><a style="color: #1A3561;text-decoration: none;"
+            [routerLink]="['/authentication/register']"> &nbsp; Sign Up</a></b></p>
+    </div>
+  </form>
+</ion-content>

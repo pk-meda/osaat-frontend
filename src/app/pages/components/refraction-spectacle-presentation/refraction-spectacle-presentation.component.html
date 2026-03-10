@@ -1,0 +1,207 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">REFRACTION SPECTACLE PRESENTATION</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md">
+  <ion-card>
+    <ion-card-content>
+      <div class="padding">
+        <form [formGroup]="dispenseForm">
+          <app-participant-info 
+            [participant]="participantData" 
+            (profileClicked)="nevigateProfile()">
+          </app-participant-info>
+
+          <!-- STEP 1: Spectacle Prescription - Right Eye -->
+          <div *ngIf="currentStep === 1">
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                1. Spherical prescription of RE in<br>
+                <span style="margin-left: 23px;">current spectacles?</span>
+              </p>
+              <div class="border">
+                <ion-select formControlName="sphericalPrescriptionRE" toggleIcon="caret-down-sharp" 
+                  placeholder="Select option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let item of increments" [value]="item.value">
+                    {{ item.label }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+              <div *ngIf="submitted && dispenseForm.get('sphericalPrescriptionRE')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select an option for spherical prescription (RE).</p>
+                </ion-text>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                2. Cylindrical prescription of RE in current spectacles
+              </p>
+              <div class="border">
+                <ion-select formControlName="cylindricalPrescriptionRE" toggleIcon="caret-down-sharp" 
+                  placeholder="Select option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let item of increments1" [value]="item.value">
+                    {{ item.label }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                3. Axis of cylinder of RE in current spectacles?
+              </p>
+              <div class="border">
+                <ion-select formControlName="axisCylinderRE" toggleIcon="caret-down-sharp" 
+                  placeholder="Select option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let item of increments2" [value]="item.value">
+                    {{ item.label }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Spectacle Prescription - Left Eye -->
+          <div *ngIf="currentStep === 2">
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                4. Spherical prescription of LE in<br>
+                <span style="margin-left: 23px;">current spectacles?</span>
+              </p>
+              <div class="border">
+                <ion-select formControlName="sphericalPrescriptionLE" toggleIcon="caret-down-sharp" 
+                  placeholder="Select option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let item of increments" [value]="item.value">
+                    {{ item.label }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+              <div *ngIf="submitted && dispenseForm.get('sphericalPrescriptionLE')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select an option for spherical prescription (LE).</p>
+                </ion-text>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                5. Cylindrical prescription of LE in<br>
+                <span style="margin-left: 23px;">current spectacles?</span>
+              </p>
+              <div class="border">
+                <ion-select formControlName="cylindricalPrescriptionLE" toggleIcon="caret-down-sharp" 
+                  placeholder="Select option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let item of increments1" [value]="item.value">
+                    {{ item.label }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                6. Axis of cylinder of LE in current spectacles?
+              </p>
+              <div class="border">
+                <ion-select formControlName="axisCylinderLE" toggleIcon="caret-down-sharp" 
+                  placeholder="Select option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let item of increments2" [value]="item.value">
+                    {{ item.label }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: Aided Distance VA (Required) -->
+          <div *ngIf="currentStep === 3">
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">7. Aided Distance VA – Right Eye</p>
+              <div class="border">
+                <ion-select formControlName="aidedDistanceVA_RE" toggleIcon="caret-down-sharp"
+                  placeholder="Choose an option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let option of vaDistanceOptions" [value]="option">
+                    {{ option }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+              <div *ngIf="(dispenseForm.get('aidedDistanceVA_RE')?.touched || submitted) && 
+                          dispenseForm.get('aidedDistanceVA_RE')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select aided distance VA for right eye.</p>
+                </ion-text>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">8. Aided Distance VA – Left Eye</p>
+              <div class="border">
+                <ion-select formControlName="aidedDistanceVA_LE" toggleIcon="caret-down-sharp"
+                  placeholder="Choose an option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let option of vaDistanceOptions" [value]="option">
+                    {{ option }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+              <div *ngIf="(dispenseForm.get('aidedDistanceVA_LE')?.touched || submitted) && 
+                          dispenseForm.get('aidedDistanceVA_LE')?.hasError('required')">
+                <ion-text color="danger">
+                  <p>Please select aided distance VA for left eye.</p>
+                </ion-text>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4: Aided Near VA (Optional) -->
+          <div *ngIf="currentStep === 4">
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                9. Aided Near VA – Right Eye <span style="color: #999;">(Optional)</span>
+              </p>
+              <div class="border">
+                <ion-select formControlName="aidedNearVA_RE" toggleIcon="caret-down-sharp"
+                  placeholder="Choose an option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let option of vaNearOptions" [value]="option">
+                    {{ option }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info" style="padding: 5px;">
+                10. Aided Near VA – Left Eye <span style="color: #999;">(Optional)</span>
+              </p>
+              <div class="border">
+                <ion-select formControlName="aidedNearVA_LE" toggleIcon="caret-down-sharp"
+                  placeholder="Choose an option" interface="popover" class="custom-ion-select">
+                  <ion-select-option *ngFor="let option of vaNearOptions" [value]="option">
+                    {{ option }}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      
+      <app-profile-footer 
+        [currentStep]="currentStep" 
+        [totalSteps]="totalSteps" 
+        (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()" 
+        (saveProgressClick)="submitForm()"
+        (editClick)="onEdit()"
+        (deleteClick)="onDelete()">
+      </app-profile-footer>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

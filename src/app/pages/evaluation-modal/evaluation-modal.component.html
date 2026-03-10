@@ -1,0 +1,64 @@
+<ion-header mode="md">
+  <app-header></app-header>
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      {{ screeningType }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md" class="ion-padding">
+  <!-- Eye selection -->
+  <div *ngIf="screeningType === 'SELECT EYE TEST'">
+    <p>Select which eye to screen:</p>
+
+    <div class="buttons-new-ionic">
+      <ion-button
+        *ngIf="!leftEyeDone"
+        (click)="selectOption('LEFT')"
+        class="button_yes"
+        [color]="'danger'"
+      >
+        LEFT
+      </ion-button>
+
+      <ion-button
+        *ngIf="!rightEyeDone"
+        (click)="selectOption('RIGHT')"
+        class="button_yes"
+        [color]="'danger'"
+      >
+        RIGHT
+      </ion-button>
+
+      <!-- New: Both Eyes (shown if at least one eye is pending) -->
+      <ion-button
+        *ngIf="!leftEyeDone || !rightEyeDone"
+        (click)="selectOption('BOTH')"
+        class="button_yes"
+      >
+        BOTH EYES
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Final Fail: full Retest or Exit -->
+  <div *ngIf="screeningType.startsWith('Test Failed')">
+    <div class="button-group">
+      <ion-button (click)="selectOption('retest')" style="height: 100%; width: 100%;" [color]="'danger'">
+        Retest Both Eyes
+      </ion-button>
+      <ion-button (click)="selectOption('exit')" style="height: 100%; width: 100%;" [color]="'danger'">
+        Exit & Move on
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Single-slide pass/fail (kept for completeness if you use it elsewhere) -->
+  <div *ngIf="screeningType === 'Wrong Swipe Detected. Pass or Fail?'">
+    <p>Please choose for this slide:</p>
+    <ion-button (click)="selectOption('pass')" class="button_yes" [color]="'success'">Pass</ion-button>
+    <ion-button (click)="selectOption('fail')" class="button_yes" [color]="'danger'">Fail</ion-button>
+  </div>
+</ion-content>

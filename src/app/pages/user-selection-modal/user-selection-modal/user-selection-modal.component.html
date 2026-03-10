@@ -1,0 +1,157 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon
+        class="back_icon"
+        name="chevron-back-outline"
+        (click)="backLocation()"
+      ></ion-icon>
+        <span class="back_btn">SELECT PARTICIPANT</span>
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="md" >
+  <ion-card>
+    <ion-card-content>
+      <div class="form-group">
+        <p class="participant-info">
+          Please select a registered Participant to continue:
+        </p>
+        <p class="Note">
+          Note: If Participant is not registered, click the Register button and register the Participant
+        </p>
+
+        <form [formGroup]="userForm">
+          <!-- Custom dropdown -->
+          <div class="select-container" [class.open]="showDropdown">
+            <ion-item
+              class="select-box"
+              button
+              (click)="toggleDropdown()"
+              [attr.aria-expanded]="showDropdown"
+            >
+              <ion-label>
+                {{
+                  userForm.get('selectedUser')?.value
+                    ? getDisplayName(userForm.get('selectedUser')?.value)
+                    : 'Please select a Participant'
+                }}
+              </ion-label>
+              <ion-icon
+                slot="end"
+                class="chevron-icon"
+                [name]="showDropdown ? 'caret-up-outline' : 'caret-down-outline'">
+              </ion-icon>
+            </ion-item>
+
+            <!-- Dropdown content -->
+            <div *ngIf="showDropdown" class="dropdown-panel">
+              <ion-searchbar
+                [formControl]="searchControl"
+                placeholder="Search by name, contact, or reference number"
+                [showClearButton]="true"
+                (ionClear)="clearSearch()">
+              </ion-searchbar>
+
+              <ion-list>
+                <ion-item
+                  *ngFor="let user of filteredUsers;"
+                  (click)="selectUser(user)"
+                  button>
+                  <!-- ONLY name + surname shown in options -->
+                  <ion-label>{{ getDisplayName(user) }}</ion-label>
+                </ion-item>
+
+                <!-- No results -->
+                <ion-item *ngIf="filteredUsers.length === 0" lines="none">
+                  <ion-label>
+                    <em>No Participants found</em>
+                    <p>Try adjusting your search terms</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+          </div>
+
+          <!-- Selected user details card -->
+          <ng-container *ngIf="userForm.get('selectedUser')?.value as u">
+            <ion-card class="selected-user-card" style="margin-top:12px">
+              <ion-card-header>
+                <ion-card-title>{{ getDisplayName(u) }}</ion-card-title>
+                <ion-card-subtitle>Ref: {{ u.reference_number }}</ion-card-subtitle>
+              </ion-card-header>
+
+              <ion-card-content>
+                <ion-list lines="none">
+                  <ion-item>
+                    <ion-label>
+                      <h3>Contact</h3>
+                      <p>{{ u.contact_number || '-' }}</p>
+                    </ion-label>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-label>
+                      <h3>Relationship</h3>
+                      <p>{{ u.relationship || '-' }}</p>
+                    </ion-label>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-label>
+                      <h3>Grade • Age • Gender</h3>
+                      <p>
+                        Grade {{ u.grade || '-' }} •
+                        {{ u.age || '-' }} •
+                        {{ (u.gender || '-') | titlecase }}
+                      </p>
+                    </ion-label>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-label>
+                      <h3>School</h3>
+                      <p>{{ u.school || '-' }}</p>
+                    </ion-label>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-label>
+                      <h3>Referral Clinic</h3>
+                      <p>{{ u.referral_clinic || '-' }}</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+          </ng-container>
+
+          <!-- Validation error -->
+          <ion-text
+            color="danger"
+            *ngIf="(userForm.get('selectedUser')?.touched || submitted) && userForm.get('selectedUser')?.hasError('required')">
+            <p style="margin-top: 12px">Please select a Participant.</p>
+          </ion-text>
+
+          <!-- Buttons -->
+          <ion-button
+            class="register-btn"
+            (click)="submit()"
+            expand="block"
+            [disabled]="!userForm.valid">
+            Continue
+          </ion-button>
+
+          <ion-button
+            class="register-link"
+            fill="outline"
+            expand="block"
+            (click)="goToRegister()">
+            Register New User
+          </ion-button>
+        </form>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

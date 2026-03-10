@@ -1,0 +1,147 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon><span class="back_btn">STATIONS </span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content >
+  <ion-card>
+    <ion-card-content>
+  <!-- <div class="participant-info-1">
+    <div class="main-text">Managing participant number:</div>
+    <div class="sub-text">{{reference_number}}, {{userData?.name}}, age {{userData?.age}}, grade {{userData?.grade}}</div>
+    <div class="sub_text"> Independent High School. <span class="view_profile" (click)="nevigateProfile()">View profile</span></div>
+  </div> -->
+
+  <ion-list>
+    <div [routerLink]="['/layout/first-screening']">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">First screening</ion-label>
+        <ion-icon *ngIf="userData?.first_screening == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.first_screening == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon>
+      </ion-item>
+    </div>
+    <div [routerLink]="['/layout/secoundScreening',userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Second Screening</ion-label>
+        <ion-icon *ngIf="userData?.second_screening == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.second_screening == false" color="light">N/A</ion-badge> 
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon></ion-item>
+    </div>
+    <!-- <div [routerLink]="['/eye_exam', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Comprehensive eye exam</ion-label>
+        <ion-icon *ngIf="userData?.comprehensive_eye_exam == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.comprehensive_eye_exam == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon></ion-item>
+    </div> -->
+    <div [routerLink]="['/layout/complaint', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Complaints/Observations</ion-label>
+        <ion-icon *ngIf="userData?.complaint == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.complaint == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon></ion-item>
+    </div>
+    <div [routerLink]="['/layout/measurement-visual', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Measure Visual Acuity</ion-label>
+        <ion-icon *ngIf="userData?.measure_visual_acuity == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.measure_visual_acuity == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon></ion-item>
+    </div>
+    <div [routerLink]="['/layout/record-diagnosis', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Diagnosis and management</ion-label>
+        <ion-icon *ngIf="userData?.diagnosis_management == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.diagnosis_management == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon> </ion-item>
+    </div>
+    <div [routerLink]="['/layout/dispensing', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Dispensing</ion-label>
+        <ion-icon *ngIf="userData?.dispensing == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.dispensing == false" color="light">N/A</ion-badge> 
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon></ion-item>
+    </div>
+
+    <div [routerLink]="['/layout/spectacle-wearing', userData?.reference_number]">
+      <ion-item lines="full" >
+        <ion-label class="disabled-item">Spectacle wearing history</ion-label>
+        <ion-icon *ngIf="userData?.spectacle_wearing_history == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.spectacle_wearing_history == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon> </ion-item>
+    </div>
+
+    <div [routerLink]="['/layout/family', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Family History</ion-label>
+        <ion-icon *ngIf="userData?.family_history == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.family_history == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon> </ion-item>
+    </div>
+
+    <div [routerLink]="['/layout/surgery', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Surgery Treatment history</ion-label>
+        <ion-icon *ngIf="userData?.surgery_treatment_history == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.surgery_treatment_history == false" color="light">N/A</ion-badge> 
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon></ion-item>
+    </div>
+
+    <div [routerLink]="['/layout/current-medical', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Current Medical Treatment</ion-label>
+        <ion-icon *ngIf="userData?.current_medical_treatment == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.current_medical_treatment == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon> </ion-item>
+    </div>
+
+    <div [routerLink]="['/layout/refraction-spectacle-presentation', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Refraction Spectacle Presentation</ion-label>
+        <ion-icon *ngIf="userData?.refraction_spectacle_presentation == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.refraction_spectacle_presentation == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon> </ion-item>
+    </div>
+
+    <!-- <div [routerLink]="['/layout/other-medical', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Other Medical Issues</ion-label>
+        <ion-icon *ngIf="userData?.other_medical_issues == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.other_medical_issues == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon> </ion-item>
+    </div> -->
+
+    <div [routerLink]="['/layout/refraction', userData?.reference_number]">
+      <ion-item lines="full">
+        <ion-label class="disabled-item">Refraction and Examination</ion-label>
+        <ion-icon *ngIf="userData?.refraction_and_examination == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
+        <ion-badge *ngIf="userData?.refraction_and_examination == false" color="light">N/A</ion-badge>
+        <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon> </ion-item>
+    </div>
+
+  </ion-list>
+
+  <div class="button_group">
+    <div class="save_btn">
+      <ion-button class="btn" expand="full" type="submit" color="#1A3561">View Full Profile</ion-button>
+    </div>
+    <div class="save_btn">
+      <ion-button class="btn" expand="full" type="submit" color="#1A3561" >Search for participant</ion-button>
+    </div>
+    <div class="save_btn">
+      <ion-button class="btn" expand="full" type="submit" color="#1A3561" (click)="CreateNewFile()">Create New File</ion-button>
+    </div>
+
+    <div class="save_btn">
+      <ion-button class="btn" expand="full" type="submit" color="#1A3561" (click)="Logout()">Logout</ion-button>
+    </div>
+  </div>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

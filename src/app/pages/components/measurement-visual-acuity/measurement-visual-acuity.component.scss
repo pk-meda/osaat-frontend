@@ -1,0 +1,10 @@
+.result-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+
+  ion-button {
+    flex: 1;
+    margin: 0 5px;
+  }
+}

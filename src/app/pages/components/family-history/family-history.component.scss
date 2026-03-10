@@ -1,0 +1,69 @@
+ion-item {
+    --padding-start: 0.5rem;
+    --inner-border-width: 0px 0px 0px 0px !important;
+}
+
+ion-label {
+    margin-left: 0.5rem;
+}
+
+ion-checkbox {
+    --size: 25px;
+    --checkbox-background-checked: #6815ec;
+}
+
+ion-checkbox::part(container) {
+    border-radius: 6px;
+}
+
+// family-history.component.scss
+
+.relationship-section {
+  margin-top: 12px;
+  margin-left: 16px;
+  padding-left: 12px;
+  border-left: 3px solid var(--ion-color-primary, #3880ff);
+  background-color: var(--ion-color-light, #f4f5f8);
+  padding: 12px;
+  border-radius: 8px;
+
+  .sub-question {
+    font-size: 0.95em;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--ion-color-medium, #92949c);
+  }
+
+  .border {
+    background-color: white;
+  }
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  .participant-info {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--ion-color-dark, #222428);
+  }
+
+  .border {
+    border: 1px solid var(--ion-color-medium, #92949c);
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: white;
+
+    ion-select, ion-input {
+      --padding-start: 8px;
+      --padding-end: 8px;
+    }
+  }
+}
+
+// Style for multi-select to show it's different
+ion-select[multiple="true"] {
+  &::part(text) {
+    font-style: italic;
+  }
+}

@@ -1,0 +1,30 @@
+  ion-item {
+      --padding-start: 0.5rem;
+      --inner-border-width: 0px 0px 0px 0px !important;
+  }
+
+  ion-label {
+      margin-left: 0.5rem;
+  }
+
+  ion-checkbox {
+      --size: 25px;
+      --checkbox-background-checked: #6815ec;
+  }
+
+  ion-checkbox::part(container) {
+      border-radius: 6px;
+  }
+
+//   p.participant-info {
+//       font-size: 12px !important;
+//   }
+
+  .border-1{
+        border: 1px solid;
+        border-radius: 12px;
+        padding: 0px 5px 0px 15px;
+        border-color: #c1c1c1;
+        width: 300px;
+    height: 149px ;
+  }

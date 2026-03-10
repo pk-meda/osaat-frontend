@@ -1,0 +1,41 @@
+<ion-header class="ion-no-border" mode="md">
+  <ion-toolbar class="auth-header">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/authentication/forget" icon="chevron-back"></ion-back-button>
+    </ion-buttons>
+    <ion-title style="padding-left: 0px;"> Verify OTP </ion-title>
+  </ion-toolbar>
+  <div class="broder-div">
+    <div class="border-div-inner"></div>
+  </div>
+</ion-header>
+
+<ion-content class="ion-padding" mode="md">
+  <div class="">
+    <h2 class="top-title">Verify OTP</h2>
+    <p class="top-subtitle">Enter otp received in email</p>
+  </div>
+  <div class="top-header">
+    <ion-img src="assets/images/header.svg" width="167px" style="height: 167px;"></ion-img>
+  </div>
+
+  <div class="otp-container">
+    <ng-otp-input [config]="otpConfig" (onInputChange)="onOtpChange($event)">
+    </ng-otp-input>
+  </div>
+
+  <div class="button-forget">
+    <a (click)="resendOtp()"><ion-spinner *ngIf="isLoading"></ion-spinner> Resend Otp</a>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <ion-button class="big-botton dark-botton"
+      (click)="location == 'login' ?submitForget() : submit()"  [disabled]="isLoading"><ion-spinner *ngIf="isLoading"></ion-spinner> <span *ngIf="!isLoading">Verify</span></ion-button>
+      
+  </div>
+
+  <div lines="none" class="link-primary">
+    <p>Remembered your password?<b> <a style="color: #1A3561;text-decoration: none;"
+          [routerLink]="['/authentication']">&nbsp; Sign In</a></b></p>
+  </div>
+</ion-content>

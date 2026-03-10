@@ -1,0 +1,74 @@
+<ion-header mode="md">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
+      <span class="back_btn">Complaints/Observations</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <!-- Complaint list (always shown first when entering via "Add Complaint") -->
+        <ion-row>
+           <p class="participant-info" style="margin-bottom: 8px;">1. What Ocular Complaints and/or signs are observable?</p>
+          <ion-col size="6" *ngFor="let complaint of complaints">
+            <ion-item lines="none">
+              <ion-checkbox
+                slot="start"
+                [(ngModel)]="complaint.selected"
+                (ionChange)="onComplaintChange(complaint)">
+              </ion-checkbox>
+              <ion-label style="font-size:14px">{{ complaint.label }}</ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+   <div class="form-group">
+            <p class="participant-info">2. Any other obvious physical disability?</p>
+            <div class="border">
+              <ion-input  [(ngModel)]="otherText" placeholder="physical disability? "></ion-input>
+            </div>
+          </div>
+
+
+        <!-- Eye affected (VISIBLE ONLY if a real complaint is selected) -->
+        <div *ngIf="hasComplaintSelected" class="ion-margin-top">
+          <p class="participant-info" style="margin-bottom: 8px;">3.Which eye is affected?</p>
+
+          <ion-radio-group [(ngModel)]="eyeAffected">
+            <ion-item lines="none">
+              <ion-label>Right Eye (RE)</ion-label>
+              <ion-radio slot="start" value="RE"></ion-radio>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label>Left Eye (LE)</ion-label>
+              <ion-radio slot="start" value="LE"></ion-radio>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label>Both</ion-label>
+              <ion-radio slot="start" value="BOTH"></ion-radio>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label>Not sure</ion-label>
+              <ion-radio slot="start" value="UNKNOWN"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </div>
+
+        <!-- Footer Navigation -->
+        <app-profile-footer
+          (saveProgressClick)="submitForm()"
+          (editClick)="onEdit()"
+          (deleteClick)="onDelete()">
+        </app-profile-footer>
+      </ion-grid>
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>
