@@ -1,5 +1,5 @@
 export const environment = {
-  baseApiUrl:'https://osaatapi.trickywebsolutions.com/api/',
+  baseApiUrl:'https://osaat-api-fwccdeftescfb9dk.southafricanorth-01.azurewebsites.net/api/',
   production: true,
   key_as: 'NTIwQDUyMUA1MjJANTIzQDUyNEA1MjVANTI2QDUyN0A1MjhANTI5QDUzMEA1MzFANTMyQDUzM0A1MzRANTM1QDUzNkA1MzdANTM4QDUzOUA1NDBANTQxQDU0MkA1NDNANTQ0QDU0NUA1NDZANTQ3QDU0OEA1NDlANTUwQDU1MQ==',
   key_vec: 'NTFANTJANTNANTRANTVANTZANTdANThANTlANjBANjFANjJANjNANjRANjVANjY=',
