@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  baseApiUrl:'https://osaatapi.trickywebsolutions.com/api/',
+  baseApiUrl:'http://127.0.0.1:8000/api/',
   // baseApiUrl:'http://192.168.29.173:8000/api/',
   // baseApiUrl:'http://35.154.171.148:8051/api/',
   production: false,
