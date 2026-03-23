@@ -114,7 +114,7 @@ phoneInvalid() {
     (this.f['mobile_number'].invalid || !this.isPhoneValid);
 }
 
-  /*submit() {
+  submit() {
     markAllDirty(this.registerForm);
     if (this.registerForm.invalid || !this.isPhoneValid) {
       return;
@@ -149,7 +149,7 @@ phoneInvalid() {
         this.apiService.handleError(error);
       }
     });
-  }*/
+  }/*
 submit() {
   markAllDirty(this.registerForm);
   if (this.registerForm.invalid || !this.isPhoneValid || !this.registerForm.value.agreeToTerms) {
@@ -213,7 +213,7 @@ async presentModal(userData: any) {
     console.error('Modal failed to open:', err);
     this.apiService.presentToast('Could not open verification screen', 'danger');
   }
-}
+}*/
   processUserData(data:any, msg:any){    
     const userData = {
       token: data.access_token,
@@ -224,7 +224,7 @@ async presentModal(userData: any) {
     this.navtCtrl.navigateRoot(['/member'], { replaceUrl: true });
   }
 
-  /*async presentModal(userData:any) {
+  async presentModal(userData:any) {
     const modal = await this.modalController.create({
       component: VerifyOtpComponent,
       cssClass: 'my-custom-class fullscreen',
@@ -234,5 +234,5 @@ async presentModal(userData: any) {
     await modal.present();
     const { data, role } = await modal.onWillDismiss();
     if(data) this.processUserData(userData, 'Login Successful')
-  }*/
+  }
 }
