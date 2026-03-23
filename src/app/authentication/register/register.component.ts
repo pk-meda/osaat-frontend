@@ -114,7 +114,7 @@ phoneInvalid() {
     (this.f['mobile_number'].invalid || !this.isPhoneValid);
 }
 
-  submit() {
+  /*submit() {
     markAllDirty(this.registerForm);
     if (this.registerForm.invalid || !this.isPhoneValid) {
       return;
@@ -149,8 +149,71 @@ phoneInvalid() {
         this.apiService.handleError(error);
       }
     });
+  }*/
+submit() {
+  markAllDirty(this.registerForm);
+  if (this.registerForm.invalid || !this.isPhoneValid || !this.registerForm.value.agreeToTerms) {
+    return;
   }
 
+  this.isLoading = true;
+  const email = this.registerForm.value.email; // Capture email early
+
+  this.apiService.register(this.registerForm.value).subscribe({
+    next: (res: any) => {
+      console.log('Register Response:', res);
+      
+      if (res.error === false) {
+        // Registration worked! Now try OTP
+        this.apiService.sendOtp({ email: email }).subscribe({
+          next: async (otpRes: any) => {
+            console.log('OTP Response:', otpRes);
+            this.isLoading = false; // STOP LOADER HERE before modal opens
+            
+            if (otpRes.error === false) {
+              await this.apiService.presentToast(otpRes.message);
+              this.presentModal(otpRes); // No 'await' here so the function finishes
+            } else {
+              this.apiService.presentToast(otpRes.message, 'danger');
+            }
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.apiService.handleError(err);
+          }
+        });
+      } else {
+        this.isLoading = false;
+        this.apiService.presentToast(res.message, 'danger');
+      }
+    },
+    error: (error) => {
+      this.isLoading = false;
+      this.apiService.handleError(error);
+    }
+  });
+}
+
+async presentModal(userData: any) {
+  try {
+    const modal = await this.modalController.create({
+      component: VerifyOtpComponent,
+      cssClass: 'my-custom-class fullscreen',
+      backdropDismiss: false,
+      componentProps: { userEmail: this.registerForm.value['email'] }
+    });
+    
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss();
+    if (data) {
+      this.processUserData(userData, 'Registration & Verification Successful');
+    }
+  } catch (err) {
+    console.error('Modal failed to open:', err);
+    this.apiService.presentToast('Could not open verification screen', 'danger');
+  }
+}
   processUserData(data:any, msg:any){    
     const userData = {
       token: data.access_token,
@@ -161,7 +224,7 @@ phoneInvalid() {
     this.navtCtrl.navigateRoot(['/member'], { replaceUrl: true });
   }
 
-  async presentModal(userData:any) {
+  /*async presentModal(userData:any) {
     const modal = await this.modalController.create({
       component: VerifyOtpComponent,
       cssClass: 'my-custom-class fullscreen',
@@ -171,5 +234,5 @@ phoneInvalid() {
     await modal.present();
     const { data, role } = await modal.onWillDismiss();
     if(data) this.processUserData(userData, 'Login Successful')
-  }
+  }*/
 }
