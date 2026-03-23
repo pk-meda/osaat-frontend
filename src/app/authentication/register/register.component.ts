@@ -114,7 +114,7 @@ phoneInvalid() {
     (this.f['mobile_number'].invalid || !this.isPhoneValid);
 }
 
-  submit() {
+ /* submit() {
     markAllDirty(this.registerForm);
     if (this.registerForm.invalid || !this.isPhoneValid) {
       return;
@@ -149,7 +149,9 @@ phoneInvalid() {
         this.apiService.handleError(error);
       }
     });
-  }/*
+  }*/
+  
+  /*
 submit() {
   markAllDirty(this.registerForm);
   if (this.registerForm.invalid || !this.isPhoneValid || !this.registerForm.value.agreeToTerms) {
@@ -214,6 +216,59 @@ async presentModal(userData: any) {
     this.apiService.presentToast('Could not open verification screen', 'danger');
   }
 }*/
+
+submit() {
+  markAllDirty(this.registerForm);
+  
+  // 1. Validation check
+  if (this.registerForm.invalid || !this.isPhoneValid || !this.registerForm.value.agreeToTerms) {
+    return;
+  }
+
+  this.isLoading = true;
+  const registrationData = {
+    name: this.registerForm.value.name,
+    mobile_number: this.registerForm.value.mobile_number,
+    email: this.registerForm.value.email,
+    password: this.registerForm.value.password,
+  };
+
+  // 2. Start Registration
+  this.apiService.register(registrationData).subscribe({
+    next: (res: any) => {
+      console.log('Register Success:', res);
+
+      if (res && res.error === false) {
+        // 3. Registration worked, now send OTP
+        this.apiService.sendOtp({ email: registrationData.email }).subscribe({
+          next: async (otpRes: any) => {
+            this.isLoading = false; // Stop loader once we get a response
+            
+            if (otpRes && otpRes.error === false) {
+              await this.apiService.presentToast(otpRes.message);
+              this.presentModal(res); // Use 'res' from registration to pass user data
+            } else {
+              this.apiService.presentToast(otpRes?.message || 'Failed to send OTP', 'danger');
+            }
+          },
+          error: (otpErr) => {
+            this.isLoading = false; // Stop loader on OTP network error
+            this.apiService.handleError(otpErr);
+          }
+        });
+      } else {
+        // Registration failed at the API level
+        this.isLoading = false;
+        this.apiService.presentToast(res?.message || 'Registration failed', 'danger');
+      }
+    },
+    error: (regErr) => {
+      // Registration failed at the network level (CORS / Timeout)
+      this.isLoading = false;
+      this.apiService.handleError(regErr);
+    }
+  });
+}
   processUserData(data:any, msg:any){    
     const userData = {
       token: data.access_token,
