@@ -1,8 +1,6 @@
-<ion-header >
+<ion-header>
   <div class="header-align">
-    <ion-img class="img_size"
-    src="assets/images/header.svg"
-    ></ion-img>
+    <ion-img class="img_size" src="assets/images/header.svg"></ion-img>
     <ion-buttons slot="end" (click)="openMenu()">
       <ion-icon name="menu-outline"></ion-icon>
     </ion-buttons> 
@@ -17,10 +15,17 @@
   </ion-header>
   <ion-content mode="md">
     <ion-list>
-      <ion-item routerLink="/tabs/tab1">Home</ion-item>
-      <ion-item routerLink="/tabs/tab2">History</ion-item>
-      <ion-item routerLink="/tabs/tab4">Profile</ion-item>
-      <ion-item routerLink="/tabs/tab5">Settings</ion-item>
+      <!-- Maps to your layout's home/school register component -->
+      <ion-item button="true" routerLink="/layout/school-register" (click)="openMenu()">Home</ion-item>
+      
+      <!-- Maps to your spectacle history component -->
+      <ion-item button="true" routerLink="/layout/spectacle-wearing" (click)="openMenu()">History</ion-item>
+      
+      <!-- Maps to your profile component -->
+      <ion-item button="true" routerLink="/layout/profile" (click)="openMenu()">Profile</ion-item>
+      
+      <!-- Maps to your way-forward component 
+      <ion-item button="true" routerLink="/layout/way-forward" (click)="openMenu()">Settings</ion-item>-->
     </ion-list>
   </ion-content>
 </ion-menu>
