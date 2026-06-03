@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -36,6 +37,7 @@ import { SharedModule } from 'src/app/helpers/shared.module';
     CommonModule,
     FormsModule,
     IonicModule,
+    RouterModule,
     LoayoutPageRoutingModule,
     ReactiveFormsModule,
     SharedModule  
