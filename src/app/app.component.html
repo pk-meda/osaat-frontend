@@ -1,19 +1,23 @@
-<ion-app>
-  <ion-menu menuId="main-menu" contentId="main-content" side="end" type="overlay">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Main Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content mode="md">
-      <ion-list>
-        <ion-item button routerLink="/layout/school-register" menuClose>Home</ion-item>
-        <ion-item button routerLink="/layout/spectacle-wearing" menuClose>History</ion-item>
-        <ion-item button routerLink="/layout/profile" menuClose>Profile</ion-item>
-        <ion-item button routerLink="/layout/way-forward" menuClose>Settings</ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-menu>
+<ion-menu menuId="main-menu" contentId="main-content" side="end" type="overlay">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Main Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content mode="md">
+    <ion-list>
+      <ion-item button routerLink="/layout/school-register" menuClose>Home</ion-item>
+      <ion-item button routerLink="/layout/spectacle-wearing" menuClose>History</ion-item>
+      <ion-item button routerLink="/layout/profile" menuClose>Profile</ion-item>
+      <ion-item button routerLink="/layout/way-forward" menuClose>Settings</ion-item>
+      
+      <ion-item button (click)="logout()" lines="none" detail="false">
+        <ion-icon name="log-out-outline" slot="start" color="danger"></ion-icon>
+        <ion-label color="danger">Logout</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
 
-  <ion-router-outlet id="main-content"></ion-router-outlet>
-</ion-app>
+<ion-router-outlet id="main-content"></ion-router-outlet>
