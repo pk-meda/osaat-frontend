@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -6,6 +8,20 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class AppComponent {
-  constructor() {
+  constructor(
+    private router: Router,
+    private menuController: MenuController
+  ) {
+  }
+  async logout() {
+    // 1. Instantly close the side menu drawer safely
+    await this.menuController.close('main-menu');
+
+    // 2. Clear out application tokens/storage matching your profile logout logic
+    localStorage.clear(); 
+    sessionStorage.clear();
+
+    // 3. Kick the user back to the authentication screen safely
+    this.router.navigateByUrl('/authentication', { replaceUrl: true });
   }
 }
