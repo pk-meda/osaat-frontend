@@ -15,17 +15,10 @@
   </ion-header>
   <ion-content mode="md">
     <ion-list>
-      <!-- Maps to your layout's home/school register component -->
-      <ion-item button="true" routerLink="/layout/school-register" (click)="openMenu()">Home</ion-item>
-      
-      <!-- Maps to your spectacle history component -->
-      <ion-item button="true" routerLink="/layout/spectacle-wearing" (click)="openMenu()">History</ion-item>
-      
-      <!-- Maps to your profile component -->
-      <ion-item button="true" routerLink="/layout/profile" (click)="openMenu()">Profile</ion-item>
-      
-      <!-- Maps to your way-forward component 
-      <ion-item button="true" routerLink="/layout/way-forward" (click)="openMenu()">Settings</ion-item>-->
+      <ion-item button routerLink="/layout/school-register" menuClose>Home</ion-item>
+      <ion-item button routerLink="/layout/spectacle-wearing" menuClose>History</ion-item>
+      <ion-item button routerLink="/layout/profile" menuClose>Profile</ion-item>
+      <ion-item button routerLink="/layout/way-forward" menuClose>Settings</ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
