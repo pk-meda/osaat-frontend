@@ -48,7 +48,7 @@ export class CalibrationTestComponent {
       }
 
       const numValue = parseInt(inputValue, 10);
-      const minValue = 1;
+      const minValue= 1;
 
       if (numValue >= minValue && numValue <= maxValue) {
         this.userEnteredHeight = inputValue
