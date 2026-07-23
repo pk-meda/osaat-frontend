@@ -171,52 +171,36 @@
               </div>
             </div>
 
-            <div class="form-group">
+<div class="form-group">
               <p class="participant-info">2. What is their age?</p>
+              
               <div class="border">
-                <ion-select formControlName="age" toggleIcon="caret-down-sharp" placeholder="Select Age"
-                  interface="popover" class="custom-ion-select">
-                  <ion-select-option *ngFor="let age of ages" [value]="age">
-                    {{ age }}
-                  </ion-select-option>
-                </ion-select>
+                <ion-input type="number" formControlName="age" placeholder="Enter Age" class="custom-ion-input"></ion-input>
               </div>
 
               <div
                 *ngIf="(screeningForm.get('age')?.touched || submitted) && screeningForm.get('age')?.hasError('required')">
                 <ion-text color="danger">
-                  <p>Please select an age.</p>
+                  <p>Please enter a valid age.</p>
                 </ion-text>
               </div>
             </div>
 
             <div class="form-group">
               <p class="participant-info">3. What grade is the child in?</p>
+              
               <div class="border">
-                <ion-select formControlName="grade" toggleIcon="caret-down-sharp" placeholder="Select Grade" interface="popover" class="custom-ion-select">
-                  <ion-select-option value="1">Grade 1</ion-select-option>
-                  <ion-select-option value="2">Grade 2</ion-select-option>
-                  <ion-select-option value="3">Grade 3</ion-select-option>
-                  <ion-select-option value="4">Grade 4</ion-select-option>
-                  <ion-select-option value="5">Grade 5</ion-select-option>
-                  <ion-select-option value="6">Grade 6</ion-select-option>
-                  <ion-select-option value="7">Grade 7</ion-select-option>
-                  <ion-select-option value="8">Grade 8</ion-select-option>
-                  <ion-select-option value="9">Grade 9</ion-select-option>
-                  <ion-select-option value="10">Grade 10</ion-select-option>
-                  <ion-select-option value="11">Grade 11</ion-select-option>
-                  <ion-select-option value="12">Grade 12</ion-select-option>
-                  <ion-select-option value="RR/R">Grades RR/R </ion-select-option>
-                </ion-select>
+                <ion-input type="text" formControlName="grade" placeholder="Enter Grade (e.g., 5 or RR/R)" class="custom-ion-input"></ion-input>
               </div>
-  
+
               <div
                 *ngIf="(screeningForm.get('grade')?.touched || submitted) && screeningForm.get('grade')?.hasError('required')">
                 <ion-text color="danger">
-                  <p>Please select a grade.</p>
+                  <p>Please enter a grade.</p>
                 </ion-text>
               </div>
             </div>
+
             <div class="form-group">
               <p class="participant-info">5. Referral Clinic/Hospital (Optional)</p>
               <div class="border">
@@ -229,7 +213,8 @@
                 </ion-text>
               </div>
             </div>
-            <div class="form-group">
+
+            <div class="form-group" >
               <p class="participant-info">6. Refrence Number (Optional)</p>
               <div class="border">
                 <ion-input formControlName="reference_number" placeholder="Enter Referral Clinic/Hospital"></ion-input>
@@ -247,18 +232,18 @@
                 <ion-select formControlName="wears_Spectacles" toggleIcon="caret-down-sharp"
                   placeholder="Select Response" interface="popover" class="custom-ion-select">
                   <ion-select-option value="Has spectacles and is currently wearing them">
-                    Has spectacles and is currently wearing
+                    	Met Need: The child requires spectacles, has them available, and is wearing an appropriate prescription.
                   </ion-select-option>
-                  <ion-select-option value="Has spectacles but not wearing them">
+                  <!--<ion-select-option value="Has spectacles but not wearing them">
                     Has spectacles but not wearing them
-                  </ion-select-option>
+                  </ion-select-option>-->
                   <ion-select-option value="Does not wear spectacles">
-                    Does not wear spectacles
+                    Unmet Need: The child requires spectacles but does not have them or is not wearing them. 
                   </ion-select-option>
-                  <ion-select-option value="Has spectacles but not wearing however has them in their possession">
-                    Has spectacles but not wearing however has <br> them in their possession
+                  <ion-select-option value="The child has spectacles but the need is only partially addressed (e.g., incorrect prescription, damaged spectacles, poor fit, inconsistent use, or spectacles not brought to school).">
+                    Partially Met Need: The child has spectacles but the need is only partially addressed.
                   </ion-select-option>
-                  <ion-select-option value="Has spectacles but not wearing and not in their possession">
+                 <!-- <ion-select-option value="Has spectacles but not wearing and not in their possession">
                     Has spectacles but not wearing and not in their possession
                   </ion-select-option>
                   <ion-select-option value="Has previously worn spectacles but no longer has spectacles">
@@ -266,7 +251,7 @@
                   </ion-select-option>
                   <ion-select-option value="Has never worn spectacles before">
                     Has never worn spectacles before
-                  </ion-select-option>
+                  </ion-select-option>-->
                 </ion-select>
               </div>
   

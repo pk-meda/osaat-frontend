@@ -5,6 +5,7 @@ import { LoayoutPage } from './loayout.page';
 import { FirstScreeningComponent } from '../components/first-screening/first-screening.component';
 import { DispensinComponent } from '../components/dispensing/dispensing.component';
 import { RefractionComponent } from '../components/refraction/refraction.component';
+import { ReportingComponent } from '../components/reporting/reporting.component';
 import { CreateNewProfileComponent } from '../components/create-new-profile/create-new-profile.component';
 import { ProfileComponent } from '../components/profile/profile.component';
 import { RecordDiagnosisComponent } from '../components/record-diagnosis/record-diagnosis.component';
@@ -60,6 +61,9 @@ const routes: Routes = [
       { path: 'complaint/:reference_number', component: ComplaintsObservationComponent }, 
       { path: 'way-forward', component: WayForwardComponent }, 
       { path: 'way-forward/:reference_number', component: WayForwardComponent }, 
+      {
+        path: 'reporting',component: ReportingComponent
+      },
     ]
   }
 ];

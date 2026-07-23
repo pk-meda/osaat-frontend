@@ -1,26 +1,77 @@
-<ion-content class="eye-test" mode="md" [scrollY]="false" [scrollX]="false">
-  <div class="loading-screen" *ngIf="(apiService.isLoading | async);else eye_container">
+<ion-content class="eye-test" mode="md" [scrollY]="leftEyeDone && rightEyeDone" [scrollX]="false">
+  
+  <div class="loading-screen" *ngIf="(apiService.isLoading | async); else eye_container">
     <ion-spinner></ion-spinner>
     <p>Processing, Please wait</p>
   </div>
   
   <ng-template #eye_container>
-    <div #slider class="slide" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
-      <div class="optotype-wrapper" [style.transform]="'rotate(' + currentRotation + 'deg)'">
-        <img [src]="getImagePath()" [style]="imageStyle" alt="Snellen E {{ snellenLabels[currentStep - 1] }}" />
+    
+    <div 
+      *ngIf="!leftEyeDone || !rightEyeDone" 
+      #slider 
+      class="slide" 
+      (touchstart)="onTouchStart($event)" 
+      (touchend)="onTouchEnd($event)"
+    >
+      <!-- Open Crowded Target Box -->
+      <div class="crowded-target-container" [style.width]="imageStyleWidth" [style.height]="imageStyleWidth">
+        <!-- 4 Separate Outer Crowding Bars -->
+        <div class="bar bar-top"></div>
+        <div class="bar bar-bottom"></div>
+        <div class="bar bar-left"></div>
+        <div class="bar bar-right"></div>
+
+        <!-- Rotatable E Optotype -->
+        <div class="optotype-wrapper" [style.transform]="'rotate(' + currentRotation + 'deg)'">
+          <img [src]="getImagePath()" [style]="imageStyle" alt="Snellen E {{ snellenLabels[currentStep - 1] }}" />
+        </div>
       </div>
     </div>
-  </ng-template>
-  <!-- <ion-modal
-      #modal
-      [isOpen]="isModalOpen"
-      trigger="open-modal"
-      [canDismiss]="canDismiss"
-      [presentingElement]="presentingElement"
-      (willPresent)="onWillPresent()"
+
+    <!-- Results summary card when test completed -->
+    <div 
+      *ngIf="leftEyeDone && rightEyeDone" 
+      class="results-summary-card" 
+      style="margin: 20px; padding: 20px; border-radius: 8px; background: #f9f9f9; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
     >
-      <ng-template>
-        <app-calibration-test [modal]="modal" (dismissChange)="onDismissChange($event)"></app-calibration-test>
-      </ng-template>
-    </ion-modal> -->
+      <h2 style="text-align: center; color: #333; font-weight: bold;">Test Completed</h2>
+      <hr style="border: 0; height: 1px; background: #ddd; margin-bottom: 20px;" />
+
+      <div style="margin-bottom: 15px; font-size: 0.95rem;">
+        <p><strong>Testing Distance:</strong> {{ testingDistance }} meters</p>
+        <p><strong>Condition:</strong> {{ isAided ? 'Aided (With Spectacles)' : 'Unaided (Without Spectacles)' }}</p>
+      </div>
+
+      <div style="padding: 12px; margin-bottom: 10px; border-radius: 6px; background: #fff; border-left: 5px solid; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"
+           [style.border-left-color]="calculatePercentage(testResults).left > 55 ? '#2dd36f' : '#eb445a'">
+        <h3 style="margin-top: 0; margin-bottom: 5px; font-weight: 600;">Left Eye</h3>
+        <p style="margin: 3px 0;"><strong>Visual Acuity:</strong> {{ getNumericVisualAcuity('left') }}</p>
+        <p style="margin: 3px 0;"><strong>Result:</strong> 
+          <span [style.color]="calculatePercentage(testResults).left > 55 ? '#2dd36f' : '#eb445a'" style="font-weight: 600;">
+            {{ calculatePercentage(testResults).left > 55 ? 'Pass' : 'Fail' }} ({{ calculatePercentage(testResults).left }}%)
+          </span>
+        </p>
+      </div>
+
+      <div style="padding: 12px; margin-bottom: 20px; border-radius: 6px; background: #fff; border-left: 5px solid; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"
+           [style.border-left-color]="calculatePercentage(testResults).right > 55 ? '#2dd36f' : '#eb445a'">
+        <h3 style="margin-top: 0; margin-bottom: 5px; font-weight: 600;">Right Eye</h3>
+        <p style="margin: 3px 0;"><strong>Visual Acuity:</strong> {{ getNumericVisualAcuity('right') }}</p>
+        <p style="margin: 3px 0;"><strong>Result:</strong> 
+          <span [style.color]="calculatePercentage(testResults).right > 55 ? '#2dd36f' : '#eb445a'" style="font-weight: 600;">
+            {{ calculatePercentage(testResults).right > 55 ? 'Pass' : 'Fail' }} ({{ calculatePercentage(testResults).right }}%)
+          </span>
+        </p>
+      </div>
+
+      <ion-button expand="block" color="success" (click)="submit({ eye: 'yes' })" style="margin-bottom: 10px;">
+        Submit & Continue
+      </ion-button>
+      <ion-button expand="block" fill="outline" color="danger" (click)="showOptionsModal()">
+        Options / Retest
+      </ion-button>
+    </div>
+
+  </ng-template>
 </ion-content>

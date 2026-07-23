@@ -66,12 +66,11 @@
               </ion-text>
             </div>
           </div>
-
-          <!-- STEP 3 -->
-          <div *ngIf="currentStep === 3">
+<!--STEP 3-->
+<div *ngIf="currentStep === 3">
             <div class="form-group">
               <p class="participant-info">
-                3. What ocular condition has been diagnosed in this patient?
+                3. What ocular condition has been diagnosed in the child?
               </p>
               <div class="border">
                 <ion-select
@@ -83,11 +82,10 @@
                   <ion-select-option *ngFor="let opt of OCULAR_CONDITION_OPTIONS" [value]="opt.value">
                     {{ opt.label }}
                   </ion-select-option>
-                  <ion-select-option value="OTHER">Other</ion-select-option>
+                  <ion-select-option value="OTHER">Other ocular abnormalities (specify)</ion-select-option>
                 </ion-select>
               </div>
 
-              <!-- Show "Other" text field only when needed -->
               <div class="border mt8" *ngIf="dispenseForm.get('ocularCondition')?.value === 'OTHER'">
                 <ion-input
                   formControlName="ocularConditionOther"

@@ -1,0 +1,32 @@
+.custom-title {
+  display: flex;
+  align-items: center;
+}
+
+.back_icon {
+  font-size: 24px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.back_btn {
+  font-weight: bold;
+}
+
+.report-header-section {
+  padding: 10px 0;
+  h2 {
+    color: #1A3561;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  p {
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+.button_group {
+  margin-top: 20px;
+}

@@ -19,6 +19,10 @@ export class ApiService {
   getSchools(): Observable<any> {
     return this.http.get(this.SchoolJson);
   }
+
+getSchoolss(): Observable<any> {
+  return this.http.get(`${this.apiUrl}school`);
+}
   async presentToast(msg: any, color: any = 'success', position: any = 'bottom', duration: any = 2000) {
     let toast = await this.toaster.create({
       message: msg,
@@ -50,7 +54,7 @@ export class ApiService {
     return this.http.post(`${this.apiUrl}send-otp`, data);
   }
   comprehensive_eye_exam(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}Comprehensive`, data);
+    return this.http.post(`${this.apiUrl}Comprehensive-eyetest`, data);
   }
   seoundScreening(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}Second-screening`, data);
@@ -58,15 +62,20 @@ export class ApiService {
   getSeoundScreening(id: any): Observable<any> {
     return this.http.get(`${this.apiUrl}Second-screening?reference_number=${id}`);
   }
-  refresh(body: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}refresh-token`, body).pipe(
-      tap((response: any) => {
-        // let res = this._authenticationService.currentUserValue
-        // let userData = {token:response.access_token, id:res.id ,email:res.email,refresh_token: res.refresh_token}
-        // this._authenticationService.setLogin(userData)
-      })
-    );
-  }
+ // In ApiService.ts
+refresh(body: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}refresh-token/`, body).pipe(
+    tap((response: any) => {
+      // Safely update the current user in localStorage directly
+      const userStr = localStorage.getItem('currentUser');
+      if (userStr && response && response.access_token) {
+        const user = JSON.parse(userStr);
+        user.token = response.access_token;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      }
+    })
+  );
+}
   sendOtp(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}send-otp`, data);
   }

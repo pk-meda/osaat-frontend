@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { ModalController } from '@ionic/angular';
+import { ExamChoiceModal } from '../../Modal-continue-DV-CE/exam-choice.modal/exam-choice.modal.component';
 interface ComplaintItem {
   label: string;
   selected: boolean;
@@ -56,17 +57,28 @@ export class ComplaintsObservationComponent implements OnInit {
     private api: ApiService,
     private modalController: ModalController
   ) {
-    this.route.queryParamMap.subscribe(params => {
+   /* this.route.queryParamMap.subscribe(params => {
       this.reference_number = params.get('reference_number');
       if (this.reference_number === null) {
         this.openModal();
       } else {
         this.getDataComplaints();
       }
-    });
+    });*/
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      const ref = params.get('reference_number');
+      if (ref) {
+        this.reference_number = ref;
+        this.getDataComplaints();
+      } else {
+        // Only open the manual selector if NO reference number was provided in URL
+        this.openModal();
+      }
+    });
+  }
 
   backLocation() {
     this.location.back();
@@ -175,40 +187,63 @@ export class ComplaintsObservationComponent implements OnInit {
       return;
     }
 
-    const eyeExam = sessionStorage.getItem('eyeExam');
-    const hasComplaint = this.hasComplaintSelected;
-    const needsReferral = eyeExam === 'no' || hasComplaint;
+    // Prepare our request body
     const body: any = {
       selected_complaint: selected,
       reference_number: this.reference_number,
     };
+    
     if (this.hasComplaintSelected && this.eyeAffected) {
       body.effected_eye = this.eyeAffected; 
     }
-    if ( this.otherText?.trim()) {
+    
+    if (this.otherText?.trim()) {
       body.otherText = this.otherText.trim();
     }
-    if (needsReferral) {
-      this.api.isLoading.next(true);
-      this.api.observationComplaints(body).subscribe(
-        (res: any) => {
-          this.api.isLoading.next(false);
-          if (res) {
-            this.api.presentToast(res?.message || 'Saved successfully');
-            // this.checkAlreadyDoVATEST()
-            this.router.navigate(['/layout', 'secoundScreening', this.reference_number]);
-          }
-        },
-        (err) => {
-          this.api.isLoading.next(false);
-          this.api.presentToast(err?.error?.message || 'Something went wrong', 'danger');
+
+    // 🟢 Always save complaints data first
+    this.api.isLoading.next(true);
+    this.api.observationComplaints(body).subscribe(
+      (res: any) => {
+        this.api.isLoading.next(false);
+        if (res) {
+          this.api.presentToast(res?.message || 'Complaints saved successfully', 'success');
+          
+          // 🟢 Crucial Workflow Step: Present the choices for the upcoming Visual Acuity test!
+          this.promptVisualAcuityTest(this.reference_number);
         }
-      );
-    } else {
-      this.router.navigate(['/layout', 'first-screening']);
-    }
-    sessionStorage.removeItem('eyeExam');
+      },
+      (err) => {
+        this.api.isLoading.next(false);
+        this.api.presentToast(err?.error?.message || 'Something went wrong', 'danger');
+      }
+    );
   }
+
+  // Helper Method to display choices for Visual Acuity Assessment
+ async promptVisualAcuityTest(reference_number: any) {
+    const modalcheck = await this.modalController.create({
+      component: ExamChoiceModal,
+      backdropDismiss: false
+    });
+    
+    await modalcheck.present();
+    const { data } = await modalcheck.onDidDismiss();
+
+    if (data?.title === 'doETest') {
+      this.router.navigate(['/eye_exam', reference_number]);
+    } else if (data?.title === 'doVAChart') {
+      this.router.navigate(['/layout/measurement-visual', reference_number]);
+    } else if (data?.title === 'SecoundScreen') {
+      // If they skip to Ocular Exam, go there
+      this.router.navigate(['/layout/secoundScreening', reference_number]);
+    } else {
+      // Default fallback if cancelled
+      this.router.navigate(['/layout/profile']);
+    }
+  }
+
+
 
   checkAlreadyDoVATEST(){
     let body ={

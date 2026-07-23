@@ -37,40 +37,43 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    markAllDirty(this.loginForm);
-    if (this.loginForm.invalid) {
-      return;
-    }
-    this.logging = true;
-    this.isLoading= true
-    let data = this.loginForm.value;
-    this.apiService.login(data).subscribe({
-      next: (res: any) => {
-        this.logging = false;
-        if (res.error == false) {
-          const userData = {
-            token: res.body.token,
-            // user_id: res.user_id,
-          };
-          localStorage.setItem('userDetails',JSON.stringify(res.body.user))
-          console.log(res,'data')
-          this.authService.setLogin(userData);
-          this.apiService.presentToast(res.message);
-          this.isLoading= false
-          this.navtCtrl.navigateRoot(['/layout'], { replaceUrl: true });
-        } else {
-          this.isLoading= false
-          this.apiService.presentToast(res.message, 'danger');
-        }
-      },
-      error: (error: any) => {
-        this.logging = false;
-        this.isLoading= false
-        this.apiService.handleError(error);
-      }
-    });
-
+  markAllDirty(this.loginForm);
+  if (this.loginForm.invalid) {
+    return;
   }
+  this.logging = true;
+  this.isLoading = true;
+  let data = this.loginForm.value;
+
+  this.apiService.login(data).subscribe({
+    next: (res: any) => {
+      this.logging = false;
+    // inside submit() in login.component.ts
+if (res.error == false) {
+  const token = res.body.token;
+
+  // Save raw token string clearly
+  localStorage.setItem('token', token);
+  localStorage.setItem('userDetails', JSON.stringify(res.body.user));
+
+  const userData = { token: token };
+  this.authService.setLogin(userData);
+
+  this.apiService.presentToast(res.message);
+  this.isLoading = false;
+  this.navtCtrl.navigateRoot(['/layout'], { replaceUrl: true });
+} else {
+        this.isLoading = false;
+        this.apiService.presentToast(res.message, 'danger');
+      }
+    },
+    error: (error: any) => {
+      this.logging = false;
+      this.isLoading = false;
+      this.apiService.handleError(error);
+    }
+  });
+}
   localstorage(){
     localStorage.setItem('login', 'login');
   }

@@ -23,14 +23,26 @@ export class RecordDiagnosisComponent implements OnInit {
   participantData: any;
   profileRes: any;
 
-  // ====== Spreadsheet options ======
+ // ====== Spreadsheet options ======
   readonly REFRACTIVE_ERROR_OPTIONS: Option[] = [
-    { label: 'Emmetropia',               value: 'EMMETROPIA' },
-    { label: 'Myopia',                   value: 'MYOPIA' },
-    { label: 'Hyperopia',                value: 'HYPEROPIA' },
-    { label: 'Astigmatism',              value: 'ASTIGMATISM' },
-    { label: 'Myopia with astigmatism',  value: 'MYOPIA_WITH_ASTIGMATISM' },
-    { label: 'Hyperopia with astigmatism', value: 'HYPEROPIA_WITH_ASTIGMATISM' },
+    /*--- Updated Reviewer-Recommended Comprehensive List ---
+    { label: 'Myopia',                          value: 'MYOPIA' },
+    { label: 'Hyperopia',                       value: 'HYPEROPIA' },
+    { label: 'Simple Myopic Astigmatism',       value: 'SIMPLE_MYOPIC_ASTIGMATISM' },
+    { label: 'Simple Hyperopic Astigmatism',    value: 'SIMPLE_HYPEROPIC_ASTIGMATISM' },
+    { label: 'Compound Myopic Astigmatism',     value: 'COMPOUND_MYOPIC_ASTIGMATISM' },
+    { label: 'Compound Hyperopic Astigmatism',  value: 'COMPOUND_HYPEROPIC_ASTIGMATISM' },
+    { label: 'Mixed Astigmatism',               value: 'MIXED_ASTIGMATISM' },
+    { label: 'Anisometropia',                   value: 'ANISOMETROPIA' },
+    { label: 'Emmetropia / No Refractive Error', value: 'EMMETROPIA' }*/
+
+    // --- Legacy Options (Commented out for reference/continuity) ---
+     { label: 'Emmetropia',               value: 'EMMETROPIA' },
+     { label: 'Myopia',                   value: 'MYOPIA' },
+     { label: 'Hyperopia',                value: 'HYPEROPIA' },
+     { label: 'Astigmatism',              value: 'ASTIGMATISM' },
+     { label: 'Myopia with astigmatism',  value: 'MYOPIA_WITH_ASTIGMATISM' },
+     { label: 'Hyperopia with astigmatism', value: 'HYPEROPIA_WITH_ASTIGMATISM' },
   ];
 
   readonly AFFECTED_EYE_OPTIONS: Option[] = [
@@ -39,18 +51,41 @@ export class RecordDiagnosisComponent implements OnInit {
     { label: 'Both', value: 'BOTH' },
   ];
 
+ // ====== Spreadsheet options ======
   readonly OCULAR_CONDITION_OPTIONS: Option[] = [
-    { label: 'Cataract',              value: 'CATARACT' },
-    { label: 'Pseudophakia',          value: 'PSEUDOPHAKIA' },
-    { label: 'Pterygium',             value: 'PTERYGIUM' },
-    { label: 'Ptosis',                value: 'PTOSIS' },
-    { label: 'Squint',                value: 'SQUINT' },
-    { label: 'Amblyopia',             value: 'AMBLYOPIA' },
-    { label: 'Bitot spots',           value: 'BITOT_SPOTS' },
-    { label: 'Conjunctivitis',        value: 'CONJUNCTIVITIS' },
-    { label: 'Impaired colour vision',value: 'IMPAIRED_COLOUR_VISION' },
-    { label: 'None',value: 'none' },
-    // "Other" handled in template, do not add here to keep values clean
+    // --- Reviewer-Recommended Pediatric Clinical Dataset ---
+    { label: 'Normal / No Ocular Condition',                        value: 'NONE' },
+    { label: 'Allergic Conjunctivitis',                             value: 'ALLERGIC_CONJUNCTIVITIS' },
+    { label: 'Infective Conjunctivitis',                            value: 'INFECTIVE_CONJUNCTIVITIS' },
+    { label: 'Blepharitis',                                         value: 'BLEPHARITIS' },
+    { label: 'Dry Eye Disease',                                     value: 'DRY_EYE_DISEASE' },
+    { label: 'Amblyopia',                                           value: 'AMBLYOPIA' },
+    { label: 'Strabismus (Esotropia)',                              value: 'STRABISMUS_ESOTROPIA' },
+    { label: 'Strabismus (Exotropia)',                              value: 'STRABISMUS_EXOTROPIA' },
+    { label: 'Strabismus (Vertical Deviations)',                     value: 'STRABISMUS_VERTICAL' },
+    { label: 'Ptosis',                                              value: 'PTOSIS' },
+    { label: 'Congenital or Developmental Cataract',                value: 'CONGENITAL_DEVELOPMENTAL_CATARACT' },
+    { label: 'Corneal Opacity / Scarring',                          value: 'CORNEAL_OPACITY_SCARRING' },
+    { label: 'Keratoconus',                                         value: 'KERATOCONUS' },
+    { label: 'Nystagmus',                                           value: 'NYSTAGMUS' },
+    { label: 'Ocular Trauma-Related Conditions',                    value: 'OCULAR_TRAUMA' },
+    { label: 'Suspected Retinal / Optic Nerve Abnormalities (Referral Required)', value: 'SUSPECTED_RETINAL_OPTIC_NERVE' },
+    { label: 'Bitot Spots',                                         value: 'BITOT_SPOTS' },
+    { label: 'Pseudophakia',                                        value: 'PSEUDOPHAKIA' },
+    { label: 'Pterygium',                                           value: 'PTERYGIUM' },
+    { label: 'Impaired Colour Vision',                              value: 'IMPAIRED_COLOUR_VISION' }
+
+    // --- Legacy Options (Commented out for reference/continuity) ---
+    // { label: 'Cataract',               value: 'CATARACT' },
+    // { label: 'Pseudophakia',           value: 'PSEUDOPHAKIA' },
+    // { label: 'Pterygium',              value: 'PTERYGIUM' },
+    // { label: 'Ptosis',                 value: 'PTOSIS' },
+    // { label: 'Squint',                 value: 'SQUINT' },
+    // { label: 'Amblyopia',              value: 'AMBLYOPIA' },
+    // { label: 'Bitot spots',            value: 'BITOT_SPOTS' },
+    // { label: 'Conjunctivitis',         value: 'CONJUNCTIVITIS' },
+    // { label: 'Impaired colour vision', value: 'IMPAIRED_COLOUR_VISION' },
+    // { label: 'None',                   value: 'none' },
   ];
 
   readonly MANAGEMENT_OPTIONS: Option[] = [

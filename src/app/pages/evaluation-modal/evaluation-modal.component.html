@@ -9,9 +9,8 @@
 </ion-header>
 
 <ion-content mode="md" class="ion-padding">
-  <!-- Eye selection -->
   <div *ngIf="screeningType === 'SELECT EYE TEST'">
-    <p>Select which eye to screen:</p>
+    <p style="font-weight: 500; margin-bottom: 15px;">Select which eye to screen:</p>
 
     <div class="buttons-new-ionic">
       <ion-button
@@ -32,7 +31,6 @@
         RIGHT
       </ion-button>
 
-      <!-- New: Both Eyes (shown if at least one eye is pending) -->
       <ion-button
         *ngIf="!leftEyeDone || !rightEyeDone"
         (click)="selectOption('BOTH')"
@@ -41,9 +39,37 @@
         BOTH EYES
       </ion-button>
     </div>
+
+    <div class="parameters-panel" style="margin-top: 25px; padding: 15px; border-top: 1px solid #e0e0e0; background-color: #fcfcfc; border-radius: 8px;">
+      <h5 style="margin-top: 0; margin-bottom: 15px; color: #555; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
+        Testing Parameters
+      </h5>
+
+      <ion-item lines="none" style="--background: transparent; margin-bottom: 10px;">
+        <ion-label style="font-size: 0.95rem; color: #333;">Testing Distance (meters):</ion-label>
+        <ion-input 
+          type="number" 
+          [(ngModel)]="testingDistance" 
+          style="max-width: 80px; text-align: center; border: 1px solid #ccc; border-radius: 6px; font-weight: bold; background: #fff;"
+          min="1"
+          max="6"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item lines="none" style="--background: transparent;">
+        <ion-label style="font-size: 0.95rem; color: #333; margin-bottom: 8px;" position="stacked">Spectacles Status:</ion-label>
+        <ion-segment [(ngModel)]="spectaclesStatus" (ionChange)="onSpectaclesChange($event)" style="width: 100%; margin-top: 5px;">
+          <ion-segment-button value="unaided">
+            <ion-label style="font-size: 0.85rem;">Unaided (No Glasses)</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="aided">
+            <ion-label style="font-size: 0.85rem;">Aided (With Glasses)</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-item>
+    </div>
   </div>
 
-  <!-- Final Fail: full Retest or Exit -->
   <div *ngIf="screeningType.startsWith('Test Failed')">
     <div class="button-group">
       <ion-button (click)="selectOption('retest')" style="height: 100%; width: 100%;" [color]="'danger'">
@@ -55,7 +81,6 @@
     </div>
   </div>
 
-  <!-- Single-slide pass/fail (kept for completeness if you use it elsewhere) -->
   <div *ngIf="screeningType === 'Wrong Swipe Detected. Pass or Fail?'">
     <p>Please choose for this slide:</p>
     <ion-button (click)="selectOption('pass')" class="button_yes" [color]="'success'">Pass</ion-button>

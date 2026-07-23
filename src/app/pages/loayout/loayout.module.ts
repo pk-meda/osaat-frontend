@@ -31,7 +31,7 @@ import { ContactNumberOnlyDirective } from 'src/app/helpers/contact-number.direc
 import { SchoolRegisterComponent } from '../school-register-modal/school-register/school-register.component';
 import { SharedModule } from 'src/app/helpers/shared.module';
 // import { CalibrationTestComponent } from '../components/calibration-test/calibration-test.component';
-
+import { ReportingComponent } from '../components/reporting/reporting.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -42,7 +42,7 @@ import { SharedModule } from 'src/app/helpers/shared.module';
     ReactiveFormsModule,
     SharedModule  
   ],
-  declarations: [LoayoutPage, HeaderComponent, FirstScreeningComponent,InternalExternalComponent,SecoundScreeningComponent,ComprehensiveEyeExamComponent, DispensinComponent, RefractionComponent, CreateNewProfileComponent, ProfileComponent, RecordDiagnosisComponent, ProfileFooterComponent, SpectacleHistoryComponent, SurgeryTreatmentHistoryComponent,FamilyHistoryComponent,CurrentMedicalTreatmentComponent,MeasurementVisualAcuityComponent,RefractionSpectaclePresentationComponent,OtherMedicalIssuesComponent,ParticipantInfoComponent,EvaluationModalComponent,ComplaintsObservationComponent,WayForwardComponent ,SchoolRegisterComponent],
+  declarations: [LoayoutPage, HeaderComponent, FirstScreeningComponent,InternalExternalComponent,SecoundScreeningComponent,ComprehensiveEyeExamComponent, DispensinComponent, RefractionComponent, CreateNewProfileComponent, ProfileComponent, RecordDiagnosisComponent, ProfileFooterComponent, SpectacleHistoryComponent, SurgeryTreatmentHistoryComponent,FamilyHistoryComponent,CurrentMedicalTreatmentComponent,MeasurementVisualAcuityComponent,RefractionSpectaclePresentationComponent,OtherMedicalIssuesComponent,ParticipantInfoComponent,EvaluationModalComponent,ComplaintsObservationComponent,WayForwardComponent ,SchoolRegisterComponent,ReportingComponent],
   exports: [ParticipantInfoComponent,SharedModule]
 })
 export class LoayoutPageModule { }

@@ -212,7 +212,7 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
   async submitForm() {
     this.submitted = true;
     if ( this.screeningForm.invalid ) {
-      this.apiService.presentToast( 'Please fill all required fields or Also fill secound page data on next click', 'danger' );
+      this.apiService.presentToast( 'Please fill all required fields.', 'danger' );
       return;
     }
     this.apiService.isLoading.next( true );
@@ -224,8 +224,13 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
           console.log( res, 'res' )
           this.apiService.isLoading.next( false );
           if ( !res.error ) {
-            this.apiService.presentToast( res.message && res.body.reference_number + ' ' +`Here is Your Reference Number`, 'success' );
-            this.CheckingRefrencePage( res.body.reference_number );
+            this.apiService.presentToast( 
+              `Student Registered Successfully! Reference: ${res.body.reference_number}`, 
+              'success' 
+            );
+            
+            //  REDIRECT TO COMPLAINTS: Jump directly to the next step of the clinical workflow
+            this.router.navigate( [ '/layout/complaint', res.body.reference_number ] );
           } else {
             this.apiService.presentToast( res.message, 'danger' );
           }
