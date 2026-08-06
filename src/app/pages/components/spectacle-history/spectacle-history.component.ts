@@ -7,14 +7,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonDatetime, IonModal } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 
-@Component( {
+@Component({
   selector: 'app-spectacle-history',
   templateUrl: './spectacle-history.component.html',
-  styleUrls: [ './spectacle-history.component.scss' ],
+  styleUrls: ['./spectacle-history.component.scss'],
   standalone: false
-} )
+})
 export class SpectacleHistoryComponent implements OnInit {
-  @ViewChild( 'dateTime', { static: false } ) dateTime!: IonDatetime;
+  @ViewChild('dateTime', { static: false }) dateTime!: IonDatetime;
   spectacleForm!: FormGroup;
   currentStep = 1;
   totalSteps = 6;
@@ -29,7 +29,7 @@ export class SpectacleHistoryComponent implements OnInit {
   // New properties for duration handling
   wearingDurationType: 'months' | 'years' = 'months';
   wearingDurationValue: number | null = null;
-   glassesChangeDurationType: 'months' | 'years' = 'months';
+  glassesChangeDurationType: 'months' | 'years' = 'months';
   glassesChangeDurationValue: number | null = null;
 
   constructor(
@@ -40,139 +40,166 @@ export class SpectacleHistoryComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
   ) {
-    this.route.paramMap.subscribe( params => {
-      this.reference_number = params.get( 'reference_number' );
-      console.log( 'Received ID:', this.reference_number );
-      if ( this.reference_number == "null" || this.reference_number == null ) {
+    this.route.paramMap.subscribe(params => {
+      this.reference_number = params.get('reference_number');
+      console.log('Received ID:', this.reference_number);
+      if (this.reference_number == "null" || this.reference_number == null) {
         this.openModal();
       } else {
-       this.patchData()
+        this.patchData();
       }
-    } );
+    });
   }
 
   ngOnInit() {
-    this.spectacleForm = this.fb.group( {
-      wearSpectacles: [ false, Validators.required ],
-      wearingDuration: [ '', Validators.required ], // This will now store the formatted duration string
-      hasGlasses: [ false, Validators.required ],
-      lensCondition: [ '' ],
-      lensMaterial: [ '',],
-      lensCoating: [ '', ],
-      lensType: [ '', ],
-      refractiveIndex: [ '', ],
-      frameCondition: [ '', ],
-      framesFit: [ false, Validators.required ],
-      framesBend: [ false, Validators.required ],
-      framesBroken: [ false, Validators.required ],
-      framesGoodCondition: [ false, Validators.required ],
-      glassesChangeDuration: [ '', Validators.required ],
-      glassesSource: [ '', ],
-      selfChosenFrames: [ false, Validators.required ],
-      satisfactionLevel: [ '' ],
-    } );
+  // 1. Update form initialization defaults in ngOnInit() so hidden controls pass valid defaults
+this.spectacleForm = this.fb.group({
+  wearSpectacles: [false, Validators.required],
+  wearingDuration: ['', Validators.required],
+  hasGlasses: [false, Validators.required],
+  lensCondition: ['good'], 
+  lensMaterial: ['plastic'], 
+  lensCoating: ['uncoated'], 
+  lensType: [''],
+  refractiveIndex: ['1.5'], 
+  frameCondition: ['good'],         // Defaulted since Q6 input is hidden
+  framesFit: [false],               // Renumbered visible 6.1
+  framesBend: [false],              // Renumbered visible 6.2
+  framesBroken: [false],            // Defaulted since Q6.3 is hidden
+  framesGoodCondition: [true],      // Defaulted since Q6.4 is hidden
+  glassesChangeDuration: [''],
+  glassesSource: [''],
+  selfChosenFrames: [false],
+  satisfactionLevel: [''],
+});
+
+    // Smart value change listeners to adjust requirements dynamically
+    this.spectacleForm.get('wearSpectacles')?.valueChanges.subscribe(wears => {
+      if (!wears) {
+        this.spectacleForm.get('wearingDuration')?.clearValidators();
+      } else {
+        this.spectacleForm.get('wearingDuration')?.setValidators([Validators.required]);
+      }
+      this.spectacleForm.get('wearingDuration')?.updateValueAndValidity();
+    });
+
+    this.spectacleForm.get('hasGlasses')?.valueChanges.subscribe(has => {
+      if (!has) {
+        this.spectacleForm.get('lensType')?.clearValidators();
+        this.spectacleForm.get('glassesChangeDuration')?.clearValidators();
+      } else {
+        this.spectacleForm.get('lensType')?.setValidators([Validators.required]);
+      }
+      this.spectacleForm.get('lensType')?.updateValueAndValidity();
+      this.spectacleForm.get('glassesChangeDuration')?.updateValueAndValidity();
+    });
   }
 
   patchData() {
-    if ( this.reference_number ) {
-      this.apiService.getSpectacleHistory( this.reference_number ).subscribe( res => {
-        if ( res && !res.error && res.body ) {
+    if (this.reference_number) {
+      this.apiService.getSpectacleHistory(this.reference_number).subscribe(res => {
+        if (res && !res.error && res.body) {
           const data = res.body;
-          this.spectacleForm.patchValue( {
-            wearSpectacles: data.wears_spectacles,
-            wearingDuration: data.wearing_duration,
-            hasGlasses: data.has_glasses,
-            lensCondition: data.lens_condition,
-            lensMaterial: data.lens_material,
-            lensCoating: data.lens_coating,
-            lensType: data.lens_type,
-            refractiveIndex: data.refractive_index,
-            frameCondition: data.frame_condition,
-            framesFit: data.frame_fit,
-            framesBend: data.frame_bent,
-            framesBroken: data.frame_broken,
-            framesGoodCondition: data.frame_good_condition,
-            glassesChangeDuration: data.glasses_change_duration,
-            glassesSource: data.glasses_source,
-            selfChosenFrames: data.chose_own_frame,
-            satisfactionLevel: data.satisfaction_level
-          } );
+      // 2. Ensure patchData() safely handles missing values for hidden controls
+this.spectacleForm.patchValue({
+  wearSpectacles: data.wears_spectacles,
+  wearingDuration: data.wearing_duration,
+  hasGlasses: data.has_glasses,
+  lensCondition: data.lens_condition || 'good',
+  lensMaterial: data.lens_material || 'plastic',
+  lensCoating: data.lens_coating || 'uncoated',
+  lensType: data.lens_type,
+  refractiveIndex: data.refractive_index || '1.5',
+  frameCondition: data.frame_condition || 'good',
+  framesFit: data.frame_fit,
+  framesBend: data.frame_bent,
+  framesBroken: data.frame_broken || false,
+  framesGoodCondition: data.frame_good_condition || true,
+  glassesChangeDuration: data.glasses_change_duration,
+  glassesSource: data.glasses_source,
+  selfChosenFrames: data.chose_own_frame,
+  satisfactionLevel: data.satisfaction_level
+});
           this.spectacleForm.disable();
         }
       });
     }
   }
 
- // Handlers for Q2
- setWearingDurationType(type: 'months' | 'years') {
-   this.wearingDurationType = type;
-   this.wearingDurationValue = null;
-   this.updateDurationForm('wearingDuration', this.wearingDurationValue, this.wearingDurationType);
- }
+  // Handlers for Q2
+  setWearingDurationType(type: 'months' | 'years') {
+    this.wearingDurationType = type;
+    this.wearingDurationValue = null;
+    this.updateDurationForm('wearingDuration', this.wearingDurationValue, this.wearingDurationType);
+  }
 
- setWearingDurationValue(value: number) {
-   this.wearingDurationValue = value;
-   this.updateDurationForm('wearingDuration', this.wearingDurationValue, this.wearingDurationType);
- }
+  setWearingDurationValue(value: number) {
+    this.wearingDurationValue = value;
+    this.updateDurationForm('wearingDuration', this.wearingDurationValue, this.wearingDurationType);
+  }
 
- // Handlers for Q7
- setGlassesChangeDurationType(type: 'months' | 'years') {
-   this.glassesChangeDurationType = type;
-   this.glassesChangeDurationValue = null;
-   this.updateDurationForm('glassesChangeDuration', this.glassesChangeDurationValue, this.glassesChangeDurationType);
- }
+  // Handlers for Q7
+  setGlassesChangeDurationType(type: 'months' | 'years') {
+    this.glassesChangeDurationType = type;
+    this.glassesChangeDurationValue = null;
+    this.updateDurationForm('glassesChangeDuration', this.glassesChangeDurationValue, this.glassesChangeDurationType);
+  }
 
- setGlassesChangeDurationValue(value: number) {
-   this.glassesChangeDurationValue = value;
-   this.updateDurationForm('glassesChangeDuration', this.glassesChangeDurationValue, this.glassesChangeDurationType);
- }
+  setGlassesChangeDurationValue(value: number) {
+    this.glassesChangeDurationValue = value;
+    this.updateDurationForm('glassesChangeDuration', this.glassesChangeDurationValue, this.glassesChangeDurationType);
+  }
 
- private updateDurationForm(ctrl: 'wearingDuration' | 'glassesChangeDuration', val: number | null, type: 'months' | 'years') {
-   if (val != null && type) {
-     this.spectacleForm.patchValue({ [ctrl]: `${val} ${type}` });
-   }
- }
+  private updateDurationForm(ctrl: 'wearingDuration' | 'glassesChangeDuration', val: number | null, type: 'months' | 'years') {
+    if (val != null && type) {
+      this.spectacleForm.patchValue({ [ctrl]: `${val} ${type}` });
+    }
+  }
 
   nextStep() {
     this.submitted = true;
-    if ( this.currentStep === 1 ) {
-      if (
-        this.spectacleForm.get( 'wearSpectacles' )?.invalid ||
-        this.spectacleForm.get( 'wearingDuration' )?.invalid
-      ) {
-        this.markFieldsTouched( [ 'wearSpectacles', 'wearingDuration' ] );
+    const wearsSpectacles = this.spectacleForm.get('wearSpectacles')?.value;
+    const hasGlasses = this.spectacleForm.get('hasGlasses')?.value;
+
+    if (this.currentStep === 1) {
+      if (this.spectacleForm.get('wearSpectacles')?.invalid) {
+        this.markFieldsTouched(['wearSpectacles']);
         return;
       }
-    } else if ( this.currentStep === 2 ) {
-    } else if ( this.currentStep === 3 ) {
-      if (
-        this.spectacleForm.get( 'lensMaterial' )?.invalid ||
-        this.spectacleForm.get( 'lensCoating' )?.invalid ||
-        this.spectacleForm.get( 'lensType' )?.invalid ||
-        this.spectacleForm.get( 'refractiveIndex' )?.invalid
-      ) {
-        this.markFieldsTouched( [ 'lensMaterial', 'lensCoating', 'lensType', 'refractiveIndex' ] );
+      if (wearsSpectacles) {
+        if (this.spectacleForm.get('wearingDuration')?.invalid) {
+          this.markFieldsTouched(['wearingDuration']);
+          return;
+        }
+      } else {
+        // If child doesn't wear glasses, submit directly
+        this.submitForm();
         return;
       }
-    } else if ( this.currentStep === 4 ) {
-      if (
-        this.spectacleForm.get( 'frameCondition' )?.invalid ||
-        this.spectacleForm.get( 'framesFit' )?.invalid ||
-        this.spectacleForm.get( 'framesBend' )?.invalid ||
-        this.spectacleForm.get( 'framesBroken' )?.invalid ||
-        this.spectacleForm.get( 'framesGoodCondition' )?.invalid
-      ) {
-        this.markFieldsTouched( [ 'frameCondition', 'framesFit', 'framesBend', 'framesBroken', 'framesGoodCondition' ] );
+    } else if (this.currentStep === 2) {
+      if (this.spectacleForm.get('hasGlasses')?.invalid) {
+        this.markFieldsTouched(['hasGlasses']);
         return;
       }
-    } else if ( this.currentStep === 5 ) {
-      // if ( this.spectacleForm.get( 'glassesChangeDuration' )?.invalid ) {
-      //   this.markFieldsTouched( [ 'glassesChangeDuration' ] );
-      //   return;
-      // }
+      // If child has no glasses with them, skip Steps 3, 4, 5 and go straight to Step 6
+      if (!hasGlasses) {
+        this.currentStep = 6;
+        this.submitted = false;
+        return;
+      }
+    } else if (this.currentStep === 3) {
+      if (this.spectacleForm.get('lensType')?.invalid) {
+        this.markFieldsTouched(['lensType']);
+        return;
+      }
+    } else if (this.currentStep === 4) {
+      // Step 4 frame condition checks
+    } else if (this.currentStep === 5) {
+      // Step 5 glasses change checks
     }
+
     this.submitted = false;
-    if ( this.currentStep < this.totalSteps ) {
+    if (this.currentStep < this.totalSteps) {
       this.currentStep++;
     }
   }
@@ -182,28 +209,27 @@ export class SpectacleHistoryComponent implements OnInit {
   async openModal() {
     try {
       const selectedUser = await this.apiService.openUserSelectionModal();
-      console.log( 'Selected user:', selectedUser );
-
-      this.handleUser( selectedUser );
-    } catch ( error ) {
-      console.error( 'Error opening user selection modal:', error );
+      console.log('Selected user:', selectedUser);
+      this.handleUser(selectedUser);
+    } catch (error) {
+      console.error('Error opening user selection modal:', error);
     }
   }
 
-  handleUser( user: any ) {
-    console.log( '=== Selected User Details ===' );
-    console.log( 'User ID:', user.id );
-    console.log( 'Reference Number:', user.reference_number );
+  handleUser(user: any) {
+    console.log('=== Selected User Details ===');
+    console.log('User ID:', user.id);
+    console.log('Reference Number:', user.reference_number);
     this.participantData = user;
     this.reference_number = user.reference_number;
-    this.patchData()
+    this.patchData();
   }
 
   openGlassesChangeCalendar() {
     this.isGlassesChangeCalendarOpen = true;
   }
 
-  onGlassesChangeSelected( event: any ) {
+  onGlassesChangeSelected(event: any) {
     this.closeGlassesChangeCalendar();
   }
 
@@ -212,37 +238,45 @@ export class SpectacleHistoryComponent implements OnInit {
   }
 
   previousStep() {
-    if ( this.currentStep > 1 ) {
+    const hasGlasses = this.spectacleForm.get('hasGlasses')?.value;
+
+    if (this.currentStep === 6 && !hasGlasses) {
+      // Jump back to Step 2 if glasses are not present
+      this.currentStep = 2;
+    } else if (this.currentStep > 1) {
       this.currentStep--;
-      this.submitted = false;
     }
+    this.submitted = false;
   }
 
   submitForm() {
     this.submitted = true;
-    if ( this.spectacleForm.invalid ) {
-      this.markFieldsTouched( Object.keys( this.spectacleForm.controls ) );
-      this.apiService.presentToast( 'Please fill all fields', 'danger' );
-      return;
+    
+    // Validate key fields depending on active flow
+    if (this.spectacleForm.get('wearSpectacles')?.value === true) {
+      if (this.spectacleForm.get('hasGlasses')?.value === true && this.spectacleForm.get('lensType')?.invalid) {
+        this.apiService.presentToast('Please select the lens type', 'danger');
+        return;
+      }
     }
-      let glassesChangeDuration = this.spectacleForm.value.glassesChangeDuration;
 
-  // Handle date vs. duration safely
-  if (glassesChangeDuration instanceof Date || !isNaN(Date.parse(glassesChangeDuration))) {
-    glassesChangeDuration = this.formatDate(glassesChangeDuration);
-  }
+    let glassesChangeDuration = this.spectacleForm.value.glassesChangeDuration;
 
-    this.apiService.isLoading.next( true );
+    if (glassesChangeDuration instanceof Date || !isNaN(Date.parse(glassesChangeDuration))) {
+      glassesChangeDuration = this.formatDate(glassesChangeDuration);
+    }
+
+    this.apiService.isLoading.next(true);
     let payload = {
       reference_number: this.reference_number,
       wears_spectacles: this.spectacleForm.value.wearSpectacles,
       wearing_duration: this.spectacleForm.value.wearingDuration,
       has_glasses: this.spectacleForm.value.hasGlasses,
-      lens_condition: this.spectacleForm.value.lensCondition,
-      lens_material: this.spectacleForm.value.lensMaterial,
-      lens_coating: this.spectacleForm.value.lensCoating,
+      lens_condition: this.spectacleForm.value.lensCondition || 'good',
+      lens_material: this.spectacleForm.value.lensMaterial || 'plastic',
+      lens_coating: this.spectacleForm.value.lensCoating || 'uncoated',
       lens_type: this.spectacleForm.value.lensType,
-      refractive_index: this.spectacleForm.value.refractiveIndex,
+      refractive_index: this.spectacleForm.value.refractiveIndex || '1.5',
       frame_condition: this.spectacleForm.value.frameCondition,
       frame_fit: this.spectacleForm.value.framesFit,
       frame_bent: this.spectacleForm.value.framesBend,
@@ -254,45 +288,45 @@ export class SpectacleHistoryComponent implements OnInit {
       satisfaction_level: this.spectacleForm.value.satisfactionLevel,
       spectacle_wearing_history: true
     };
-    this.apiService.SpectacleHistory( payload ).subscribe( ( res: any ) => {
-      this.apiService.isLoading.next( false );
-      if ( res.error === false ) {
-        this.apiService.presentToast( res.message );
-        this.router.navigate( [ '/layout/profile' ], { queryParams: { reference_number: this.reference_number } } );
+    
+    this.apiService.SpectacleHistory(payload).subscribe((res: any) => {
+      this.apiService.isLoading.next(false);
+      if (res.error === false) {
+        this.apiService.presentToast(res.message);
+        this.router.navigate(['/layout/profile'], { queryParams: { reference_number: this.reference_number } });
       } else {
-        this.apiService.presentToast( res.message, 'danger' );
+        this.apiService.presentToast(res.message, 'danger');
       }
     }, err => {
-      this.apiService.isLoading.next( false );
-      this.apiService.presentToast( 'Something Went Wrong', 'danger' );
-    } );
+      this.apiService.isLoading.next(false);
+      this.apiService.presentToast('Something Went Wrong', 'danger');
+    });
   }
 
-  private markFieldsTouched( fields: string[] ) {
-    fields.forEach( field => {
-      this.spectacleForm.get( field )?.markAsTouched();
-    } );
+  private markFieldsTouched(fields: string[]) {
+    fields.forEach(field => {
+      this.spectacleForm.get(field)?.markAsTouched();
+    });
   }
 
-  formatDate( date: string | Date ): string {
-    return new Date( date ).toISOString().split( 'T' )[ 0 ];
+  formatDate(date: string | Date): string {
+    return new Date(date).toISOString().split('T')[0];
   }
 
-  // Keep existing calendar methods for Question 7 (glasses change date)
-  dateChanged( event: any ) {
+  dateChanged(event: any) {
     this.selectedDate = event.detail.value;
-    if ( this.currentStep === 5 ) {
-      this.spectacleForm.patchValue( { glassesChangeDuration: this.formatDate( this.selectedDate ) } );
+    if (this.currentStep === 5) {
+      this.spectacleForm.patchValue({ glassesChangeDuration: this.formatDate(this.selectedDate) });
     }
     this.showCalendar = false;
   }
 
   nevigateProfile() {
-    this.apiService.nevigateProfile( this.reference_number );
+    this.apiService.nevigateProfile(this.reference_number);
   }
 
   backLocation() {
-    this.router.navigate( [ '/layout/profile' ], { queryParams: { reference_number: this.reference_number } } );
+    this.router.navigate(['/layout/profile'], { queryParams: { reference_number: this.reference_number } });
   }
 
   onEdit() {
@@ -300,6 +334,6 @@ export class SpectacleHistoryComponent implements OnInit {
   }
 
   onDelete() {
-    this.router.navigate( [ '/layout/profile' ] );
+    this.router.navigate(['/layout/profile']);
   }
 }

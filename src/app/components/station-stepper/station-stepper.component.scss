@@ -1,0 +1,66 @@
+// station-stepper.component.scss
+.stepper-wrapper {
+  background: #ffffff;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.stepper-carousel {
+  display: flex;
+  align-items: center;
+  min-width: max-content;
+  gap: 16px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: all 0.25s ease;
+
+  &.completed {
+    opacity: 0.85;
+    .step-badge { 
+      background-color: #10b981; 
+      color: #fff; 
+    }
+  }
+
+  /* Active state takes precedence if user navigates back */
+  &.active {
+    opacity: 1;
+    .step-badge {
+      background-color: #2563eb !important;
+      color: #fff !important;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    .step-title { 
+      color: #0f172a; 
+      font-weight: 700; 
+    }
+  }
+}
+
+.step-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.step-details { display: flex; flex-direction: column; }
+.step-title { font-size: 13px; font-weight: 600; color: #334155; white-space: nowrap; }
+.step-desc { font-size: 10px; color: #94a3b8; white-space: nowrap; }
+.step-line { width: 32px; height: 2px; background-color: #e2e8f0; margin-left: 6px; }

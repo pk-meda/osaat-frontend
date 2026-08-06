@@ -1,0 +1,32 @@
+<!-- station-stepper.component.html -->
+<ion-header mode="md" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title class="custom-title">
+      <ion-icon class="back_icon" name="chevron-back-outline" (click)="onBack()"></ion-icon>
+      <span class="back_btn">{{ pageTitle }}</span>
+    </ion-title>
+  </ion-toolbar>
+
+  <!-- Carousel Stepper -->
+  <div class="stepper-wrapper">
+    <div class="stepper-carousel">
+      <div 
+        *ngFor="let station of stationService.stations; let i = index" 
+        class="step-item"
+        [class.active]="(stationService.activeIndex$ | async) === i"
+        [class.completed]="(stationService.activeIndex$ | async)! > i"
+        (click)="onStepClick(station.route)"
+      >
+        <div class="step-badge">
+          <ion-icon *ngIf="(stationService.activeIndex$ | async)! > i" name="checkmark-outline"></ion-icon>
+          <span *ngIf="(stationService.activeIndex$ | async)! <= i">{{ i + 1 }}</span>
+        </div>
+        <div class="step-details">
+          <span class="step-title">{{ station.name }}</span>
+          <span class="step-desc">{{ station.description }}</span>
+        </div>
+        <div *ngIf="i < stationService.stations.length - 1" class="step-line"></div>
+      </div>
+    </div>
+  </div>
+</ion-header>

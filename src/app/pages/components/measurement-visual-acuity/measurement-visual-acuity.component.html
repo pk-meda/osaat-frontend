@@ -1,11 +1,15 @@
-<ion-header mode="md">
+<!--<ion-header mode="md">
   <ion-toolbar>
     <ion-title class="custom-title">
       <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
       <span class="back_btn">MEASUREMENT OF VISUAL ACUITY</span>
     </ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header>-->
+<app-station-stepper
+  pageTitle="MEASUREMENT OF VISUAL ACUITY"
+  (back)="backLocation()">
+</app-station-stepper>
 
 <ion-content mode="md">
   <ion-card>
@@ -114,6 +118,7 @@
               <div class="border">
                 <ion-select formControlName="unaidedNearVA_RE" toggleIcon="caret-down-sharp"
                   placeholder="Choose an option" interface="popover" class="custom-ion-select">
+                  <ion-select-option value="NOT TEST">NO TEST</ion-select-option>
                   <ion-select-option value="N6">N6</ion-select-option>
                   <ion-select-option value="N8">N8</ion-select-option>
                   <ion-select-option value="N10">N10</ion-select-option>
@@ -139,6 +144,7 @@
               <div class="border">
                 <ion-select formControlName="unaidedNearVA_LE" toggleIcon="caret-down-sharp"
                   placeholder="Choose an option" interface="popover" class="custom-ion-select">
+                  <ion-select-option value="NOT TEST">NO TEST</ion-select-option>
                   <ion-select-option value="N6">N6</ion-select-option>
                   <ion-select-option value="N8">N8</ion-select-option>
                   <ion-select-option value="N10">N10</ion-select-option>

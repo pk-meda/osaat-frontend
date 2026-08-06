@@ -1,11 +1,16 @@
-<ion-header mode="md">
+<!--<ion-header mode="md">
   <ion-toolbar>
     <ion-title class="custom-title">
       <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
-      <span class="back_btn">CHILD REGISTRATION</span>
+      <span class="back_btn">{{ currentStep === 1 ? 'PARTICIPANT REGISTRATION' : 'FIRST SCREENING' }}</span>
     </ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header>-->
+<!-- WITH THIS: -->
+<app-station-stepper 
+  [pageTitle]="currentStep === 1 ? 'PARTICIPANT REGISTRATION' : 'FIRST SCREENING'" 
+  (back)="backLocation()">
+</app-station-stepper>
 
 <ion-content mode="md">
   <ion-card>
@@ -151,131 +156,132 @@
             <!-- Step 8: Referral Clinic/Hospital -->
           <!-- </div> -->
           
+          <!-- STEP 1: PARTICIPANT REGISTRATION -->
           <div *ngIf="currentStep === 1">
+            <div class="form-group">
+              <p class="participant-info">1. Participant first name?</p>
+              <div class="border">
+                <ion-input formControlName="firstname" placeholder="Enter participant firstname" maxlength="50"></ion-input>
+              </div>
+              <ion-text color="danger" *ngIf="(screeningForm.get('firstname')?.touched || submitted) && screeningForm.get('firstname')?.invalid">
+                Please enter participant first name
+              </ion-text>
+            </div>
 
+            <div class="form-group">
+              <p class="participant-info">2. Participant surname?</p>
+              <div class="border">
+                <ion-input formControlName="surname" placeholder="Enter participant surname" maxlength="50"></ion-input>
+              </div>
+              <ion-text color="danger" *ngIf="(screeningForm.get('surname')?.touched || submitted) && screeningForm.get('surname')?.invalid">
+                Please enter participant surname
+              </ion-text>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info">3. Contact first name</p>
+              <div class="border">
+                <ion-input formControlName="contact_name" placeholder="Enter contact person firstname" maxlength="50"></ion-input>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info">4. Contact surname</p>
+              <div class="border">
+                <ion-input type="text" formControlName="contact_surname" placeholder="Enter contact surname" maxlength="50"></ion-input>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info">5. Relationship to participant</p>
+              <ion-item class="border" lines="none">
+                <ion-select formControlName="relationship" interface="popover" placeholder="Select relationship">
+                  <ion-select-option value="Mother">Mother</ion-select-option>
+                  <ion-select-option value="Father">Father</ion-select-option>
+                  <ion-select-option value="Self" *ngIf="isAdult">Self</ion-select-option>
+                  <ion-select-option value="Other">Other</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
+
+            <div class="form-group">
+              <p class="participant-info">6. Contact Number</p>
+              <div class="border_1">
+                <input id="phoneInput" type="tel" class="native-input" placeholder="Enter mobile number" formControlName="contact_number" />
+              </div>
+              <ion-text color="danger" *ngIf="(screeningForm.get('contact_number')?.touched || submitted) && screeningForm.get('contact_number')?.invalid">
+                Please enter a valid phone number
+              </ion-text>
+            </div>
+
+            <ng-container *ngIf="reference_number">
+              <div class="form-group">
+                <p class="participant-info">7. Reference Number</p>
+                <div class="border">
+                  <ion-input formControlName="reference_number" placeholder="Reference number"></ion-input>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <!-- STEP 2: FIRST SCREENING -->
+          <div *ngIf="currentStep === 2">
             <div class="form-group">
               <p class="participant-info">1. What is the Gender of participant?</p>
               <div class="border">
-                <ion-select formControlName="gender" toggleIcon="caret-down-sharp" placeholder="Select Gender"
-                  interface="popover" class="custom-ion-select">
+                <ion-select formControlName="gender" toggleIcon="caret-down-sharp" placeholder="Select Gender" interface="popover" class="custom-ion-select">
                   <ion-select-option value="male">Male</ion-select-option>
                   <ion-select-option value="female">Female</ion-select-option>
                 </ion-select>
               </div>
-
-              <div
-                *ngIf="(screeningForm.get('gender')?.touched || submitted) && screeningForm.get('gender')?.hasError('required')">
-                <ion-text color="danger">
-                  <p>Please select a gender.</p>
-                </ion-text>
-              </div>
             </div>
 
-<div class="form-group">
+            <div class="form-group">
               <p class="participant-info">2. What is their age?</p>
-              
               <div class="border">
                 <ion-input type="number" formControlName="age" placeholder="Enter Age" class="custom-ion-input"></ion-input>
-              </div>
-
-              <div
-                *ngIf="(screeningForm.get('age')?.touched || submitted) && screeningForm.get('age')?.hasError('required')">
-                <ion-text color="danger">
-                  <p>Please enter a valid age.</p>
-                </ion-text>
               </div>
             </div>
 
             <div class="form-group">
               <p class="participant-info">3. What grade is the child in?</p>
-              
               <div class="border">
                 <ion-input type="text" formControlName="grade" placeholder="Enter Grade (e.g., 5 or RR/R)" class="custom-ion-input"></ion-input>
               </div>
-
-              <div
-                *ngIf="(screeningForm.get('grade')?.touched || submitted) && screeningForm.get('grade')?.hasError('required')">
-                <ion-text color="danger">
-                  <p>Please enter a grade.</p>
-                </ion-text>
-              </div>
             </div>
 
+       
+
             <div class="form-group">
-              <p class="participant-info">5. Referral Clinic/Hospital (Optional)</p>
+              <p class="participant-info">4. Referral Clinic/Hospital (Optional)</p>
               <div class="border">
                 <ion-input formControlName="referral_clinic" placeholder="Enter Referral Clinic/Hospital"></ion-input>
               </div>
-              <div
-                *ngIf="(screeningForm.get('referral_clinic')?.touched || submitted) && screeningForm.get('referral_clinic')?.errors">
-                <ion-text color="danger">
-                  <p>{{ screeningForm.get('referral_clinic')?.hasError('minlength') ? 'Min 5 character are required.' : "Only a-z, A-Z, - and ( \' ) are allowed" }}</p>
-                </ion-text>
-              </div>
             </div>
-
-            <div class="form-group" >
-              <p class="participant-info">6. Refrence Number (Optional)</p>
+                 <div class="form-group">
+              <p class="participant-info">5. Does the participant wear spectacles?</p>
               <div class="border">
-                <ion-input formControlName="reference_number" placeholder="Enter Refrence Number"></ion-input>
-              </div>
-              <div
-                *ngIf="(screeningForm.get('reference_number')?.touched || submitted) && screeningForm.get('reference_number')?.errors">
-                <ion-text color="danger">
-                  <p>{{ screeningForm.get('reference_number')?.hasError('minlength') ? 'Min 5 character are required.' : "Only a-z, A-Z, - and ( \' ) are allowed" }}</p>
-                </ion-text>
-              </div>
-            </div>
-            <div class="form-group">
-              <p class="participant-info">4. Does the participant wear spectacles?</p>
-              <div class="border">
-                <ion-select formControlName="wears_Spectacles" toggleIcon="caret-down-sharp"
-                  placeholder="Select Response" interface="popover" class="custom-ion-select">
-                  <ion-select-option value="Has spectacles and is currently wearing them">
-                    	Spectacles wearing.
-                  </ion-select-option>
-                  <!--<ion-select-option value="Has spectacles but not wearing them">
-                    Has spectacles but not wearing them
-                  </ion-select-option>-->
-                  <ion-select-option value="Spectacles not wearing">
-                    Spectacles not wearing
-                  </ion-select-option>
-                  <ion-select-option value="Has worn spectacles in the past">
-                    Has worn spectacles in the past
-                  </ion-select-option>
-                 <!-- <ion-select-option value="Has spectacles but not wearing and not in their possession">
-                    Has spectacles but not wearing and not in their possession
-                  </ion-select-option>
-                  <ion-select-option value="Has previously worn spectacles but no longer has spectacles">
-                    Has previously worn spectacles but no longer has spectacles
-                  </ion-select-option>
-                  <ion-select-option value="Has never worn spectacles before">
-                    Has never worn spectacles before
-                  </ion-select-option>-->
+                <ion-select formControlName="wears_Spectacles" toggleIcon="caret-down-sharp" placeholder="Select Response" interface="popover" class="custom-ion-select">
+                  <ion-select-option value="Has spectacles and is currently wearing them">Spectacles wearing.</ion-select-option>
+                  <ion-select-option value="Spectacles not wearing">Spectacles not wearing</ion-select-option>
+                  <ion-select-option value="Has worn spectacles in the past">Has worn spectacles in the past</ion-select-option>
                 </ion-select>
               </div>
-  
-              <div
-                *ngIf="(screeningForm.get('wears_Spectacles')?.touched || submitted) && screeningForm.get('wears_Spectacles')?.hasError('required')">
-                <ion-text color="danger">
-                  <p>Please select a response.</p>
-                </ion-text>
-              </div>
             </div>
-
           </div>
-
-          <!-- <div *ngIf="currentStep === 2">
-
-          </div> -->
         </form>
       </div>
 
-      <app-profile-footer [currentStep]="currentStep"  [saveDisabled]="!screeningForm.valid" [totalSteps]="totalSteps" (previousStepClick)="previousStep()"
-        (nextStepClick)="nextStep()" (saveProgressClick)="submitForm()" (editClick)="onEdit()"
-        (deleteClick)="onDelete()">
+      <app-profile-footer
+        [currentStep]="currentStep"
+        [totalSteps]="2"
+        (previousStepClick)="previousStep()"
+        (nextStepClick)="nextStep()"
+        (saveProgressClick)="submitForm()"
+        (editClick)="onEdit()"
+        (deleteClick)="onDelete()"
+      >
       </app-profile-footer>
     </ion-card-content>
   </ion-card>
 </ion-content>
-

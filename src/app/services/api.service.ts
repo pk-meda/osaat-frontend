@@ -91,6 +91,10 @@ refresh(body: any): Observable<any> {
   firstScreening(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}first-screening`, data);
   }
+  // In apiService.ts
+updateFirstScreening(id: number | string, payload: FormData) {
+  return this.http.patch(`${this.apiUrl}first-screening/${id}/`, payload);
+}
   reference_number(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}reference_number`, data);
   }

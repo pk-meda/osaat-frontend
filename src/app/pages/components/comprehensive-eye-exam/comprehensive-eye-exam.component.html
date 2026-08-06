@@ -35,6 +35,12 @@
       class="results-summary-card" 
       style="margin: 20px; padding: 20px; border-radius: 8px; background: #f9f9f9; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
     >
+    <!-- Station Stepper Header -->
+  <app-station-stepper
+    pageTitle="E-TEST"
+    (back)="backLocation()">
+  </app-station-stepper>
+
       <h2 style="text-align: center; color: #333; font-weight: bold;">Test Completed</h2>
       <hr style="border: 0; height: 1px; background: #ddd; margin-bottom: 20px;" />
 
@@ -65,9 +71,9 @@
         </p>
       </div>
 
-      <ion-button expand="block" color="success" (click)="submit({ eye: 'yes' })" style="margin-bottom: 10px;">
-        Submit & Continue
-      </ion-button>
+      <ion-button expand="block" color="success" (click)="submitExam()" style="margin-bottom: 10px;">
+  Submit & Continue
+</ion-button>
       <ion-button expand="block" fill="outline" color="danger" (click)="showOptionsModal()">
         Options / Retest
       </ion-button>

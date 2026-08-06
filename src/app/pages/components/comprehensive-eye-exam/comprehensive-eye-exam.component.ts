@@ -362,14 +362,14 @@ const percentage = this.calculatePercentage(this.testResults);
   }
 }
 
-  private getPassRate(percentage: { left: number; right: number }) {
+  /*private getPassRate(percentage: { left: number; right: number }) {
     const passStatus = { left: false, right: false };
     if (percentage.left > 55) passStatus.left = true;
     if (percentage.right > 55) passStatus.right = true;
     return passStatus;
   }
-
-  public calculatePercentage(data: Record<Eye, Record<string, boolean>>) {
+*/
+  /*public calculatePercentage(data: Record<Eye, Record<string, boolean>>) {
     const result = { left: 0, right: 0 };
     for (const key in data.left) if (data.left[key]) result.left += 11.11;
     for (const key in data.right) if (data.right[key]) result.right += 11.11;
@@ -378,7 +378,7 @@ const percentage = this.calculatePercentage(this.testResults);
       left: result.left ? Math.round(result.left) : 0,
       right: result.right ? Math.round(result.right) : 0,
     };
-  }
+  }*/
 
   private restartEyeTest() {
     this.currentStep = 1;
@@ -399,7 +399,7 @@ private visualAcuityMap: Record<number, string> = {
 };
 
 // Find this in comprehensive-eye-exam.component.ts and change "private" to "public"
-public getNumericVisualAcuity(eye: Eye): string {
+/*public getNumericVisualAcuity(eye: Eye): string {
   const results = this.testResults[eye];
   let highestPassedStep = 0;
 
@@ -412,53 +412,146 @@ public getNumericVisualAcuity(eye: Eye): string {
 
   return this.visualAcuityMap[highestPassedStep] || 'Less than 6/60';
 }
+*/
+// Define standard scoring weights per step (Step 8 = 6/6 = 100%, Step 9 = 6/5 = 100%)
+private stepScoreMap: Record<number, number> = {
+  1: 10,  // 6/60
+  2: 25,  // 6/36
+  3: 40,  // 6/24
+  4: 55,  // 6/18
+  5: 70,  // 6/12
+  6: 85,  // 6/9
+  7: 90,  // 6/7.5
+  8: 100, // 6/6 (Normal 20/20 Vision)
+  9: 100  // 6/5 (Better than 20/20)
+};
+
+
+/*private visualAcuityMap: Record<number, string> = {
+  1: '6/60',
+  2: '6/36',
+  3: '6/24',
+  4: '6/18',
+  5: '6/12',
+  6: '6/9',
+  7: '6/7.5',
+  8: '6/6',
+  9: '6/5'
+};
+*/
+public getHighestPassedStep(eye: Eye): number {
+  const results = this.testResults[eye];
+  let highestPassedStep = 0;
+
+  if (!results) return 0;
+
+  for (let i = 0; i < this.snellenLabels.length; i++) {
+    const label = this.snellenLabels[i];
+    if (results[label] === true) {
+      highestPassedStep = i + 1;
+    }
+  }
+  return highestPassedStep;
+}
+
+public getNumericVisualAcuity(eye: Eye): string {
+  const highestStep = this.getHighestPassedStep(eye);
+  return this.visualAcuityMap[highestStep] || 'Less than 6/60';
+}
+
+public calculatePercentage(data: Record<Eye, Record<string, boolean>>) {
+  const leftHighest = this.getHighestPassedStep('left');
+  const rightHighest = this.getHighestPassedStep('right');
+
+  return {
+    left: this.stepScoreMap[leftHighest] || 0,
+    right: this.stepScoreMap[rightHighest] || 0,
+  };
+}
+
+private getPassRate(percentage: { left: number; right: number }) {
+  // 6/9 (85%) or 6/6 (100%) will now cleanly pass (> 55 threshold)
+  return {
+    left: percentage.left >= 55, // 6/18 (55%) or better passes
+    right: percentage.right >= 55
+  };
+}
 
   // —————————————— API ——————————————
 
-  public async submit(data: { eye: string }) {
+// 1. Add this method inside ComprehensiveEyeExamComponent to dynamically evaluate status
+public submitExam() {
+  const percentage = this.calculatePercentage(this.testResults);
+  const rate = this.getPassRate(percentage);
+
+  // Determine overall status: "yes" only if BOTH eyes passed (> 55%)
+  const passed = rate.left && rate.right;
+  const status = passed ? 'yes' : 'no';
+
+  this.submit({ eye: status });
+}
+
+// 2. Update your submit method's router navigation logic
+public async submit(data: { eye: string }) {
   const leftPassRate = this.calculatePercentage(this.testResults).left;
   const rightPassRate = this.calculatePercentage(this.testResults).right;
+
+  const leftNumericVA = this.getNumericVisualAcuity('left');
+  const rightNumericVA = this.getNumericVisualAcuity('right');
 
   const payload = {
     reference_number: this.reference_number,
     status: data.eye === 'yes' ? 'Yes' : 'No',
-    
-    // Captured Parameters
     testing_distance_meters: this.testingDistance,
-    measurement_type: this.isAided ? 'Aided' : 'Unaided', // Spectacles vs No Spectacles
-    
-    // Left Eye Results
+    measurement_type: this.isAided ? 'Aided' : 'Unaided',
     left_eye_tested: this.leftEyeDone,
     left_pass_fail: leftPassRate > 55 ? 'Pass' : 'Fail',
-    left_numeric_va: this.getNumericVisualAcuity('left'),
+    left_numeric_va: leftNumericVA,
     left_eye_score: leftPassRate,
-
-    // Right Eye Results
     right_eye_tested: this.rightEyeDone,
     right_pass_fail: rightPassRate > 55 ? 'Pass' : 'Fail',
-    right_numeric_va: this.getNumericVisualAcuity('right'),
-    right_eye_score: rightPassRate, 
+    right_numeric_va: rightNumericVA,
+    right_eye_score: rightPassRate,
   };
 
   this.apiService.isLoading.next(true);
-  this.apiService.comprehensive_eye_exam(payload).subscribe(
-    (res) => {
+  this.apiService.comprehensive_eye_exam(payload).subscribe({
+    next: (res: any) => {
       this.apiService.isLoading.next(false);
       this.apiService.presentToast(res.message);
+
+      const eTestResult = {
+        reference_number: this.reference_number,
+        right_numeric_va: rightNumericVA,
+        left_numeric_va: leftNumericVA,
+        measurement_type: this.isAided ? 'Aided' : 'Unaided'
+      };
+      localStorage.setItem('latest_e_test_result', JSON.stringify(eTestResult));
+
+      const refParam = this.reference_number || '';
+
       if (data.eye === 'no') {
-        this.router.navigate(['/layout/secoundScreening'], {
-          queryParams: { reference_number: this.reference_number },
+        // Safe navigation for failed tests
+        /*this.router.navigate(['/layout/secoundScreening'], {
+          queryParams: { reference_number: refParam }
+        });*/
+        this.router.navigate(['/layout/measurement-visual'], {
+          queryParams: { reference_number: refParam }
         });
       } else {
-        this.checkAlreadyDoVATEST();
+        // Safe navigation for passed tests
+        this.router.navigate(['/layout/measurement-visual'], {
+          queryParams: { reference_number: refParam }
+        });
       }
     },
-    (err) => {
+    error: (err: any) => {
       this.apiService.isLoading.next(false);
-      this.apiService.presentToast(err.error.message, 'danger');
+      this.apiService.presentToast(err?.error?.message || 'Something went wrong', 'danger');
     }
-  );
+  });
 }
+
 
     checkAlreadyDoVATESTNew(){
         let body ={

@@ -620,3 +620,16 @@ ion-label {
 .error-message {
   color: red;
 }
+/* Add to src/global.scss */
+.exam-choice-modal-custom {
+  --width: 90%;
+  --max-width: 640px;
+  --height: auto;
+  --max-height: 90vh;
+  --border-radius: 16px;
+
+  &::part(content) {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+}

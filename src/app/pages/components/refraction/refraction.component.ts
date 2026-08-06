@@ -235,13 +235,42 @@ export class RefractionComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {  
-    this.route.paramMap.subscribe(params => {
+   /* this.route.paramMap.subscribe(params => {
       this.reference_number = params.get('reference_number');
       console.log('Received ID:', this.reference_number);
       if (this.reference_number == "null" || this.reference_number == null) {
         this.openModal()
       }
-    });
+    });*/
+      this.route.queryParamMap.subscribe(params => {
+    this.reference_number = params.get('reference_number');
+
+    if (!this.reference_number || this.reference_number === "null" || this.reference_number === "undefined") {
+      this.openModal();
+    } else {
+
+      this.apiService.getParticipant().subscribe((res: any) => {
+  const participants: any[] = res.body ? res.body : res;
+
+  // Find the exact participant matching your reference_number
+  const matchedParticipant = participants.find(
+    (p: any) => p.reference_number === this.reference_number
+  );
+
+  if (matchedParticipant) {
+    // Combine name and surname if necessary to fit the component's name field
+    this.participantData = {
+      ...matchedParticipant,
+      name: matchedParticipant.name 
+        ? `${matchedParticipant.name} ${matchedParticipant.surname || ''}`.trim() 
+        : matchedParticipant.contact_first_name || 'N/A'
+    };
+  } else {
+    console.warn(`Participant with ref ${this.reference_number} not found in array.`);
+  }
+});
+    }
+  });
   }
 
   async openModal() {
@@ -306,7 +335,7 @@ export class RefractionComponent implements OnInit {
     });
   }
 
-  nextStep() {
+  /*nextStep() {
     this.submitted = true;
     if (this.currentStep === 1 && this.refravtionForm.get('chief_complaint')?.invalid) return;
     if (this.currentStep === 2 && (this.refravtionForm.get('eye')?.invalid || this.refravtionForm.get('duration')?.invalid)) return;
@@ -320,7 +349,95 @@ export class RefractionComponent implements OnInit {
       this.currentStep--;
       this.submitted = false;
     }
+  }*/
+nextStep() {
+  this.submitted = true;
+
+  // Step 1 Validation
+  if (this.currentStep === 1) {
+    if (this.refravtionForm.get('chief_complaint')?.invalid) return;
+    
+    this.submitted = false;
+    const complaint = this.refravtionForm.get('chief_complaint')?.value;
+
+    // IF "NO COMPLAINTS", skip Step 2 (Eye/Duration) and jump to Step 3
+    if (complaint === 'NO COMPLAINTS') {
+      // Reset values to NULL (not empty string) so Django/SQL treats them as NULL
+      this.refravtionForm.patchValue({
+        eye: null,
+        duration: null
+      });
+
+      this.refravtionForm.get('eye')?.clearValidators();
+      this.refravtionForm.get('eye')?.updateValueAndValidity();
+      this.refravtionForm.get('duration')?.clearValidators();
+      this.refravtionForm.get('duration')?.updateValueAndValidity();
+
+      this.currentStep = 3;
+      return;
+    }
   }
+
+  // Step 2 Validation
+  if (this.currentStep === 2) {
+    if (this.refravtionForm.get('eye')?.invalid || this.refravtionForm.get('duration')?.invalid) return;
+  }
+
+  // Step 3 Routing
+  if (this.currentStep === 3) {
+    this.submitted = false;
+    const additionalComplaint = this.refravtionForm.get('additional_ocular_complaint')?.value;
+
+    // If user clicked "No" on additional complaint, skip Step 4 (Alignment)
+    if (additionalComplaint === false) {
+      this.refravtionForm.patchValue({ ocular_alignment_remarks: null });
+      this.refravtionForm.get('ocular_alignment_remarks')?.clearValidators();
+      this.refravtionForm.get('ocular_alignment_remarks')?.updateValueAndValidity();
+
+      this.currentStep = 5;
+      return;
+    }
+  }
+
+  // Step 4 Validation
+  if (this.currentStep === 4) {
+    if (this.refravtionForm.get('ocular_alignment_remarks')?.invalid) return;
+  }
+
+  this.submitted = false;
+
+  if (this.currentStep < this.totalSteps) {
+    this.currentStep++;
+  }
+}
+
+previousStep() {
+  if (this.currentStep > 1) {
+    // Going back from Step 5 when additional complaint was "No"
+    if (this.currentStep === 5) {
+      const additionalComplaint = this.refravtionForm.get('additional_ocular_complaint')?.value;
+      if (additionalComplaint === false) {
+        this.currentStep = 3;
+        this.submitted = false;
+        return;
+      }
+    }
+
+    // Going back from Step 3 when chief complaint was "NO COMPLAINTS"
+    if (this.currentStep === 3) {
+      const complaint = this.refravtionForm.get('chief_complaint')?.value;
+      if (complaint === 'NO COMPLAINTS') {
+        this.currentStep = 1;
+        this.submitted = false;
+        return;
+      }
+    }
+
+    // Default step decrement
+    this.currentStep--;
+    this.submitted = false;
+  }
+}
 
   submitForm() {
     this.submitted = true;
@@ -334,7 +451,8 @@ export class RefractionComponent implements OnInit {
       this.apiService.isLoading.next(false);
       if (res.error === false) {
         this.apiService.presentToast(res.message);
-        this.router.navigate(['/layout/profile'], { queryParams: { reference_number: this.reference_number } });
+        //this.router.navigate(['/layout/profile'], { queryParams: { reference_number: this.reference_number } });
+        this.router.navigate(['/layout/dispensing'], { queryParams: { reference_number: this.reference_number } });
       } else {
         this.apiService.presentToast(res.message, 'danger');
       }
@@ -353,7 +471,8 @@ export class RefractionComponent implements OnInit {
   }
 
   backLocation() {
-    this.router.navigate(['/layout/profile'], { queryParams: { reference_number: this.reference_number } });
+    //this.router.navigate(['/layout/profile'], { queryParams: { reference_number: this.reference_number } });
+    this.router.navigate(['/layout/refraction-spectacle-presentation'], { queryParams: { reference_number: this.reference_number } });
   }
 
   onEdit() {

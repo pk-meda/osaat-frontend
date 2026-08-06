@@ -48,26 +48,8 @@ export class MeasurementVisualAcuityComponent implements OnInit {
   ngOnInit() {
     this.buildForm();
 
-    // If you want to prefill from API, uncomment this block
     if (this.reference_number) {
-      this.apiService.getVisualAcuity(this.reference_number).subscribe((res: any) => {
-        if (res && !res.error && res.body) {
-          const d = res.body;
-          this.screeningForm.patchValue({
-            unaidedDistanceVA_RE: d.unaided_distance_va_re,
-            unaidedDistanceVA_LE: d.unaided_distance_va_le,
-            unaidedNearVA_RE: d.unaided_near_va_re,
-            unaidedNearVA_LE: d.unaided_near_va_le,
-            // aidedDistanceVA_RE: d.aided_distance_va_re,
-            // aidedDistanceVA_LE: d.aided_distance_va_le,
-            // aidedNearVA_RE: d.aided_near_va_re,
-            // aidedNearVA_LE: d.aided_near_va_le,
-            // phDistanceVA_RE: d.ph_distance_va_re,
-            // pdDistanceVA_LE: d.pd_distance_va_le
-          });
-          this.screeningForm.disable();
-        }
-      });
+      this.fetchDataAndPopulate(this.reference_number);
     }
   }
 
@@ -86,6 +68,108 @@ export class MeasurementVisualAcuityComponent implements OnInit {
     });
   }
 
+  /**
+   * Helper to load saved backend Visual Acuity data or fallback to
+   * auto-populating from the E-Test stored in localStorage.
+   *
+  private fetchDataAndPopulate(refNum: string) {
+    this.apiService.getVisualAcuity(refNum).subscribe((res: any) => {
+      if (res && !res.error && res.body) {
+        const d = res.body;
+        this.screeningForm.patchValue({
+          unaidedDistanceVA_RE: d.unaided_distance_va_re,
+          unaidedDistanceVA_LE: d.unaided_distance_va_le,
+          unaidedNearVA_RE: d.unaided_near_va_re,
+          unaidedNearVA_LE: d.unaided_near_va_le,
+          // aidedDistanceVA_RE: d.aided_distance_va_re,
+          // aidedDistanceVA_LE: d.aided_distance_va_le,
+          // aidedNearVA_RE: d.aided_near_va_re,
+          // aidedNearVA_LE: d.aided_near_va_le,
+          // phDistanceVA_RE: d.ph_distance_va_re,
+          // pdDistanceVA_LE: d.pd_distance_va_le
+        });
+        this.screeningForm.disable();
+      } else {
+        // Fallback: Populate RE & LE distance fields from localStorage if available
+        this.populateFromLocalStorage(refNum);
+      }
+    });
+  }
+
+  private populateFromLocalStorage(refNum: string) {
+    const localData = localStorage.getItem('latest_e_test_result');
+    if (localData) {
+      try {
+        const testResult = JSON.parse(localData);
+        if (testResult && testResult.reference_number === refNum) {
+          this.screeningForm.patchValue({
+            unaidedDistanceVA_RE: testResult.right_numeric_va || '',
+            unaidedDistanceVA_LE: testResult.left_numeric_va || ''
+          });
+        }
+      } catch (e) {
+        console.error('Error reading E-Test result from localStorage', e);
+      }
+    }
+  }*/
+
+    private fetchDataAndPopulate(refNum: string) {
+  this.apiService.getVisualAcuity(refNum).subscribe({
+    next: (res: any) => {
+      const d = res?.body ? res.body : res;
+      // Populate if backend record already exists
+      if (d && (d.unaided_distance_va_re || d.unaided_distance_va_le)) {
+        this.screeningForm.patchValue({
+          unaidedDistanceVA_RE: d.unaided_distance_va_re || '',
+          unaidedDistanceVA_LE: d.unaided_distance_va_le || '',
+          unaidedNearVA_RE: d.unaided_near_va_re || '',
+          unaidedNearVA_LE: d.unaided_near_va_le || ''
+        });
+        this.screeningForm.disable();
+      } else {
+        // Fallback to local storage if API returns empty body
+        this.populateFromLocalStorage(refNum);
+      }
+    },
+    error: (err: any) => {
+      // 404 Error handler: Backend has no record, pull Distance values from local storage
+      console.log('No backend record found (404). Pulling E-Test distance results from localStorage...');
+      this.populateFromLocalStorage(refNum);
+    }
+  });
+}
+
+
+
+private populateFromLocalStorage(refNum: string) {
+  const localData = localStorage.getItem('latest_e_test_result');
+  if (!localData) return;
+
+  try {
+    const testResult = JSON.parse(localData);
+    
+    // Match reference number
+    if (testResult && testResult.reference_number === refNum) {
+      // Populate ONLY the Distance fields from E-Test
+      this.screeningForm.patchValue({
+        unaidedDistanceVA_RE: testResult.right_numeric_va || '',
+        unaidedDistanceVA_LE: testResult.left_numeric_va || ''
+      });
+
+      // Mark the populated fields as touched/dirty so Angular UI picks up the changes immediately
+      this.screeningForm.get('unaidedDistanceVA_RE')?.markAsTouched();
+      this.screeningForm.get('unaidedDistanceVA_LE')?.markAsTouched();
+      
+      console.log('Populated Distance VA:', {
+        RE: testResult.right_numeric_va,
+        LE: testResult.left_numeric_va
+      });
+    }
+  } catch (e) {
+    console.error('Error parsing latest_e_test_result from localStorage', e);
+  }
+}
+
   async openModal() {
     try {
       const selectedUser = await this.apiService.openUserSelectionModal();
@@ -99,25 +183,8 @@ export class MeasurementVisualAcuityComponent implements OnInit {
 
   handleUser(user: any) {
     this.reference_number = user?.reference_number ?? null;
-        if (this.reference_number) {
-      this.apiService.getVisualAcuity(this.reference_number).subscribe((res: any) => {
-        if (res && !res.error && res.body) {
-          const d = res.body;
-          this.screeningForm.patchValue({
-            unaidedDistanceVA_RE: d.unaided_distance_va_re,
-            unaidedDistanceVA_LE: d.unaided_distance_va_le,
-            unaidedNearVA_RE: d.unaided_near_va_re,
-            unaidedNearVA_LE: d.unaided_near_va_le,
-            // aidedDistanceVA_RE: d.aided_distance_va_re,
-            // aidedDistanceVA_LE: d.aided_distance_va_le,
-            // aidedNearVA_RE: d.aided_near_va_re,
-            // aidedNearVA_LE: d.aided_near_va_le,
-            // phDistanceVA_RE: d.ph_distance_va_re,
-            // pdDistanceVA_LE: d.pd_distance_va_le
-          });
-          this.screeningForm.disable();
-        }
-      });
+    if (this.reference_number) {
+      this.fetchDataAndPopulate(this.reference_number);
     }
   }
 
@@ -161,57 +228,60 @@ export class MeasurementVisualAcuityComponent implements OnInit {
   async submitForm() {
     this.submitted = true;
 
-  if (this.screeningForm.invalid) {
-    this.apiService.presentToast('Please fill all fields', 'danger');
-    return;
-  }
+    if (this.screeningForm.invalid) {
+      this.apiService.presentToast('Please fill all fields', 'danger');
+      return;
+    }
 
-  // ✅ Show Pass/Fail buttons instead of API call
-  this.showResultButtons = true;
+    // ✅ Show Pass/Fail buttons instead of API call
+    this.showResultButtons = true;
   }
 
   onResultSelect(result: 'pass' | 'fail') {
-  this.selectedResult = result;
+    this.selectedResult = result;
 
-  const v = this.screeningForm.value;
-  const body = {
-    reference_number: this.reference_number,
-    unaided_distance_va_re: v.unaidedDistanceVA_RE,
-    unaided_distance_va_le: v.unaidedDistanceVA_LE,
-    unaided_near_va_re: v.unaidedNearVA_RE,
-    unaided_near_va_le: v.unaidedNearVA_LE,
-    measure_visual_acuity: true,
-  };
-  console.log(body);
+    const v = this.screeningForm.value;
+    const body = {
+      reference_number: this.reference_number,
+      unaided_distance_va_re: v.unaidedDistanceVA_RE,
+      unaided_distance_va_le: v.unaidedDistanceVA_LE,
+      unaided_near_va_re: v.unaidedNearVA_RE,
+      unaided_near_va_le: v.unaidedNearVA_LE,
+      measure_visual_acuity: true,
+    };
+    console.log(body);
 
-  this.apiService.VisualAcuity(body).subscribe(
-    (res: any) => {
-      if (res.error === false) {
-        this.apiService.presentToast(res.message);
-        this.apiService.isLoading.next(false);
-          this.checkAlreadyDoVATEST(this.selectedResult)
-      } else {
-        this.apiService.presentToast(res.message, 'danger');
-      }
-    },
-    () => this.apiService.presentToast('Something went wrong', 'danger')
-  );
-}
+    this.apiService.VisualAcuity(body).subscribe(
+      (res: any) => {
+        if (res.error === false) {
+          // Clear cached local storage after successful backend submission
+          localStorage.removeItem('latest_e_test_result');
+          this.apiService.presentToast(res.message);
+          this.apiService.isLoading.next(false);
+          this.checkAlreadyDoVATEST(this.selectedResult);
+        } else {
+          this.apiService.presentToast(res.message, 'danger');
+        }
+      },
+      () => this.apiService.presentToast('Something went wrong', 'danger')
+    );
+  }
 
-  checkAlreadyDoVATEST(result:any){
-    let body ={
-      reference_number:this.reference_number
-    }
-    this.apiService.profile(body).subscribe((res:any)=>{
+  checkAlreadyDoVATEST(result: any) {
+    let body = {
+      reference_number: this.reference_number
+    };
+    this.apiService.profile(body).subscribe((res: any) => {
       const data = res;
-      if(data.second_screening == true){
-          this.router.navigate(['/layout/secoundScreening']);      
-      } else if (data.second_screening == false && result === 'fail'){
-          this.router.navigate(['/layout/secoundScreening'], { queryParams: { reference_number: this.reference_number } });
+      if (data.second_screening == true) {
+        this.router.navigate(['/layout/secoundScreening']);      
+      } else if (data.second_screening == false && result === 'fail') {
+        //this.router.navigate(['/layout/secoundScreening'], { queryParams: { reference_number: this.reference_number } });
+        this.router.navigate(['/layout/refraction-spectacle-presentation'], { queryParams: { reference_number: this.reference_number } });
       } else {
-          this.router.navigate(['/layout/first-screening']);
+        this.router.navigate(['/layout/first-screening']);
       }
-    })
+    });
   }
 
   backLocation() {

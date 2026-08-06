@@ -14,6 +14,7 @@ import { Share } from '@capacitor/share';
 import { SchoolRegisterComponent } from '../../school-register-modal/school-register/school-register.component';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ExamChoiceModal } from '../../Modal-continue-DV-CE/exam-choice.modal/exam-choice.modal.component';
+import { StationService } from 'src/app/services/station.service';
 
 @Component( {
   selector: 'app-first-screening',
@@ -24,9 +25,15 @@ import { ExamChoiceModal } from '../../Modal-continue-DV-CE/exam-choice.modal/ex
 export class FirstScreeningComponent implements OnInit, OnDestroy {
 
   screeningForm!: FormGroup;
-  currentStep = 1;
-  totalSteps = 1;
+  currentStep: number = 1;
+participantId: number | null = null;
+  totalSteps: number = 2;
   submitted = false;
+
+  // Added properties required by HTML template
+  isAdult: boolean = false;
+  reference_number: string | null = null;
+
   ages: number[] = [];
   school: any[] = [];
   countries: any[] = [];
@@ -65,7 +72,8 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private apiService: ApiService,
     private router: Router,
-    private modal: ModalController
+    private modal: ModalController,
+    private stationService: StationService
   ) {
     // this.openModal()
     // generate age options
@@ -77,12 +85,18 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.screeningForm = this.fb.group( {
-      referral_clinic: [ '' ],
-      gender: [ '', Validators.required ],
-      age: [ null, Validators.required ],
-      grade: [ '', Validators.required ],
-      wears_Spectacles: [ '', Validators.required ],
-      reference_number: [ ''],
+     firstname: ['', Validators.required],
+    surname: ['', Validators.required],
+    contact_name: [''],
+    contact_surname: [''],
+    contact_number: [''],
+    relationship: [''],
+    referral_clinic: [''],
+    gender: ['', Validators.required],
+    age: [null, Validators.required],
+    grade: ['', Validators.required],
+    wears_Spectacles: ['', Validators.required],
+    reference_number: [''],
       // country: ['', Validators.required],
       // province: ['', Validators.required],
       // School_name: ['', Validators.required],
@@ -90,6 +104,11 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
       // contact_person: ['', [Validators.required]],
       // , Validators.pattern(/^\d{10}$/)]
     } );
+
+    // Automatically update isAdult based on participant age
+  this.screeningForm.get('age')?.valueChanges.subscribe((age: number | null) => {
+    this.isAdult = age ? age >= 18 : false;
+  })
 
     this.autoSubmitOnFullInput();
     // this.loadCountries();
@@ -120,6 +139,14 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
     this.loadSchools();
 
   }
+  // Check validity for Step 1 controls
+  isStep1Valid(): boolean {
+    const step1Controls = ['firstname', 'surname'];
+    return step1Controls.every(name => {
+      const control = this.screeningForm.get(name);
+      return control && control.valid;
+    });
+  }
 
   async openModal() {
     const modal = await this.modal.create( {
@@ -135,6 +162,40 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
     this.schoolData = SchollName;
     this.loadSchools();
   }
+
+async saveParticipantStep1() {
+  this.apiService.isLoading.next(true); // Replaces loadingCtrl
+
+  const payload = {
+    name: this.screeningForm.value.firstname,
+    surname: this.screeningForm.value.surname,
+    contact_first_name: this.screeningForm.value.contact_name,
+    contact_surname: this.screeningForm.value.contact_surname,
+    relationship: this.screeningForm.value.relationship,
+    contact_number: this.screeningForm.value.contact_number
+  };
+
+  this.apiService.firstScreening(payload).subscribe({ // Call actual method name
+    next: (res: any) => {
+      this.apiService.isLoading.next(false);
+      this.apiService.presentToast('Participant registered successfully!', 'success');
+      
+      if (res?.body?.reference_number) {
+        this.reference_number = res.body.reference_number;
+        this.participantId = res.body.participant || res.body.id;
+        this.screeningForm.patchValue({ reference_number: this.reference_number });
+      }
+      
+      this.submitted = false;
+      this.currentStep = 2;
+    },
+    error: (err: any) => {
+      this.apiService.isLoading.next(false);
+      this.apiService.presentToast('Failed to save participant details.', 'danger');
+      console.error(err);
+    }
+  });
+}
 
   loadSchools() {
     this.apiService.getSchool().subscribe( ( res: any ) => {
@@ -180,67 +241,130 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
       } )
   }
 
-  previousStep() {
+  /*previousStep() {
     if ( this.currentStep > 1 ) {
       this.currentStep--;
       this.submitted = false;
     }
   }
-
+*/
+    previousStep() {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
   onAlphabetOnly( event: any ) {
     const val = ( event.target as HTMLInputElement ).value.replace( /[^A-Za-z]/g, '' );
     this.screeningForm.get( 'refPrefix' )!.setValue( val.toUpperCase() );
   }
 
-  private buildFormData(): FormData {
-    const fd = new FormData();
-    const v = this.screeningForm.value;
-    fd.append( 'school', this.schoolData );
-    fd.append( 'referral_clinic', v.referral_clinic || '' );
-    fd.append( 'gender', v.gender );
-    fd.append( 'age', v.age.toString() );
-    fd.append( 'grade', v.grade );
-    fd.append( 'wears_spectacles', v.wears_Spectacles );
-    fd.append('reference_number',v.reference_number ? v.reference_number : '') 
-    // fd.append('country', v.country);
-    // fd.append('province', this.SchoolDetails.province);
-    // fd.append('address', this.SchoolDetails.address);
-    // fd.append('contact_person', v.contact_person);
-    return fd;
+private buildFormData(): FormData {
+  const fd = new FormData();
+  const v = this.screeningForm.getRawValue();
+
+  // Helper to safely append only non-empty values
+  const safeAppend = (key: string, val: any) => {
+    if (val !== null && val !== undefined && val !== '') {
+      fd.append(key, val);
+    }
+  };
+
+  safeAppend('name', v.firstname);                        // Maps 'firstname' -> 'name'
+  safeAppend('surname', v.surname);                      // Maps 'surname' -> 'surname'
+  safeAppend('contact_first_name', v.contact_name);      // Maps 'contact_name' -> 'contact_first_name'
+  safeAppend('contact_surname', v.contact_surname);      // Maps 'contact_surname' -> 'contact_surname'
+  safeAppend('contact_number', v.contact_number);
+  safeAppend('relationship', v.relationship);
+  safeAppend('school', this.schoolData);
+  safeAppend('referral_clinic', v.referral_clinic);
+  safeAppend('gender', v.gender);
+  safeAppend('grade', v.grade);
+  safeAppend('wears_spectacles', v.wears_Spectacles);
+
+  // Cast age to string safely
+  if (v.age !== null && v.age !== undefined && v.age !== '') {
+    fd.append('age', v.age.toString());
   }
 
-  async submitForm() {
-    this.submitted = true;
-    if ( this.screeningForm.invalid ) {
-      this.apiService.presentToast( 'Please fill all required fields.', 'danger' );
+  // Identifiers from Step 1
+  const refNum = this.reference_number || v.reference_number;
+  if (refNum) {
+    fd.append('reference_number', refNum);
+  }
+
+  if (this.participantId) {
+    fd.append('participant', this.participantId.toString());
+  }
+
+  return fd;
+}
+
+async submitForm() {
+  this.submitted = true;
+
+  // 1. STEP 1 VALIDATION LOGIC
+  if (this.currentStep === 1) {
+    if (!this.isStep1Valid()) {
+      this.apiService.presentToast('Please fill all required fields for Step 1.', 'danger');
+
+      console.group('=== Step 1 Validation Errors ===');
+      ['firstname', 'surname'].forEach(key => {
+        const controlErrors = this.screeningForm.get(key)?.errors;
+        if (controlErrors != null) {
+          console.log(`Control: ${key} | Status: INVALID | Errors:`, controlErrors);
+        }
+      });
+      console.groupEnd();
+
       return;
     }
-    this.apiService.isLoading.next( true );
-    const payload = this.buildFormData();
-
-    this.apiService.firstScreening( payload )
-      .subscribe( {
-        next: res => {
-          console.log( res, 'res' )
-          this.apiService.isLoading.next( false );
-          if ( !res.error ) {
-            this.apiService.presentToast( 
-              `Student Registered Successfully! Reference: ${res.body.reference_number}`, 
-              'success' 
-            );
-            
-            //  REDIRECT TO COMPLAINTS: Jump directly to the next step of the clinical workflow
-            this.router.navigate( [ '/layout/complaint', res.body.reference_number ] );
-          } else {
-            this.apiService.presentToast( res.message, 'danger' );
-          }
-        },
-        error: () => {
-          this.apiService.isLoading.next( false );
-          this.apiService.presentToast( 'Something went wrong', 'danger' );
-        }
-      } );
   }
+
+  // 2. STEP 2 / FULL FORM VALIDATION LOGIC
+  if (this.currentStep === 2 && this.screeningForm.invalid) {
+    this.apiService.presentToast('Please fill all required fields.', 'danger');
+
+    console.group('=== Full Form Validation Errors ===');
+    Object.keys(this.screeningForm.controls).forEach(key => {
+      const controlErrors = this.screeningForm.get(key)?.errors;
+      if (controlErrors != null) {
+        console.log(`Control: ${key} | Status: INVALID | Errors:`, controlErrors);
+      }
+    });
+    console.groupEnd();
+
+    return;
+  }
+
+  // 3. API SUBMISSION & ROUTER NAVIGATION
+  this.apiService.isLoading.next(true);
+  const payload = this.buildFormData();
+
+  const request$ = this.participantId 
+    ? this.apiService.updateFirstScreening(this.participantId, payload)
+    : this.apiService.firstScreening(payload);
+
+  request$.subscribe({
+    next: (res: any) => {
+      this.apiService.isLoading.next(false);
+      
+      if (!res.error) {
+        this.apiService.presentToast(
+          `Student Registered Successfully! Reference: ${res.body.reference_number}`,
+          'success'
+        );
+        // Redirect directly to the complaint step of the clinical workflow
+        this.router.navigate(['/layout/complaint', res.body.reference_number]);
+      } else {
+        this.apiService.presentToast(res.message, 'danger');
+      }
+    },
+    error: () => {
+      this.apiService.isLoading.next(false);
+      this.apiService.presentToast('Something went wrong', 'danger');
+    }
+  });
+}
 
   async CheckingRefrencePage( reference_number: any ) {
     const modalcheck = await this.modal.create( {
@@ -269,7 +393,67 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
   nevigateProfile() { this.apiService.nevigateProfile( '' ); }
   onEdit() {this.screeningForm.enable() }
   onDelete() { this.router.navigate( [ '/layout/profile' ] ); }
-  nextStep() {
+
+
+async nextStep() {
+  this.submitted = true;
+
+  // STEP 1: Validate, save draft, and move to Step 2 UI
+  if (this.currentStep === 1) {
+    const step1Controls = ['firstname', 'surname', 'contact_number', 'relationship'];
+    let isValid = true;
+
+    step1Controls.forEach(control => {
+      if (this.screeningForm.get(control)?.invalid) {
+        this.screeningForm.get(control)?.markAsTouched();
+        isValid = false;
+      }
+    });
+
+    if (!isValid) {
+      this.apiService.presentToast('Please fill in all required participant details.');
+      return;
+    }
+
+    // Trigger Step 1 API persistence before advancing
+    await this.saveParticipantStep1();
+
+    // Advance UI to Step 2 (First Screening)
+    this.currentStep = 2;
+    this.submitted = false;
+    return;
+  }
+
+  // STEP 2: Trigger submission (validates, saves API data, and routes to /layout/complaint)
+  if (this.currentStep === 2) {
+    await this.submitForm();
+  }
+}
+
+  /*nextStep() {
+    // Validate Step 1 fields before proceeding to Step 2
+    if (this.currentStep === 1) {
+      const step1Fields = ['firstname', 'surname', 'contact_name', 'contact_surname', 'relationship'];
+      let isValid = true;
+
+      step1Fields.forEach(field => {
+        const control = this.screeningForm.get(field);
+        if (control && control.invalid) {
+          control.markAsTouched();
+          isValid = false;
+        }
+      });
+
+      if (isValid) {
+        this.currentStep = 2;
+      }
+    }
+  }*/
+
+
+
+
+  //nextStep() {
     // if (this.currentStep == 1 &&
     //   this.screeningForm.get('country')?.invalid ||
     //   this.screeningForm.get('School_name')?.invalid ||
@@ -285,7 +469,7 @@ export class FirstScreeningComponent implements OnInit, OnDestroy {
     //   this.currentStep++;
     //   this.submitted = false;
     // }
-  }
+  //}
 
   ngOnDestroy(): void {
     if ( this.subscriptions.formSub ) this.subscriptions.formSub.unsubscribe()

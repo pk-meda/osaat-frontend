@@ -296,8 +296,12 @@ export class DispensinComponent implements OnInit {
         if (res?.error === false) {
           this.apiService.presentToast(res.message);
           this.apiService.isLoading.next(false);
-          this.router.navigate(
+          /*this.router.navigate(
             ['/layout/measurement-visual'],
+            { queryParams: { reference_number: this.reference_number || '' } }
+          );*/
+          this.router.navigate(
+            ['/layout/profile'],
             { queryParams: { reference_number: this.reference_number || '' } }
           );
         } else {
@@ -313,7 +317,8 @@ export class DispensinComponent implements OnInit {
   }
 
   // ---------- Misc nav ----------
-  backLocation() { this.router.navigate(['/layout/profile']); }
+  //backLocation() { this.router.navigate(['/layout/profile']); }
+   backLocation() { this.router.navigate(['/layout/refraction']); }
   nevigateProfile() { this.apiService.nevigateProfile(this.reference_number); }
   onEdit() { this.screeningForm.enable(); }
   onDelete() { this.router.navigate(['/layout/profile']); }

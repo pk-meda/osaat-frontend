@@ -1,18 +1,72 @@
-ion-item {
-    --padding-start: 0.5rem;
-    --inner-border-width: 0px 0px 0px 0px !important;
+.complaints-card {
+  margin: 16px;
+  border-radius: 12px;
 }
 
-ion-label {
-    margin-left: 0px;
+.participant-info {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #334155;
+  margin: 12px 0 8px 0;
 }
 
-ion-checkbox {
-    --size: 17px;
+.checkbox-grid {
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.checkbox-item {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --min-height: 40px;
+  --inner-border-width: 0 !important;
+
+  ion-checkbox {
+    --size: 18px;
     --checkbox-background-checked: #6815ec;
-    margin-right: 10px;
+    --border-color: #94a3b8;
+    margin-right: 12px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  ion-checkbox::part(container) {
+    border-radius: 6px;
+  }
+
+  ion-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+    margin: 0;
+    white-space: normal;
+    text-transform: uppercase;
+  }
 }
 
-ion-checkbox::part(container) {
-    border-radius: 6px;
+.text-input-wrapper {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 2px 12px;
+  background: #ffffff;
+}
+
+.radio-group-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.radio-item {
+  --padding-start: 8px;
+  --inner-border-width: 0 !important;
+
+  ion-radio {
+    margin-right: 12px;
+  }
+
+  ion-label {
+    font-size: 14px;
+    color: #1e293b;
+  }
 }

@@ -225,7 +225,7 @@ export class RefractionSpectaclePresentationComponent implements OnInit {
   ];
 
   vaNearOptions = [
-    "N6", "N8", "N10", "N12", "N14", "N18", "N24", "N36", "N60", "LESS THEN N60"
+    "NO TEST", "N6", "N8", "N10", "N12", "N14", "N18", "N24", "N36", "N60", "LESS THEN N60"
   ];
 
   @ViewChild('dateModal', { static: false }) dateModal!: IonModal;
@@ -245,12 +245,43 @@ export class RefractionSpectaclePresentationComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location
   ) {
-    this.route.paramMap.subscribe(params => {
+   /* this.route.paramMap.subscribe(params => {
       this.reference_number = params.get('reference_number');
       if (this.reference_number == "null" || this.reference_number == null) {
         this.openModal();
       }
-    });
+    });*/
+    // Use queryParamMap instead of paramMap
+  this.route.queryParamMap.subscribe(params => {
+    this.reference_number = params.get('reference_number');
+
+    if (!this.reference_number || this.reference_number === "null" || this.reference_number === "undefined") {
+      this.openModal();
+    } else {
+      // Reference exists in URL -> Fetch the record
+      this.getRefractionSpectacle();
+      this.apiService.getParticipant().subscribe((res: any) => {
+  const participants: any[] = res.body ? res.body : res;
+
+  // Find the exact participant matching your reference_number
+  const matchedParticipant = participants.find(
+    (p: any) => p.reference_number === this.reference_number
+  );
+
+  if (matchedParticipant) {
+    // Combine name and surname if necessary to fit the component's name field
+    this.participantData = {
+      ...matchedParticipant,
+      name: matchedParticipant.name 
+        ? `${matchedParticipant.name} ${matchedParticipant.surname || ''}`.trim() 
+        : matchedParticipant.contact_first_name || 'N/A'
+    };
+  } else {
+    console.warn(`Participant with ref ${this.reference_number} not found in array.`);
+  }
+});
+    }
+  });
   }
 
   ngOnInit() {
@@ -376,7 +407,10 @@ export class RefractionSpectaclePresentationComponent implements OnInit {
       res => {
         if (res.error === false) {
           this.apiService.presentToast(res.message);
-          this.router.navigate(['/layout/profile'], { 
+          /*this.router.navigate(['/layout/profile'], { 
+            queryParams: { reference_number: this.reference_number } 
+          });*/
+          this.router.navigate(['/layout/refraction'], { 
             queryParams: { reference_number: this.reference_number } 
           });
         } else {
@@ -394,6 +428,8 @@ export class RefractionSpectaclePresentationComponent implements OnInit {
     this.apiService.GetRefractionSpectacle(this.reference_number).subscribe((res:any)=>{
       if(res.error === false){
         this.profileRes = res.body; 
+
+        
         this.dispenseForm.patchValue({
           sphericalPrescriptionRE: this.profileRes.spherical_prescription_re,
           cylindricalPrescriptionRE: this.profileRes.cylindrical_prescription_re,
@@ -417,7 +453,10 @@ export class RefractionSpectaclePresentationComponent implements OnInit {
   }
 
   backLocation() {
-    this.router.navigate(['/layout/profile'], { 
+    /*this.router.navigate(['/layout/profile'], { 
+      queryParams: { reference_number: this.reference_number } 
+    });*/
+    this.router.navigate(['/layout/measurement-visual'], { 
       queryParams: { reference_number: this.reference_number } 
     });
   }
@@ -429,5 +468,8 @@ export class RefractionSpectaclePresentationComponent implements OnInit {
     this.router.navigate(['/layout/profile'], { 
       queryParams: { reference_number: this.reference_number } 
     });
+    /*this.router.navigate(['/layout/refraction'], { 
+      queryParams: { reference_number: this.reference_number } 
+    });*/
   }
 }

@@ -1,11 +1,15 @@
-<ion-header mode="md">
+<!--<ion-header mode="md">
   <ion-toolbar>
     <ion-title class="custom-title">
       <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
       <span class="back_btn">REFRACTION SPECTACLE PRESENTATION</span>
     </ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header>-->
+<app-station-stepper
+  pageTitle="REFRACTION SPECTACLE PRESENTATION"
+  (back)="backLocation()">
+</app-station-stepper>
 
 <ion-content mode="md">
   <ion-card>
