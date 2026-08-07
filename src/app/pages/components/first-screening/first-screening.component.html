@@ -204,10 +204,10 @@
               </ion-item>
             </div>
 
-           <div class="form-group">
+          <div class="form-group">
   <p class="participant-info">6. Contact Number</p>
   <div class="border">
-    <ion-input type="tel" formControlName="contact_number" placeholder="Enter mobile number"></ion-input>
+    <input id="phoneInput" type="tel" class="native-input" placeholder="Enter mobile number" formControlName="contact_number" />
   </div>
   <ion-text color="danger" *ngIf="(screeningForm.get('contact_number')?.touched || submitted) && screeningForm.get('contact_number')?.invalid">
     Please enter a valid phone number
