@@ -206,10 +206,23 @@
 
           <div class="form-group">
   <p class="participant-info">6. Contact Number</p>
-  <div class="border">
-    <input id="phoneInput" type="tel" class="native-input" placeholder="Enter mobile number" formControlName="contact_number" />
+  <div class="border_1">
+    <!-- Use native input instead of ion-input -->
+    <input
+      id="phoneInput"
+      type="tel"
+      class="native-input"
+      placeholder="Enter mobile number"
+      appContactNumberOnly
+    />
   </div>
-  <ion-text color="danger" *ngIf="(screeningForm.get('contact_number')?.touched || submitted) && screeningForm.get('contact_number')?.invalid">
+  <ion-text
+    color="danger"
+    *ngIf="
+      (screeningForm.get('contact_number')?.touched || submitted) &&
+      screeningForm.get('contact_number')?.invalid
+    "
+  >
     Please enter a valid phone number
   </ion-text>
 </div>
