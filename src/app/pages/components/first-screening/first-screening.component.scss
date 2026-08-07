@@ -335,3 +335,48 @@ ion-item{
   line-height: 1;
   cursor: pointer;
 }
+.border_1 {
+  border: 1px solid #c1c1c1;
+  border-radius: 12px;
+  padding: 8px 12px; /* better spacing */
+  display: flex;
+  align-items: center;
+  background: #fff;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.border_1:focus-within {
+  border-color: #3b82f6; /* highlight on focus */
+}
+
+input#phoneInput:focus-visible {
+  outline: none;
+  border: 0 !important;
+  box-shadow: none;}
+
+input#phoneInput {
+    padding: 10px;
+    font-size: 13px;
+    border: 0px;
+}
+
+.border_1-div-inner {
+  width: 100%;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+}
+
+.phone-input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+  background: transparent;
+}
+
+.phone-input::placeholder {
+  color: #9e9e9e;
+  font-size: 13px;
+}
+
