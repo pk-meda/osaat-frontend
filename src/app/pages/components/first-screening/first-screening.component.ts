@@ -175,9 +175,20 @@ async saveParticipantStep1() {
     contact_number: this.screeningForm.value.contact_number
   };
 
+  console.group('=== STEP 1: Sending Payload ===');
+  console.log('Step 1 Outgoing Payload:', payload);
+  console.groupEnd();
+
   this.apiService.firstScreening(payload).subscribe({ // Call actual method name
     next: (res: any) => {
       this.apiService.isLoading.next(false);
+      console.group('=== STEP 1: Backend Response Debug ===');
+      console.log('Full Raw Response (res):', res);
+      console.log('Response Body (res.body):', res?.body);
+      console.log('Primary Key res.body.id:', res?.body?.id);
+      console.log('Foreign Key res.body.participant:', res?.body?.participant);
+      console.log('Reference Number res.body.reference_number:', res?.body?.reference_number);
+      console.groupEnd();
       this.apiService.presentToast('Participant registered successfully!', 'success');
       
       if (res?.body?.reference_number) {
@@ -185,6 +196,10 @@ async saveParticipantStep1() {
         this.participantId = res.body.participant || res.body.id;
         this.screeningForm.patchValue({ reference_number: this.reference_number });
       }
+      console.group('=== STEP 1: Component State Saved ===');
+      console.log('Assigned this.participantId:', this.participantId);
+      console.log('Assigned this.reference_number:', this.reference_number);
+      console.groupEnd();
       
       this.submitted = false;
       this.currentStep = 2;
@@ -295,7 +310,16 @@ private buildFormData(): FormData {
   if (this.participantId) {
     fd.append('participant', this.participantId.toString());
   }
-
+// --- LOG ALL FORMDATA KEYS & VALUES ---
+  console.group('=== STEP 2: FormData Payload Inspection ===');
+  console.log('Current this.participantId in class:', this.participantId);
+  console.log('Current this.reference_number in class:', this.reference_number);
+  console.log('--- FormData Key-Value Pairs Sent to Backend ---');
+  fd.forEach((value, key) => {
+    console.log(`[FormData] ${key}:`, value);
+  });
+  console.groupEnd();
+  
   return fd;
 }
 
@@ -339,7 +363,10 @@ async submitForm() {
   // 3. API SUBMISSION & ROUTER NAVIGATION
   this.apiService.isLoading.next(true);
   const payload = this.buildFormData();
-
+console.group('=== FINAL SUBMIT: Triggering API ===');
+  console.log('Current Step:', this.currentStep);
+  console.log('Using Request Endpoint:', this.participantId ? 'updateFirstScreening' : 'firstScreening');
+  console.groupEnd();
   const request$ = this.participantId 
     ? this.apiService.updateFirstScreening(this.participantId, payload)
     : this.apiService.firstScreening(payload);
@@ -347,7 +374,9 @@ async submitForm() {
   request$.subscribe({
     next: (res: any) => {
       this.apiService.isLoading.next(false);
-      
+      console.group('=== FINAL SUBMIT: Response Success ===');
+      console.log('Backend Response:', res);
+      console.groupEnd();
       if (!res.error) {
         this.apiService.presentToast(
           `Student Registered Successfully! Reference: ${res.body.reference_number}`,
