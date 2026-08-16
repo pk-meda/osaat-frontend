@@ -22,6 +22,58 @@ export class RefractionComponent implements OnInit {
 
   // Dropdown options arrays
   sphereOptions = [
+    { "value": "-0.25", "label": "-0.25" },
+    { "value": "-0.50", "label": "-0.50" },
+    { "value": "-0.75", "label": "-0.75" },
+    { "value": "-1.00", "label": "-1.00" },
+    { "value": "-1.25", "label": "-1.25" },
+    { "value": "-1.50", "label": "-1.50" },
+    { "value": "-1.75", "label": "-1.75" },
+    { "value": "-2.00", "label": "-2.00" },
+    { "value": "-2.25", "label": "-2.25" },
+    { "value": "-2.50", "label": "-2.50" },
+    { "value": "-2.75", "label": "-2.75" },
+    { "value": "-3.00", "label": "-3.00" },
+    { "value": "-3.25", "label": "-3.25" },
+    { "value": "-3.50", "label": "-3.50" },
+    { "value": "-3.75", "label": "-3.75" },
+    { "value": "-4.00", "label": "-4.00" },
+    { "value": "-4.25", "label": "-4.25" },
+    { "value": "-4.50", "label": "-4.50" },
+    { "value": "-4.75", "label": "-4.75" },
+    { "value": "-5.00", "label": "-5.00" },
+    { "value": "-5.25", "label": "-5.25" },
+    { "value": "-5.50", "label": "-5.50" },
+    { "value": "-5.75", "label": "-5.75" },
+    { "value": "-6.00", "label": "-6.00" },
+    { "value": "-6.50", "label": "-6.50" },
+    { "value": "-7.00", "label": "-7.00" },
+    { "value": "-7.50", "label": "-7.50" },
+    { "value": "-8.00", "label": "-8.00" },
+    { "value": "-8.50", "label": "-8.50" },
+    { "value": "-9.00", "label": "-9.00" },
+    { "value": "-9.50", "label": "-9.50" },
+    { "value": "-10.00", "label": "-10.00" },
+    { "value": "-10.50", "label": "-10.50" },
+    { "value": "-11.00", "label": "-11.00" },
+    { "value": "-11.50", "label": "-11.50" },
+    { "value": "-12.00", "label": "-12.00" },
+    { "value": "-12.50", "label": "-12.50" },
+    { "value": "-13.00", "label": "-13.00" },
+    { "value": "-13.50", "label": "-13.50" },
+    { "value": "-14.00", "label": "-14.00" },
+    { "value": "-14.50", "label": "-14.50" },
+    { "value": "-15.00", "label": "-15.00" },
+    { "value": "-15.50", "label": "-15.50" },
+    { "value": "-16.00", "label": "-16.00" },
+    { "value": "-16.50", "label": "-16.50" },
+    { "value": "-17.00", "label": "-17.00" },
+    { "value": "-17.50", "label": "-17.50" },
+    { "value": "-18.00", "label": "-18.00" },
+    { "value": "-18.50", "label": "-18.50" },
+    { "value": "-19.00", "label": "-19.00" },
+    { "value": "-19.50", "label": "-19.50" },
+    { "value": "-20.00", "label": "-20.00" },
     { "value": "0.00", "label": "0.00" },
     { "value": "+0.25", "label": "+0.25" },
     { "value": "+0.50", "label": "+0.50" },
@@ -74,7 +126,11 @@ export class RefractionComponent implements OnInit {
     { "value": "+18.50", "label": "+18.50" },
     { "value": "+19.00", "label": "+19.00" },
     { "value": "+19.50", "label": "+19.50" },
-    { "value": "+20.00", "label": "+20.00" },
+    { "value": "+20.00", "label": "+20.00" }
+    
+  ];
+
+  cylinderOptions = [
     { "value": "-0.25", "label": "-0.25" },
     { "value": "-0.50", "label": "-0.50" },
     { "value": "-0.75", "label": "-0.75" },
@@ -99,37 +155,6 @@ export class RefractionComponent implements OnInit {
     { "value": "-5.50", "label": "-5.50" },
     { "value": "-5.75", "label": "-5.75" },
     { "value": "-6.00", "label": "-6.00" },
-    { "value": "-6.50", "label": "-6.50" },
-    { "value": "-7.00", "label": "-7.00" },
-    { "value": "-7.50", "label": "-7.50" },
-    { "value": "-8.00", "label": "-8.00" },
-    { "value": "-8.50", "label": "-8.50" },
-    { "value": "-9.00", "label": "-9.00" },
-    { "value": "-9.50", "label": "-9.50" },
-    { "value": "-10.00", "label": "-10.00" },
-    { "value": "-10.50", "label": "-10.50" },
-    { "value": "-11.00", "label": "-11.00" },
-    { "value": "-11.50", "label": "-11.50" },
-    { "value": "-12.00", "label": "-12.00" },
-    { "value": "-12.50", "label": "-12.50" },
-    { "value": "-13.00", "label": "-13.00" },
-    { "value": "-13.50", "label": "-13.50" },
-    { "value": "-14.00", "label": "-14.00" },
-    { "value": "-14.50", "label": "-14.50" },
-    { "value": "-15.00", "label": "-15.00" },
-    { "value": "-15.50", "label": "-15.50" },
-    { "value": "-16.00", "label": "-16.00" },
-    { "value": "-16.50", "label": "-16.50" },
-    { "value": "-17.00", "label": "-17.00" },
-    { "value": "-17.50", "label": "-17.50" },
-    { "value": "-18.00", "label": "-18.00" },
-    { "value": "-18.50", "label": "-18.50" },
-    { "value": "-19.00", "label": "-19.00" },
-    { "value": "-19.50", "label": "-19.50" },
-    { "value": "-20.00", "label": "-20.00" }
-  ];
-
-  cylinderOptions = [
     { "value": "0.00", "label": "0.00" },
     { "value": "+0.25", "label": "+0.25" },
     { "value": "+0.50", "label": "+0.50" },
@@ -154,31 +179,7 @@ export class RefractionComponent implements OnInit {
     { "value": "+5.25", "label": "+5.25" },
     { "value": "+5.50", "label": "+5.50" },
     { "value": "+5.75", "label": "+5.75" },
-    { "value": "+6.00", "label": "+6.00" },
-    { "value": "-0.25", "label": "-0.25" },
-    { "value": "-0.50", "label": "-0.50" },
-    { "value": "-0.75", "label": "-0.75" },
-    { "value": "-1.00", "label": "-1.00" },
-    { "value": "-1.25", "label": "-1.25" },
-    { "value": "-1.50", "label": "-1.50" },
-    { "value": "-1.75", "label": "-1.75" },
-    { "value": "-2.00", "label": "-2.00" },
-    { "value": "-2.25", "label": "-2.25" },
-    { "value": "-2.50", "label": "-2.50" },
-    { "value": "-2.75", "label": "-2.75" },
-    { "value": "-3.00", "label": "-3.00" },
-    { "value": "-3.25", "label": "-3.25" },
-    { "value": "-3.50", "label": "-3.50" },
-    { "value": "-3.75", "label": "-3.75" },
-    { "value": "-4.00", "label": "-4.00" },
-    { "value": "-4.25", "label": "-4.25" },
-    { "value": "-4.50", "label": "-4.50" },
-    { "value": "-4.75", "label": "-4.75" },
-    { "value": "-5.00", "label": "-5.00" },
-    { "value": "-5.25", "label": "-5.25" },
-    { "value": "-5.50", "label": "-5.50" },
-    { "value": "-5.75", "label": "-5.75" },
-    { "value": "-6.00", "label": "-6.00" }
+    { "value": "+6.00", "label": "+6.00" }
   ];
 
   axisOptions = [
@@ -221,12 +222,44 @@ export class RefractionComponent implements OnInit {
     { "value": "180", "label": "180" }
   ];
 
+  // Adjusted IDs to align with HTML flow (4, 5, 6, 7) while keeping your EXACT form control names
   prescriptionSteps = [
-    { id: 5, label: 'Current Spectacle Prescription', controls: { sph_RE: 'sph_RE_current', cyl_RE: 'cyl_RE_current', axis_RE: 'axis_RE_current', sph_LE: 'sph_LE_current', cyl_LE: 'cyl_LE_current', axis_LE: 'axis_LE_current' }},
-    { id: 6, label: 'Dry Retinoscopy Prescription', controls: { sph_RE: 'sph_RE_dry', cyl_RE: 'cyl_RE_dry', axis_RE: 'axis_RE_dry', sph_LE: 'sph_LE_dry', cyl_LE: 'cyl_LE_dry', axis_LE: 'axis_LE_dry' }},
-    { id: 7, label: 'Cycloplegic Retinoscopy Prescription', controls: { sph_RE: 'sph_RE_cyclo', cyl_RE: 'cyl_RE_cyclo', axis_RE: 'axis_RE_cyclo', sph_LE: 'sph_LE_cyclo', cyl_LE: 'cyl_LE_cyclo', axis_LE: 'axis_LE_cyclo' }},
-    { id: 8, label: 'Final Accepted Prescription', controls: { sph_RE: 'sph_RE_final', cyl_RE: 'cyl_RE_final', axis_RE: 'axis_RE_final', sph_LE: 'sph_LE_final', cyl_LE: 'cyl_LE_final', axis_LE: 'axis_LE_final' }},
+    { id: 4, label: 'Current Spectacle Prescription', controls: { sph_RE: 'sph_RE_current', cyl_RE: 'cyl_RE_current', axis_RE: 'axis_RE_current', sph_LE: 'sph_LE_current', cyl_LE: 'cyl_LE_current', axis_LE: 'axis_LE_current' }},
+    { id: 5, label: 'Dry Retinoscopy Prescription', controls: { sph_RE: 'sph_RE_dry', cyl_RE: 'cyl_RE_dry', axis_RE: 'axis_RE_dry', sph_LE: 'sph_LE_dry', cyl_LE: 'cyl_LE_dry', axis_LE: 'axis_LE_dry' }},
+    { id: 6, label: 'Cycloplegic Retinoscopy Prescription', controls: { sph_RE: 'sph_RE_cyclo', cyl_RE: 'cyl_RE_cyclo', axis_RE: 'axis_RE_cyclo', sph_LE: 'sph_LE_cyclo', cyl_LE: 'cyl_LE_cyclo', axis_LE: 'axis_LE_cyclo' }},
+    { id: 7, label: 'Final Accepted Prescription', controls: { sph_RE: 'sph_RE_final', cyl_RE: 'cyl_RE_final', axis_RE: 'axis_RE_final', sph_LE: 'sph_LE_final', cyl_LE: 'cyl_LE_final', axis_LE: 'axis_LE_final' }},
   ];
+
+// VA options for BCVA dropdowns
+  vaDistanceOptions = [
+    "6/4", "6/5", "6/6", "6/6P", "6/7.5", "6/7.5P", "6/9", "6/9P",
+    "6/12", "6/12P", "6/18", "6/18P", "6/24", "6/24P", "6/36", "6/36P",
+    "6/60", "5/60", "4/60", "3/60", "2/60", "1/60", "FC 1/2 M", "FCCF",
+    "HM(+)", "PL+ PR ACCURATE", "PL + PR INACCURATE", "FIXING AND FOLLOWING LIGHT",
+    "NPL", "DEFERRED"
+  ];
+
+  vaNearOptions = [
+  { "value": "NO TEST", "label": "NO TEST" },
+  { "value": "N6", "label": "N6" },
+  { "value": "N8", "label": "N8" },
+  { "value": "N10", "label": "N10" },
+  { "value": "N12", "label": "N12" },
+  { "value": "N14", "label": "N14" },
+  { "value": "N18", "label": "N18" },
+  { "value": "N24", "label": "N24" },
+  { "value": "N36", "label": "N36" },
+  { "value": "N60", "label": "N60" },
+  { "value": "LESS THEN N60", "label": "LESS THEN N60" }
+];
+  // Manage visibility/validation of prescription steps
+  public prescriptionApplicableMap: Record<number, boolean> = {
+    4: true, 5: true, 6: true, 7: true
+  };
+
+  // Track loading state to prevent UI flicker
+  public dataLoaded: boolean = false;
+  public showDurationField: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -234,43 +267,37 @@ export class RefractionComponent implements OnInit {
     private location: Location,
     private router: Router,
     private route: ActivatedRoute,
-  ) {  
-   /* this.route.paramMap.subscribe(params => {
+  ) {   
+    this.route.queryParamMap.subscribe(params => {
       this.reference_number = params.get('reference_number');
-      console.log('Received ID:', this.reference_number);
-      if (this.reference_number == "null" || this.reference_number == null) {
-        this.openModal()
+
+      if (!this.reference_number || this.reference_number === "null" || this.reference_number === "undefined") {
+        this.openModal();
+      } else {
+        this.apiService.getParticipant().subscribe((res: any) => {
+          const participants: any[] = res.body ? res.body : res;
+          const matchedParticipant = participants.find(
+            (p: any) => p.reference_number === this.reference_number
+          );
+
+          if (matchedParticipant) {
+            this.participantData = {
+              ...matchedParticipant,
+              name: matchedParticipant.name 
+                ? `${matchedParticipant.name} ${matchedParticipant.surname || ''}`.trim() 
+                : matchedParticipant.contact_first_name || 'N/A'
+            };
+            
+            this.refravtionForm.patchValue({
+              eye: matchedParticipant.eye || 'BOTH_EYE'
+            });
+          }
+        });
+
+        // Fetch actual complaints from the complaint table to check if any exist
+        this.checkComplaintsAndManageDuration(this.reference_number);
       }
-    });*/
-      this.route.queryParamMap.subscribe(params => {
-    this.reference_number = params.get('reference_number');
-
-    if (!this.reference_number || this.reference_number === "null" || this.reference_number === "undefined") {
-      this.openModal();
-    } else {
-
-      this.apiService.getParticipant().subscribe((res: any) => {
-  const participants: any[] = res.body ? res.body : res;
-
-  // Find the exact participant matching your reference_number
-  const matchedParticipant = participants.find(
-    (p: any) => p.reference_number === this.reference_number
-  );
-
-  if (matchedParticipant) {
-    // Combine name and surname if necessary to fit the component's name field
-    this.participantData = {
-      ...matchedParticipant,
-      name: matchedParticipant.name 
-        ? `${matchedParticipant.name} ${matchedParticipant.surname || ''}`.trim() 
-        : matchedParticipant.contact_first_name || 'N/A'
-    };
-  } else {
-    console.warn(`Participant with ref ${this.reference_number} not found in array.`);
-  }
-});
-    }
-  });
+    });
   }
 
   async openModal() {
@@ -284,24 +311,68 @@ export class RefractionComponent implements OnInit {
   }
 
   handleUser(user: any) {
-    console.log('=== Selected User Details ===');
-    console.log('User ID:', user.id);
-    console.log('Reference Number:', user.reference_number);
     this.reference_number = user.reference_number;
-    console.log(user);
     this.participantData = user;
+    
+    this.refravtionForm.patchValue({
+      eye: user.eye || 'BOTH_EYE'
+    });
+
+    this.checkComplaintsAndManageDuration(this.reference_number);
     this.patchData();
   }
 
+  // Unified helper to check database complaints and handle duration visibility & step jumping
+  private checkComplaintsAndManageDuration(refNo: string) {
+    this.apiService.getObservationComplaints(refNo).subscribe((res: any) => {
+      let hasRealComplaints = false;
+
+      if (res && res.body && res.body[0]) {
+        const saved = Array.isArray(res.body[0].selected_complaint)
+          ? res.body[0].selected_complaint
+          : (typeof res.body[0].selected_complaint === 'string' 
+              ? res.body[0].selected_complaint.split(',').map((s: string) => s.trim()) 
+              : []);
+
+        hasRealComplaints = saved.some((c: string) => 
+          c && c !== 'NO COMPLAINTS' && c !== 'NO COMPLAINTS/observations'
+        );
+      }
+
+      this.showDurationField = hasRealComplaints;
+
+      const durationControl = this.refravtionForm.get('duration');
+      if (!hasRealComplaints) {
+        durationControl?.setValue(null);
+        durationControl?.clearValidators();
+        
+        // Skip Step 1 automatically if there are no complaints to avoid a blank screen
+        if (this.currentStep === 1) {
+          this.currentStep = 2;
+        }
+      } else {
+        durationControl?.setValidators([Validators.required]);
+      }
+      durationControl?.updateValueAndValidity();
+
+      // Reveal UI smoothly once checks complete
+      this.dataLoaded = true;
+    }, () => {
+      // Fallback on error
+      this.showDurationField = true;
+      this.dataLoaded = true;
+    });
+  }
+
   patchData(){
-    this.apiService.getrefractionExamination(this.reference_number).subscribe(res => {
+    this.apiService.getrefractionExamination(this.reference_number).subscribe((res: any) => {
       if (res && !res.error && res.body) {
         const data = res.body;
         console.log(data.duration)
         if (data.duration !== undefined && data.duration !== null) {
           data.duration = String(data.duration);
         }
-        this.refravtionForm.patchValue(data)
+        this.refravtionForm.patchValue(data);
         this.refravtionForm.disable();
       }
     });
@@ -309,9 +380,11 @@ export class RefractionComponent implements OnInit {
 
   ngOnInit() {
     this.refravtionForm = this.fb.group({
-      chief_complaint: ['', Validators.required],
-      eye: ['', Validators.required],
-      duration: [''],
+      // Background fields (removed validators to avoid silent block since they aren't on screen)
+      chief_complaint: [''],
+      eye: [''],
+      
+      duration: ['', Validators.required],
       ocular_alignment_remarks: ['', Validators.required],
       additional_ocular_complaint: [false, Validators.required],
 
@@ -335,132 +408,168 @@ export class RefractionComponent implements OnInit {
     });
   }
 
-  /*nextStep() {
+  // ---- Dynamic Prescription Toggles Logic ----
+  public isPrescriptionStepActive(stepId: number): boolean {
+    return this.prescriptionApplicableMap[stepId] ?? true;
+  }
+
+  public togglePrescriptionStep(stepId: number, event: any) {
+    const isActive = event.detail.checked;
+    this.prescriptionApplicableMap[stepId] = isActive;
+    this.toggleStepValidators(stepId, isActive);
+  }
+
+  private toggleStepValidators(stepId: number, enable: boolean) {
+    const stepConfig = this.prescriptionSteps.find((s) => s.id === stepId);
+    if (!stepConfig) return;
+
+    Object.values(stepConfig.controls).forEach((controlName) => {
+      const control = this.refravtionForm.get(controlName);
+      if (enable) {
+        control?.enable();
+      } else {
+        control?.reset();
+        control?.disable();
+      }
+    });
+  }
+  // --------------------------------------------
+
+  nextStep() {
     this.submitted = true;
-    if (this.currentStep === 1 && this.refravtionForm.get('chief_complaint')?.invalid) return;
-    if (this.currentStep === 2 && (this.refravtionForm.get('eye')?.invalid || this.refravtionForm.get('duration')?.invalid)) return;
-    if (this.currentStep === 4 && this.refravtionForm.get('ocular_alignment_remarks')?.invalid) return;
+
+    // If we are on Step 1, but duration field is hidden (no complaints), jump straight to Step 2
+  if (this.currentStep === 1 && !this.showDurationField) {
+    this.currentStep = 2;
     this.submitted = false;
-    if (this.currentStep < this.totalSteps) this.currentStep++;
+    return;
+  }
+    // Step 1 Validation (Duration)
+    if (this.currentStep === 1) {
+      if (this.refravtionForm.get('duration')?.invalid) return;
+    }
+
+    // Step 2 Validation and Routing (Additional Complaint)
+    if (this.currentStep === 2) {
+      this.submitted = false;
+      const additionalComplaint = this.refravtionForm.get('additional_ocular_complaint')?.value;
+
+      // If user clicked "No" on additional complaint, skip Step 3 (Alignment)
+      if (additionalComplaint === false) {
+        this.refravtionForm.patchValue({ ocular_alignment_remarks: null });
+        this.refravtionForm.get('ocular_alignment_remarks')?.clearValidators();
+        this.refravtionForm.get('ocular_alignment_remarks')?.updateValueAndValidity();
+
+        this.currentStep = 4; // Jump to prescriptions
+        return;
+      }
+    }
+
+    // Step 3 Validation (Ocular Alignment)
+    if (this.currentStep === 3) {
+      if (this.refravtionForm.get('ocular_alignment_remarks')?.invalid) return;
+    }
+
+    this.submitted = false;
+
+    if (this.currentStep < this.totalSteps) {
+      this.currentStep++;
+    }
   }
 
   previousStep() {
     if (this.currentStep > 1) {
+
+      // Going back from Step 4 (Prescriptions) when additional complaint was "No"
+      if (this.currentStep === 4) {
+        const additionalComplaint = this.refravtionForm.get('additional_ocular_complaint')?.value;
+        if (additionalComplaint === false) {
+          this.currentStep = 2;
+          this.submitted = false;
+          return;
+        }
+      }
+
+      // Default step decrement
       this.currentStep--;
+      // If we backed up into Step 1, but there is no duration field, skip back past it
+    if (this.currentStep === 1 && !this.showDurationField) {
+      // Handle accordingly based on your layout flow, or stay at 2
+      this.currentStep = 2; 
+    }
+
       this.submitted = false;
     }
-  }*/
-nextStep() {
+  }
+
+  // Converts text inputs like "6 months", "1 year 2 months", "3 years" into a backend-ready integer
+private parseDurationToInteger(val: any): number {
+  if (val === null || val === undefined || val === '') {
+    return 1;
+  }
+
+  // Convert to string and lowercase for uniform parsing
+  const str = String(val).toLowerCase().trim();
+
+  // Extract numeric years and months using regular expressions
+  const yearMatch = str.match(/(\d+)\s*(?:year|yr|y)/);
+  const monthMatch = str.match(/(\d+)\s*(?:month|mo|m)/);
+
+  let years = yearMatch ? parseInt(yearMatch[1], 10) : 0;
+  let months = monthMatch ? parseInt(monthMatch[1], 10) : 0;
+
+  // If input is purely a raw number like "3" or "2"
+  if (!yearMatch && !monthMatch && !isNaN(Number(str))) {
+    const rawNum = parseInt(str, 10);
+    return rawNum < 1 ? 1 : rawNum;
+  }
+
+  // Rule 1: Anything less than 1 year total (e.g. "6 months", "2 months") defaults to 1
+  if (years < 1) {
+    return 1;
+  }
+
+  // Rule 2: 5 or 6+ months rounds up to the next full year
+  if (months >= 5) {
+    years += 1;
+  }
+
+  return years;
+}
+
+submitForm() {
   this.submitted = true;
+  if (this.refravtionForm.invalid) {
+    this.apiService.presentToast('Please fill all fields', 'danger');
+    return;
+  }
 
-  // Step 1 Validation
-  if (this.currentStep === 1) {
-    if (this.refravtionForm.get('chief_complaint')?.invalid) return;
-    
-    this.submitted = false;
-    const complaint = this.refravtionForm.get('chief_complaint')?.value;
+  this.apiService.isLoading.next(true);
 
-    // IF "NO COMPLAINTS", skip Step 2 (Eye/Duration) and jump to Step 3
-    if (complaint === 'NO COMPLAINTS') {
-      // Reset values to NULL (not empty string) so Django/SQL treats them as NULL
-      this.refravtionForm.patchValue({
-        eye: null,
-        duration: null
-      });
+  // Get raw duration input and format it to integer according to business logic
+  const rawDuration = this.refravtionForm.get('duration')?.value;
+  const formattedDuration = this.parseDurationToInteger(rawDuration);
 
-      this.refravtionForm.get('eye')?.clearValidators();
-      this.refravtionForm.get('eye')?.updateValueAndValidity();
-      this.refravtionForm.get('duration')?.clearValidators();
-      this.refravtionForm.get('duration')?.updateValueAndValidity();
+  const formData = { 
+    ...this.refravtionForm.value, 
+    duration: formattedDuration, // Sent to backend as integer
+    reference_number: this.reference_number, 
+    refraction_and_examination: true 
+  };
 
-      this.currentStep = 3;
-      return;
+  this.apiService.RefractionExamination(formData).subscribe((res: any) => {
+    this.apiService.isLoading.next(false);
+    if (res.error === false) {
+      this.apiService.presentToast(res.message);
+      this.router.navigate(['/layout/dispensing'], { queryParams: { reference_number: this.reference_number } });
+    } else {
+      this.apiService.presentToast(res.message, 'danger');
     }
-  }
-
-  // Step 2 Validation
-  if (this.currentStep === 2) {
-    if (this.refravtionForm.get('eye')?.invalid || this.refravtionForm.get('duration')?.invalid) return;
-  }
-
-  // Step 3 Routing
-  if (this.currentStep === 3) {
-    this.submitted = false;
-    const additionalComplaint = this.refravtionForm.get('additional_ocular_complaint')?.value;
-
-    // If user clicked "No" on additional complaint, skip Step 4 (Alignment)
-    if (additionalComplaint === false) {
-      this.refravtionForm.patchValue({ ocular_alignment_remarks: null });
-      this.refravtionForm.get('ocular_alignment_remarks')?.clearValidators();
-      this.refravtionForm.get('ocular_alignment_remarks')?.updateValueAndValidity();
-
-      this.currentStep = 5;
-      return;
-    }
-  }
-
-  // Step 4 Validation
-  if (this.currentStep === 4) {
-    if (this.refravtionForm.get('ocular_alignment_remarks')?.invalid) return;
-  }
-
-  this.submitted = false;
-
-  if (this.currentStep < this.totalSteps) {
-    this.currentStep++;
-  }
+  }, () => {
+    this.apiService.isLoading.next(false);
+    this.apiService.presentToast('Something Went Wrong', 'danger');
+  });
 }
-
-previousStep() {
-  if (this.currentStep > 1) {
-    // Going back from Step 5 when additional complaint was "No"
-    if (this.currentStep === 5) {
-      const additionalComplaint = this.refravtionForm.get('additional_ocular_complaint')?.value;
-      if (additionalComplaint === false) {
-        this.currentStep = 3;
-        this.submitted = false;
-        return;
-      }
-    }
-
-    // Going back from Step 3 when chief complaint was "NO COMPLAINTS"
-    if (this.currentStep === 3) {
-      const complaint = this.refravtionForm.get('chief_complaint')?.value;
-      if (complaint === 'NO COMPLAINTS') {
-        this.currentStep = 1;
-        this.submitted = false;
-        return;
-      }
-    }
-
-    // Default step decrement
-    this.currentStep--;
-    this.submitted = false;
-  }
-}
-
-  submitForm() {
-    this.submitted = true;
-    if (this.refravtionForm.invalid) {
-      this.apiService.presentToast('Please fill all fields','danger');
-      return;
-    }
-    this.apiService.isLoading.next(true);
-    const formData = { ...this.refravtionForm.value, reference_number: this.reference_number, refraction_and_examination: true };
-    this.apiService.RefractionExamination(formData).subscribe(res => {
-      this.apiService.isLoading.next(false);
-      if (res.error === false) {
-        this.apiService.presentToast(res.message);
-        //this.router.navigate(['/layout/profile'], { queryParams: { reference_number: this.reference_number } });
-        this.router.navigate(['/layout/dispensing'], { queryParams: { reference_number: this.reference_number } });
-      } else {
-        this.apiService.presentToast(res.message, 'danger');
-      }
-    }, () => {
-      this.apiService.isLoading.next(false);
-      this.apiService.presentToast('Something Went Wrong', 'danger');
-    });
-  }
 
   sendnotification(value: boolean) {
     this.refravtionForm.patchValue({ additional_ocular_complaint: value });
@@ -471,7 +580,6 @@ previousStep() {
   }
 
   backLocation() {
-    //this.router.navigate(['/layout/profile'], { queryParams: { reference_number: this.reference_number } });
     this.router.navigate(['/layout/refraction-spectacle-presentation'], { queryParams: { reference_number: this.reference_number } });
   }
 

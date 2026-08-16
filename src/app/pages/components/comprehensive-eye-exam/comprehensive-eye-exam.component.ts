@@ -113,12 +113,12 @@ ngOnInit() {
 private async askWhichEye() {
   const modal = await this.modalController.create({
     component: EvaluationModalComponent,
-   componentProps: { // 👈 It goes right here!
+    componentProps: {
       screeningType: 'SELECT EYE TEST',
       leftEyeDone: this.leftEyeDone,
       rightEyeDone: this.rightEyeDone,
-      testingDistance: this.testingDistance, // Passes class property down
-      isAided: this.isAided                  // Passes class property down
+      testingDistance: this.testingDistance,
+      isAided: this.isAided
     },
   });
   await modal.present();
@@ -126,19 +126,36 @@ private async askWhichEye() {
 
   const sel = data?.eye as 'LEFT' | 'RIGHT' | 'BOTH' | undefined;
   
-  // Capture the manual selections made by the clinician inside the modal
   if (data?.testingDistance) this.testingDistance = data.testingDistance;
   if (data?.isAided !== undefined) this.isAided = data.isAided;
 
   if (sel === 'BOTH') {
     this.bothMode = true;
-    this.currentEye = !this.leftEyeDone ? 'left' : 'right';
+    // Reset state completely for BOTH mode
+    this.leftEyeDone = false;
+    this.rightEyeDone = false;
+    this.testResults = { left: {}, right: {} };
+    this.eyeHadFailure = { left: false, right: false };
+    this.eyeResults = { left: false, right: false };
+    this.currentEye = 'left';
     this.restartEyeTest();
     return;
   }
 
   this.bothMode = false;
   this.currentEye = sel === 'RIGHT' ? 'right' : 'left';
+
+  // Reset state for the selected eye
+  if (this.currentEye === 'left') {
+    this.leftEyeDone = false;
+    this.testResults.left = {};
+    this.eyeHadFailure.left = false;
+  } else {
+    this.rightEyeDone = false;
+    this.testResults.right = {};
+    this.eyeHadFailure.right = false;
+  }
+
   this.restartEyeTest();
 }
 
@@ -439,16 +456,20 @@ private stepScoreMap: Record<number, number> = {
   9: '6/5'
 };
 */
+// Fix 1: Find the highest step passed BEFORE the first failure (Standard Visual Acuity progression)
 public getHighestPassedStep(eye: Eye): number {
   const results = this.testResults[eye];
-  let highestPassedStep = 0;
-
   if (!results) return 0;
+
+  let highestPassedStep = 0;
 
   for (let i = 0; i < this.snellenLabels.length; i++) {
     const label = this.snellenLabels[i];
     if (results[label] === true) {
       highestPassedStep = i + 1;
+    } else if (results[label] === false) {
+      // Stop checking once a step is failed!
+      break; 
     }
   }
   return highestPassedStep;
@@ -459,13 +480,14 @@ public getNumericVisualAcuity(eye: Eye): string {
   return this.visualAcuityMap[highestStep] || 'Less than 6/60';
 }
 
+// Fix 2: Update calculatePercentage to properly calculate failure scores
 public calculatePercentage(data: Record<Eye, Record<string, boolean>>) {
   const leftHighest = this.getHighestPassedStep('left');
   const rightHighest = this.getHighestPassedStep('right');
 
   return {
-    left: this.stepScoreMap[leftHighest] || 0,
-    right: this.stepScoreMap[rightHighest] || 0,
+    left: leftHighest > 0 ? (this.stepScoreMap[leftHighest] || 0) : 0,
+    right: rightHighest > 0 ? (this.stepScoreMap[rightHighest] || 0) : 0,
   };
 }
 

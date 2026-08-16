@@ -2,73 +2,125 @@
   <ion-toolbar>
     <ion-title class="custom-title">
       <ion-icon class="back_icon" name="chevron-back-outline" (click)="backLocation()"></ion-icon>
-      <span class="back_btn">REPORTS </span>
+      <span class="back_btn">REPORTS & ANALYTICS</span>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-card>
+<ion-content class="ion-padding">
+  <!-- School Filter Selection Card -->
+  <ion-card class="filter-card">
     <ion-card-content>
       <div class="report-header-section">
-        <h2>Export Spec Order Sheets</h2>
-        <p>Extract clinical spectacles prescriptions, dispensing configurations, and demographics into a standard spreadsheet layout.</p>
+        <h2>Data Filter & Scoping</h2>
+        <p>Select a specific school to scope metrics and downstream CSV exports dynamically.</p>
       </div>
 
-      <!-- Searchable School Select -->
-<!-- Clickable Item Triggering Modal -->
-<ion-item lines="full" class="ion-margin-vertical" id="open-school-modal" button>
-  <ion-label position="floating">Filter by School (Optional)</ion-label>
-  <ion-input [value]="selectedSchool || 'All Schools'" readonly></ion-input>
-  <ion-icon name="search-outline" slot="end"></ion-icon>
-</ion-item>
+      <ion-item lines="full" class="ion-margin-vertical school-picker-item" id="open-school-modal" button>
+        <ion-label position="floating">Filter by School (Optional)</ion-label>
+        <ion-input [value]="selectedSchool || 'All Schools (Global View)'" readonly></ion-input>
+        <ion-icon name="search-outline" slot="end"></ion-icon>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 
-<!-- Searchable Modal overlay -->
-<ion-modal trigger="open-school-modal" #schoolModal>
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Select School</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="schoolModal.dismiss()">Close</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-      <ion-toolbar>
-        <!-- Search bar filters the list instantly -->
-        <ion-searchbar 
-          placeholder="Search school name..." 
-          (ionInput)="filterSchools($event)">
-        </ion-searchbar>
-      </ion-toolbar>
-    </ion-header>
+  <!-- Modern Metric Summary Cards / Tabs Selection -->
+  <ion-segment [(ngModel)]="activeTab" (ionChange)="segmentChanged($event)" mode="ios" class="ion-margin-bottom report-segment">
+    <ion-segment-button value="orders">
+      <ion-label>Spec Orders</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="screenings">
+      <ion-label>Screenings</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="examinations">
+      <ion-label>Exams</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="diagnoses">
+      <ion-label>Diagnoses</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 
-    <ion-content>
-      <ion-list>
-        <!-- Option to reset filter -->
-        <ion-item button (click)="selectSchool(''); schoolModal.dismiss()">
-          <ion-label><strong>All Schools</strong></ion-label>
-        </ion-item>
-
-        <!-- Dynamic Filtered School List -->
-        <ion-item 
-          *ngFor="let school of filteredSchools" 
-          button 
-          (click)="selectSchool(school); schoolModal.dismiss()">
-          <ion-label>{{ school }}</ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-      <div class="button_group">
-        <div class="save_btn">
-          <ion-button class="btn" expand="full" color="primary" (click)="downloadReport()">
-            <ion-icon name="download-outline" slot="start"></ion-icon>
-            Download CSV Report
-          </ion-button>
+  <!-- Metrics Grid Dashboard View -->
+  <div class="metrics-grid">
+    <ion-card class="metric-card" *ngIf="activeTab === 'orders'">
+      <ion-card-content>
+        <div class="metric-icon-wrapper bg-blue"><ion-icon name="glasses-outline"></ion-icon></div>
+        <div class="metric-info">
+          <h3>Dispensing Orders</h3>
+          <h1>{{ metrics.total_dispensing }}</h1>
         </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="metric-card" *ngIf="activeTab === 'screenings'">
+      <ion-card-content>
+        <div class="metric-icon-wrapper bg-green"><ion-icon name="people-outline"></ion-icon></div>
+        <div class="metric-info">
+          <h3>Total Screenings</h3>
+          <h1>{{ metrics.total_screenings }}</h1>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="metric-card" *ngIf="activeTab === 'examinations'">
+      <ion-card-content>
+        <div class="metric-icon-wrapper bg-orange"><ion-icon name="eye-outline"></ion-icon></div>
+        <div class="metric-info">
+          <h3>Refractions</h3>
+          <h1>{{ metrics.total_refractions }}</h1>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="metric-card" *ngIf="activeTab === 'diagnoses'">
+      <ion-card-content>
+        <div class="metric-icon-wrapper bg-purple"><ion-icon name="medkit-outline"></ion-icon></div>
+        <div class="metric-info">
+          <h3>Diagnoses</h3>
+          <h1>{{ metrics.total_diagnoses }}</h1>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Download Action Card -->
+  <ion-card class="download-action-card">
+    <ion-card-content class="ion-text-center">
+      <h3>Ready to Export Data</h3>
+      <p>Download the fully populated, precise CSV data set for <strong>{{ activeTab | uppercase }}</strong> matching your school filters.</p>
+      <div class="button_group">
+        <ion-button class="btn" expand="block" color="primary" (click)="downloadActiveReport()">
+          <ion-icon name="download-outline" slot="start"></ion-icon>
+          Download {{ activeTab | titlecase }} CSV Report
+        </ion-button>
       </div>
     </ion-card-content>
   </ion-card>
+
+  <!-- School Selection Modal overlay -->
+  <ion-modal trigger="open-school-modal" #schoolModal>
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Select School</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="schoolModal.dismiss()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <ion-toolbar>
+          <ion-searchbar placeholder="Search school name..." (ionInput)="filterSchools($event)"></ion-searchbar>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <ion-item button (click)="selectSchool(''); schoolModal.dismiss()">
+            <ion-label><strong>All Schools</strong></ion-label>
+          </ion-item>
+          <ion-item *ngFor="let school of filteredSchools" button (click)="selectSchool(school); schoolModal.dismiss()">
+            <ion-label>{{ school }}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

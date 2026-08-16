@@ -15,7 +15,7 @@
     <div class="buttons-new-ionic">
       <ion-button
         *ngIf="!leftEyeDone"
-        (click)="selectOption('LEFT')"
+        (click)="confirmPreTestInstructions('LEFT')"
         class="button_yes"
         [color]="'danger'"
       >
@@ -24,7 +24,7 @@
 
       <ion-button
         *ngIf="!rightEyeDone"
-        (click)="selectOption('RIGHT')"
+        (click)="confirmPreTestInstructions('RIGHT')"
         class="button_yes"
         [color]="'danger'"
       >
@@ -33,7 +33,7 @@
 
       <ion-button
         *ngIf="!leftEyeDone || !rightEyeDone"
-        (click)="selectOption('BOTH')"
+        (click)="confirmPreTestInstructions('BOTH')"
         class="button_yes"
       >
         BOTH EYES

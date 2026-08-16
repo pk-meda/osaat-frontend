@@ -16,6 +16,19 @@ export class ReportService {
     return this.http.get<any>(`${this.apiUrl}/schools/`);
   }
 
+  // Add inside ReportService
+getReportMetrics(school?: string): Observable<any> {
+  let params = new HttpParams();
+  if (school) params = params.set('school', school);
+  return this.http.get(`${this.apiUrl}metrics/`, { params });
+}
+
+downloadReportByType(reportType: string, school?: string): Observable<Blob> {
+  let params = new HttpParams();
+  if (school) params = params.set('school', school);
+  return this.http.get(`${this.apiUrl}${reportType}/`, { params, responseType: 'blob' });
+}
+
   downloadSpecOrderSheet(school?: string): Observable<Blob> {
     let params = new HttpParams();
     if (school) {

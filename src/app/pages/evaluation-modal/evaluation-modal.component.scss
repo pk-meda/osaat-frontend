@@ -1,15 +1,83 @@
 .button-group {
-    display: flex
-;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
-ion-button.button_yes{
-    height: 42px;
-    width: 27%;
-    margin-left: 16px;
+ion-button.button_yes {
+  height: 42px;
+  width: 27%;
+  margin-left: 16px;
 }
-.buttons-new-ionic{
-    display: flex;
-    justify-content: center;
+
+.buttons-new-ionic {
+  display: flex;
+  justify-content: center;
+}
+
+/* Red, Green & White Pre-Test Warning Popup */
+ion-toast.pre-test-warning-toast,
+::ng-deep .pre-test-warning-toast {
+  --background: #ffffff;
+  --color: #1f2937;
+  --width: 90%;
+  --max-width: 420px;
+  --border-radius: 16px;
+  --box-shadow: 0 16px 36px rgba(220, 38, 38, 0.2), 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Stack card elements vertically inside Shadow DOM */
+  &::part(container),
+  .toast-container {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 18px !important;
+    border: 2px solid #dc2626 !important; /* Crisp Warning Red Border */
+    border-radius: 16px !important;
+    background: #ffffff !important; /* Clean White Background */
+  }
+
+  &::part(header),
+  .toast-header {
+    font-weight: 800 !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 0.5px;
+    color: #dc2626 !important; /* Bold Red Warning Header */
+    margin-bottom: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  &::part(message),
+  .toast-message {
+    white-space: pre-line !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important; /* Dark Charcoal Text */
+    margin-bottom: 14px !important;
+    padding: 0 !important;
+  }
+
+  /* Bottom action button row */
+  &::part(button-group),
+  .toast-button-group {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    border-top: 1px solid #fee2e2 !important; /* Light Red Divider Line */
+    padding-top: 12px !important;
+    margin-top: 4px !important;
+  }
+
+  &::part(button),
+  .toast-button {
+    font-weight: 700 !important;
+    background: #16a34a !important; /* Vibrant Action Green */
+    color: #ffffff !important; /* White Button Text */
+    border-radius: 8px !important;
+    padding: 8px 20px !important;
+    margin: 0 !important;
+    font-size: 0.88rem !important;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3) !important;
+  }
 }
