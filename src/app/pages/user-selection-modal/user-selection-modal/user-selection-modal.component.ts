@@ -41,6 +41,7 @@ interface User {
   standalone: true,
   imports: [IonicModule, FormsModule, CommonModule, ReactiveFormsModule],
 })
+
 export class UserSelectionModalComponent implements OnInit {
   userForm: FormGroup;
   submitted = false;

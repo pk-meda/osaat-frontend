@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { ModalController, ViewWillEnter } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
@@ -159,6 +159,54 @@ private async askWhichEye() {
   this.restartEyeTest();
 }
 
+@HostListener('window:keydown', ['$event'])
+handleKeyboardEvent(event: KeyboardEvent) {
+  // Only handle arrow keys during an active test (when test isn't completed)
+  if (this.leftEyeDone && this.rightEyeDone) {
+    return;
+  }
+
+  let arrowDirection: Dir | '' = '';
+
+  switch (event.key) {
+    case 'ArrowUp':
+      arrowDirection = 'up';
+      break;
+    case 'ArrowDown':
+      arrowDirection = 'down';
+      break;
+    case 'ArrowLeft':
+      arrowDirection = 'left';
+      break;
+    case 'ArrowRight':
+      arrowDirection = 'right';
+      break;
+    default:
+      return; // Ignore other keys
+  }
+
+  event.preventDefault(); // Prevent page scrolling
+
+  // Reuse your exact validation logic
+  const dirMap: Record<number, Dir> = {
+    0: 'right',
+    90: 'down',
+    180: 'left',
+    270: 'up',
+  };
+  this.expectedDirection = dirMap[this.currentRotation];
+  const testIdx = this.snellenLabels[this.currentStep - 1];
+
+  if (arrowDirection === this.expectedDirection) {
+    this.testResults[this.currentEye][testIdx] = true;
+    this.nextStep();
+  } else {
+    this.testResults[this.currentEye][testIdx] = false;
+    this.eyeHadFailure[this.currentEye] = true;
+    this.nextStep();
+  }
+}
+
   backLocation() {
     this.router.navigate(['/layout/profile']);
   }
@@ -257,6 +305,7 @@ async onTouchEnd(evt: TouchEvent) {
     await this.nextStep();
   }
 }
+
 
   private async nextStep() {
     if (this.currentStep < this.totalSteps) {
@@ -404,6 +453,7 @@ const percentage = this.calculatePercentage(this.testResults);
 
   // Standard Snellen fraction labels corresponding to steps 1-9
 private visualAcuityMap: Record<number, string> = {
+  0: '6/60', // Step 1 failure default / initial visual acuity floor
   1: '6/60', // Step 1 (43.5mm)
   2: '6/36', // Step 2 (26.5mm)
   3: '6/24', // Step 3 (17.5mm)
@@ -477,7 +527,11 @@ public getHighestPassedStep(eye: Eye): number {
 
 public getNumericVisualAcuity(eye: Eye): string {
   const highestStep = this.getHighestPassedStep(eye);
-  return this.visualAcuityMap[highestStep] || 'Less than 6/60';
+  if (highestStep === 0) {
+    return '6/60';
+  }
+
+  return this.visualAcuityMap[highestStep] || '6/60';
 }
 
 // Fix 2: Update calculatePercentage to properly calculate failure scores

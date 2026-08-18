@@ -492,6 +492,7 @@ onResultSelect(result: 'pass' | 'fail') {
   const body: any = {
     reference_number: this.reference_number,
     measure_visual_acuity: true,
+    screening_result: result
   };
 
   if (isAidedTest) {
@@ -545,83 +546,60 @@ checkAlreadyDoVATEST(result: 'pass' | 'fail' | null) {
     next: (res: any) => {
       console.log('API Response `/profile`:', res);
 
-      // Helper function to strictly parse boolean-like fields from API
-// Replace the existing isTruthy helper inside checkAlreadyDoVATEST() with this:
-const isTruthy = (val: any): boolean => {
-  if (typeof val === 'boolean') return val;
-  if (typeof val === 'number') return val === 1;
+      const isTruthy = (val: any): boolean => {
+        if (typeof val === 'boolean') return val;
+        if (typeof val === 'number') return val === 1;
 
-  if (typeof val === 'string') {
-    const clean = val.trim().toLowerCase();
+        if (typeof val === 'string') {
+          const clean = val.trim().toLowerCase();
+          const isExplicitlyFalse = 
+            clean === 'false' ||
+            clean === '0' ||
+            clean === 'no' ||
+            clean === 'unaided' ||
+            clean.includes('not wearing') ||
+            clean.includes('no spectacles') ||
+            clean.includes('does not wear') ||
+            clean.includes('in the past') ||
+            clean.includes('previously worn') ||
+            clean.includes('no longer') ||
+            clean.includes('never');
 
-    // 1. Broad rejection of all non-wearing, past, absent, or negative states
-    const isExplicitlyFalse = 
-      clean === 'false' ||
-      clean === '0' ||
-      clean === 'no' ||
-      clean === 'unaided' ||
-      clean.includes('not wearing') ||
-      clean.includes('no spectacles') ||
-      clean.includes('does not wear') ||
-      clean.includes('in the past') ||
-      clean.includes('previously worn') ||
-      clean.includes('no longer') ||
-      clean.includes('never');
+          if (isExplicitlyFalse) return false;
 
-    if (isExplicitlyFalse) return false;
-
-    // 2. Strict check for active spectacle usage
-    return (
-      clean === 'true' ||
-      clean === '1' ||
-      clean === 'yes' ||
-      clean === 'aided' ||
-      clean.includes('currently wearing')
-    );
-  }
-
-  return false;
-};
+          return (
+            clean === 'true' ||
+            clean === '1' ||
+            clean === 'yes' ||
+            clean === 'aided' ||
+            clean.includes('currently wearing')
+          );
+        }
+        return false;
+      };
 
       // Sanitize profile inputs
       const profileWearsGlasses = isTruthy(res?.wears_spectacles) || isTruthy(res?.has_glasses);
       const wearsSpectacles = profileWearsGlasses || isAidedTest;
+      const schoolName = res?.school || '';
 
       console.log('Sanitized wearsSpectacles Check:', {
         profileWearsGlasses,
         isAidedTest,
         final_wearsSpectacles: wearsSpectacles,
-        raw_wears_spectacles: res?.wears_spectacles,
-        raw_has_glasses: res?.has_glasses
+        school: schoolName
       });
 
-      // Route 1: Already completed second screening
-      if (res?.second_screening === true || res?.second_screening === 1) {
-        console.log('-> Navigating to: /layout/secoundScreening');
-        this.router.navigate(['/layout/secoundScreening']);
-        return;
-      }
-
-      // Route 2: Test Failed
-      if ((res?.second_screening === false || res?.second_screening === 0 || !res?.second_screening) && result === 'fail') {
-        if (wearsSpectacles) {
-          console.log('-> Navigating to: /layout/refraction-spectacle-presentation');
-          this.router.navigate(['/layout/refraction-spectacle-presentation'], {
-            queryParams: { reference_number: this.reference_number }
-          });
-        } else {
-          console.log('-> Navigating to: /layout/refraction');
-          this.router.navigate(['/layout/refraction'], {
-            queryParams: { reference_number: this.reference_number }
-          });
+      // Route: Always go to Way Forward view, passing necessary routing parameters
+      console.log('-> Navigating to: /layout/way-forward');
+      this.router.navigate(['/layout/way-forward'], {
+        queryParams: {
+          reference_number: this.reference_number,
+          result: result,
+          wears_spectacles: wearsSpectacles ? 'true' : 'false',
+          school: schoolName,
+          second_screening: res?.second_screening ? 'true' : 'false'
         }
-        return;
-      }
-
-      // Route 3: Test Passed / Fallback
-      console.log('-> Navigating to: /layout/first-screening');
-      this.router.navigate(['/layout/first-screening'], {
-        queryParams: { reference_number: this.reference_number }
       });
     },
     error: (err) => {

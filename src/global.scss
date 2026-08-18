@@ -694,3 +694,9 @@ ion-toast.pre-test-warning-toast {
     box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3) !important;
   }
 }
+/* In global.scss (if applying a custom modal class) */
+ion-modal.custom-profile-modal {
+  --height: 100%;
+  --max-height: 90vh; // Allows modal to fit screen while enabling internal scrolling
+  --border-radius: 16px;
+}

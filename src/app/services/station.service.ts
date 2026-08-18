@@ -15,7 +15,7 @@ export interface Station {
 })
 export class StationService {
   public stations: Station[] = [
-    { id: 'screening', name: 'Screening', description: 'Initial Assessment', route: '/layout/first-screening' },
+    { id: 'screening', name: 'Participant Reg', description: 'Initial Registration', route: '/layout/first-screening' },
     { id: 'complaint', name: 'Complaints', description: 'Patient Complaints', route: '/layout/complaint' },
     { id: 'etest', name: 'E-Test', description: 'Orientation-Based', route: '/layout/eye_exam' },
     { id: 'va', name: 'VA Chart', description: 'Visual Acuity', route: '/layout/measurement-visual' },

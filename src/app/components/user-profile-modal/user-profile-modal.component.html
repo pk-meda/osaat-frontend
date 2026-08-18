@@ -1,0 +1,149 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>User Profile & Security</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline" slot="icon-only" class="close-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding profile-content">
+  
+  <!-- Profile Avatar Banner -->
+  <div class="ion-text-center ion-margin-bottom avatar-banner">
+    <div class="large-avatar">
+      {{ userData?.first_name ? userData.first_name.charAt(0).toUpperCase() : 'U' }}
+    </div>
+
+    <h2>{{ userData?.first_name }} {{ userData?.last_name }}</h2>
+
+    <p>{{ userData?.username }}</p>
+  </div>
+
+  <!-- Account Details Card -->
+  <ion-card class="profile-card">
+    <ion-card-content>
+      <h3 class="section-title">Account Details</h3>
+      
+      <ion-item lines="full">
+        <ion-label position="stacked">First Name</ion-label>
+        <ion-input
+          [(ngModel)]="userData.first_name"
+          placeholder="First Name">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Last Name</ion-label>
+        <ion-input
+          [(ngModel)]="userData.last_name"
+          placeholder="Last Name">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Username</ion-label>
+        <ion-input
+          [(ngModel)]="userData.username"
+          placeholder="Username">
+        </ion-input>
+      </ion-item>
+
+      <!-- Email: Read-only as requested -->
+      <ion-item lines="none" class="readonly-email-item">
+  <ion-label position="stacked">
+    Email Address
+    <span class="danger-text">(Cannot be changed)</span>
+  </ion-label>
+
+  <ion-input
+    [(ngModel)]="userData.email"
+    name="email"
+    readonly>
+  </ion-input>
+</ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Metadata Information Card -->
+  <ion-card class="profile-card">
+    <ion-card-content>
+      <h3 class="section-title">System Info</h3>
+
+      <div class="info-row border-bottom">
+        <span class="info-label">User ID:</span>
+        <span class="info-val">
+          {{ userData?.id || 'N/A' }}
+        </span>
+      </div>
+
+      <div class="info-row border-bottom">
+        <span class="info-label">Last Login:</span>
+        <span class="info-val">
+          {{ userData?.last_login ? (userData.last_login | date:'medium') : 'Never' }}
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Date Joined:</span>
+        <span class="info-val">
+          {{ userData?.date_joined ? (userData.date_joined | date:'mediumDate') : 'N/A' }}
+        </span>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Password Reset Card -->
+  <ion-card class="profile-card">
+    <ion-card-content>
+      <h3 class="section-title text-danger">Reset Password</h3>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">New Password</ion-label>
+
+        <ion-input
+          type="password"
+          [(ngModel)]="passwordData.new_password"
+          placeholder="Enter new password">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Confirm New Password</ion-label>
+
+        <ion-input
+          type="password"
+          [(ngModel)]="passwordData.confirm_password"
+          placeholder="Confirm new password">
+        </ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        color="danger"
+        fill="outline"
+        class="ion-margin-top"
+        (click)="resetPassword()"
+        [disabled]="isResetting">
+
+        {{ isResetting ? 'Updating Password...' : 'Update Password' }}
+
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Save Changes Button -->
+  <ion-button
+    expand="block"
+    color="primary"
+    class="ion-margin-bottom save-btn"
+    size="large"
+    (click)="saveProfile()">
+
+    Save Changes
+
+  </ion-button>
+
+</ion-content>

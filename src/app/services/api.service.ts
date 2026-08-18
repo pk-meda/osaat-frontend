@@ -50,6 +50,10 @@ getSchoolss(): Observable<any> {
   register(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}register`, data);
   }
+  updateProfile(data: any): Observable<any> {
+    // Adjust endpoint path if your backend uses 'update-profile', 'profile/update', etc.
+    return this.http.put(`${this.apiUrl}update-profile`, data);
+  }
   resendOtp(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}send-otp`, data);
   }
