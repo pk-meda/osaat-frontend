@@ -225,7 +225,7 @@ export class RefractionComponent implements OnInit {
   // Adjusted IDs to align with HTML flow (4, 5, 6, 7) while keeping your EXACT form control names
   prescriptionSteps = [
     { id: 4, label: 'Current Spectacle Prescription', controls: { sph_RE: 'sph_RE_current', cyl_RE: 'cyl_RE_current', axis_RE: 'axis_RE_current', sph_LE: 'sph_LE_current', cyl_LE: 'cyl_LE_current', axis_LE: 'axis_LE_current' }},
-    { id: 5, label: 'Dry Retinoscopy Prescription', controls: { sph_RE: 'sph_RE_dry', cyl_RE: 'cyl_RE_dry', axis_RE: 'axis_RE_dry', sph_LE: 'sph_LE_dry', cyl_LE: 'cyl_LE_dry', axis_LE: 'axis_LE_dry' }},
+    { id: 5, label: 'Retinoscopy Prescription', controls: { sph_RE: 'sph_RE_dry', cyl_RE: 'cyl_RE_dry', axis_RE: 'axis_RE_dry', sph_LE: 'sph_LE_dry', cyl_LE: 'cyl_LE_dry', axis_LE: 'axis_LE_dry' }},
     { id: 6, label: 'Cycloplegic Retinoscopy Prescription', controls: { sph_RE: 'sph_RE_cyclo', cyl_RE: 'cyl_RE_cyclo', axis_RE: 'axis_RE_cyclo', sph_LE: 'sph_LE_cyclo', cyl_LE: 'cyl_LE_cyclo', axis_LE: 'axis_LE_cyclo' }},
     { id: 7, label: 'Final Accepted Prescription', controls: { sph_RE: 'sph_RE_final', cyl_RE: 'cyl_RE_final', axis_RE: 'axis_RE_final', sph_LE: 'sph_LE_final', cyl_LE: 'cyl_LE_final', axis_LE: 'axis_LE_final' }},
   ];
