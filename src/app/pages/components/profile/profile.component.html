@@ -261,7 +261,7 @@
     <!-- 5. Refraction -->
     <div [routerLink]="['/layout/refraction-spectacle-presentation', userData?.reference_number]">
       <ion-item lines="full">
-        <ion-label class="disabled-item">SPECTACLES BEFORE REFRACTION</ion-label>
+        <ion-label class="disabled-item">Spectacles Before Refraction</ion-label>
         <ion-icon *ngIf="userData?.refraction_spectacle_presentation == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
         <ion-badge *ngIf="userData?.refraction_spectacle_presentation == false" color="light">N/A</ion-badge>
         <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon> </ion-item>
