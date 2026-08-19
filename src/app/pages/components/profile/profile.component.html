@@ -199,14 +199,14 @@
     </ion-item>
   </div>
 
-  <div [routerLink]="['/layout/family', userData?.reference_number]">
+  <!--<div [routerLink]="['/layout/family', userData?.reference_number]">
     <ion-item lines="full">
       <ion-label class="disabled-item">Family History</ion-label>
       <ion-icon *ngIf="userData?.family_history == true" name="ellipse" color="success" slot="end" class="new_success"></ion-icon>
       <ion-badge *ngIf="userData?.family_history == false" color="light">N/A</ion-badge>
       <ion-icon name="chevron-forward-outline" slot="end" class="new_error"></ion-icon>
     </ion-item>
-  </div>
+  </div>-->
 
   <div [routerLink]="['/layout/surgery', userData?.reference_number]">
     <ion-item lines="full">
