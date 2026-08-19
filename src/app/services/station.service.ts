@@ -19,7 +19,7 @@ export class StationService {
     { id: 'complaint', name: 'Complaints', description: 'Patient Complaints', route: '/layout/complaint' },
     { id: 'etest', name: 'E-Test', description: 'Orientation-Based', route: '/layout/eye_exam' },
     { id: 'va', name: 'VA Chart', description: 'Visual Acuity', route: '/layout/measurement-visual' },
-    { id: 'refractionRespresentation', name: 'Refraction Spectacle Presentation', description: 'Refraction Spectacle Presentation', route: '/layout/refraction-spectacle-presentation' },
+    { id: 'refractionRespresentation', name: 'SPECTACLES BEFORE REFRACTION', description: 'SPECTACLES BEFORE REFRACTION', route: '/layout/refraction-spectacle-presentation' },
     { id: 'refraction', name: 'Refraction & Examination', description: 'Refraction & Examination', route: '/layout/refraction' },
     { id: 'dispensing', name: 'Dispensing', description: 'Dispensing Summary', route: '/layout/dispensing' },
   ];
